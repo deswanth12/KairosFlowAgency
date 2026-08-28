@@ -12,7 +12,7 @@
   - Core technical decisions & system architecture
   - Overall product direction
 - **Skills**: System Architecture, Next.js, React, TypeScript, Python, Cloud Infra, Client Strategy
-- **Direct Contacts**: Email: desvanth@kairosflow.agency | LinkedIn: https://www.linkedin.com/in/deswanth | GitHub: https://github.com/deswanth12
+- **Direct Contacts**: Email: kairosflowagency@gmail.com | LinkedIn: https://www.linkedin.com/in/deswanth | GitHub: https://github.com/deswanth12
 
 ## 📈 Bhasha — Marketing & Operations Lead
 - **Role**: Marketing & Operations Lead
@@ -25,6 +25,7 @@
   - Quotations and invoices
   - Agency operations
   - Client follow-ups
+- **Direct Contacts**: Email: kairosflowagency@gmail.com
 
 ## 🎨 Siddiq — Creative & Content Lead
 - **Role**: Creative & Content Lead
@@ -36,6 +37,7 @@
   - Creative direction
   - Social media creatives
   - Support video production
+- **Direct Contacts**: Email: kairosflowagency@gmail.com
 
 ## 💻 Rithesh — Development & Technical Support
 - **Role**: Development & Technical Support
@@ -47,6 +49,7 @@
   - Development tasks
   - Learning new technologies
   - Project execution support
+- **Direct Contacts**: Email: kairosflowagency@gmail.com
 
 ## 🎥 Sai Deep — Video Production Lead
 - **Role**: Video Production Lead
@@ -58,3 +61,4 @@
   - Product/business shoots
   - Raw footage archive management
   - Support for video projects
+- **Direct Contacts**: Email: kairosflowagency@gmail.com

@@ -29,7 +29,7 @@ export const foundersData: Founder[] = [
     socialLinks: {
       linkedin: 'https://www.linkedin.com/in/deswanth',
       github: 'https://github.com/deswanth12',
-      email: 'desvanth@kairosflow.agency'
+      email: 'kairosflowagency@gmail.com'
     }
   },
   {
@@ -60,7 +60,7 @@ export const foundersData: Founder[] = [
     socialLinks: {
       linkedin: 'https://linkedin.com',
       twitter: 'https://twitter.com',
-      email: 'bhasha@kairosflow.agency'
+      email: 'kairosflowagency@gmail.com'
     }
   },
   {
@@ -90,7 +90,7 @@ export const foundersData: Founder[] = [
     socialLinks: {
       linkedin: 'https://linkedin.com',
       twitter: 'https://twitter.com',
-      email: 'siddiq@kairosflow.agency'
+      email: 'kairosflowagency@gmail.com'
     }
   },
   {
@@ -120,7 +120,7 @@ export const foundersData: Founder[] = [
     socialLinks: {
       linkedin: 'https://linkedin.com',
       github: 'https://github.com',
-      email: 'rithesh@kairosflow.agency'
+      email: 'kairosflowagency@gmail.com'
     }
   },
   {
@@ -150,7 +150,7 @@ export const foundersData: Founder[] = [
     socialLinks: {
       linkedin: 'https://linkedin.com',
       instagram: 'https://instagram.com',
-      email: 'saideep@kairosflow.agency'
+      email: 'kairosflowagency@gmail.com'
     }
   }
 ];

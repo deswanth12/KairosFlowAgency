@@ -13,7 +13,7 @@
   - Sai Deep (Video Production Lead)
 - **operating_philosophy**: Trust first, premium second, sales third. One integrated team across all disciplines with zero junior handoffs.
 - **location**: Hyderabad & Bangalore, India • Global Client Delivery (US, UK, UAE, India)
-- **email**: hello@kairosflow.agency
+- **email**: kairosflowagency@gmail.com
 - **phone**: +91 77022 56073
 - **whatsapp**: +91 77022 56073
 - **working_hours**: Monday – Saturday: 9:00 AM – 7:00 PM IST

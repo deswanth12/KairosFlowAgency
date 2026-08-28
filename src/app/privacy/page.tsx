@@ -1,78 +1,74 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ShieldCheck } from 'lucide-react';
+import { ShieldCheck, ArrowLeft } from 'lucide-react';
+import { siteSettingsData } from '@/data/settings';
 
 export const metadata = {
-  title: 'Privacy Policy | Kairos Flow Agency',
-  description: 'Privacy policy and data protection practices for Kairos Flow Agency clients and visitors.'
+  title: 'Privacy Policy & Terms | Kairos Flow Agency',
+  description: 'Privacy policy, client data governance, and non-disclosure standards for Kairos Flow Agency.'
 };
 
 export default function PrivacyPage() {
   return (
-    <div className="bg-ivory text-softblack min-h-screen">
-      {/* Top Header */}
-      <section className="bg-ink text-ivory pt-32 pb-16 px-4 sm:px-6 lg:px-8 border-b border-navy-border">
-        <div className="max-w-4xl mx-auto">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-xs font-mono text-slate-light hover:text-ivory transition-colors mb-6"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Return to Home</span>
-          </Link>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-ivory font-display mb-4">
-            Privacy Policy & Data Protection
-          </h1>
-          <p className="text-slate-light text-sm font-mono">
-            Last Updated: August 2026 • Kairos Flow Agency
-          </p>
-        </div>
-      </section>
+    <div className="bg-ivory text-softblack min-h-screen pt-32 pb-24 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-slate hover:text-softblack transition-colors mb-8"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          <span>Back to Home</span>
+        </Link>
 
-      {/* Main Privacy Body */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-slate text-sm sm:text-base leading-relaxed space-y-8">
-        <div>
-          <h2 className="text-lg sm:text-xl font-bold text-softblack mb-3">1. Information We Collect</h2>
-          <p>
-            When you submit a project enquiry through our intake form or interact with our website, we collect information you voluntarily provide, including:
-          </p>
-          <ul className="list-disc pl-5 mt-2 space-y-1 text-sm">
-            <li>Your full name and professional title</li>
-            <li>Your business or company name</li>
-            <li>Contact information (email address, telephone / WhatsApp number)</li>
-            <li>Project briefs, technical requirements, budget estimates, and reference links</li>
-          </ul>
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-ivory-muted border border-ivory-border text-xs font-mono uppercase tracking-widest text-slate mb-4">
+          <ShieldCheck className="w-3.5 h-3.5 text-teal" />
+          <span>Legal & Data Policy</span>
         </div>
 
-        <div>
-          <h2 className="text-lg sm:text-xl font-bold text-softblack mb-3">2. How We Use Your Information</h2>
-          <p>
-            All submitted information is strictly used to evaluate your project requirements, prepare architectural proposals, coordinate discovery calls, and manage active client engagements. We do not sell, rent, or monetize your personal or company information to any third party.
-          </p>
-        </div>
+        <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-softblack font-display mb-6">
+          Privacy Policy & Client Data Standards
+        </h1>
+        <p className="text-slate text-sm font-mono mb-12">
+          Effective Date: January 1, 2026 • Last Updated: Q1 2026
+        </p>
 
-        <div>
-          <h2 className="text-lg sm:text-xl font-bold text-softblack mb-3">3. Confidentiality & Non-Disclosure (NDA)</h2>
-          <p>
-            We treat all proprietary product concepts, software architectures, unreleased features, and business logic shared with Kairos Flow Agency with institutional confidentiality. Formal bilateral NDAs are readily executed upon request prior to detailed technical discovery sessions.
-          </p>
-        </div>
+        <div className="space-y-10 text-slate text-sm sm:text-base leading-relaxed border-t border-ivory-border pt-10">
+          <section className="space-y-4">
+            <h2 className="text-xl font-bold text-softblack font-display">1. Information We Collect</h2>
+            <p>
+              When you submit a project brief or interact with our AI Consultant, we collect only the project details necessary to assess and execute your engagement:
+            </p>
+            <ul className="list-disc pl-6 space-y-2">
+              <li>Full Name, Company / Venture Name, Email, and WhatsApp/Phone Number.</li>
+              <li>Functional specifications, project descriptions, target timelines, and budget ranges.</li>
+            </ul>
+          </section>
 
-        <div>
-          <h2 className="text-lg sm:text-xl font-bold text-softblack mb-3">4. Data Storage & Security</h2>
-          <p>
-            Submitted project data is stored in secured, encrypted environments with restricted access limited exclusively to authorized agency partners. We employ industry-standard encryption protocols (HTTPS/TLS) across all data transmissions.
-          </p>
-        </div>
+          <section className="space-y-4">
+            <h2 className="text-xl font-bold text-softblack font-display">2. Non-Disclosure & Strict Confidentiality</h2>
+            <p>
+              We treat all client concepts, proprietary architectures, and business briefs as strictly confidential under strict non-disclosure obligations. We never sell, rent, or distribute client contact data to third parties.
+            </p>
+          </section>
 
-        <div>
-          <h2 className="text-lg sm:text-xl font-bold text-softblack mb-3">5. Contact Regarding Your Data</h2>
-          <p>
-            If you wish to review, update, or request the deletion of your submitted project information, please contact us directly at{' '}
-            <a href="mailto:hello@kairosflow.agency" className="text-teal font-semibold hover:underline">
-              hello@kairosflow.agency
-            </a>.
-          </p>
+          <section className="space-y-4">
+            <h2 className="text-xl font-bold text-softblack font-display">3. 100% Intellectual Property & Code Ownership</h2>
+            <p>
+              Upon milestone completion and balance settlement, 100% of all intellectual property, bespoke source code, Figma design files, database architectures, and media assets belong entirely to the client with zero vendor lock-in.
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-xl font-bold text-softblack font-display">4. Contact & Inquiries</h2>
+            <p>
+              For legal questions, data requests, or mutual NDA execution, reach out directly:
+            </p>
+            <div className="p-4 rounded-xl bg-ivory-card border border-ivory-border text-xs font-mono space-y-1 text-softblack">
+              <div><strong>Email:</strong> {siteSettingsData.email}</div>
+              <div><strong>Phone/WhatsApp:</strong> {siteSettingsData.phone}</div>
+              <div><strong>Location:</strong> {siteSettingsData.address}</div>
+            </div>
+          </section>
         </div>
       </div>
     </div>

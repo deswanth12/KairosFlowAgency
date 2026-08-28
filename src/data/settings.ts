@@ -2,18 +2,18 @@ import { SiteSettings, FAQItem } from '@/types';
 
 export const siteSettingsData: SiteSettings = {
   agencyName: 'Kairos Flow Agency',
-  tagline: 'Digital experiences built for businesses that want to move forward.',
-  email: 'hello@kairosflow.agency',
+  tagline: 'Digital products built to move your business forward.',
+  email: 'kairosflowagency@gmail.com',
   phone: '+91 77022 56073',
   whatsappNumber: '917702256073',
   address: 'Hyderabad & Bangalore, India • Global Client Delivery',
   workingHours: 'Monday – Saturday: 9:00 AM – 7:00 PM IST',
   responseExpectation: 'Within 24 hours on business days',
   socials: {
-    linkedin: 'https://linkedin.com/company/kairos-flow-agency',
+    linkedin: 'https://www.linkedin.com/in/deswanth',
     twitter: 'https://twitter.com/kairosflow',
     instagram: 'https://instagram.com/kairosflow.agency',
-    github: 'https://github.com/kairosflow'
+    github: 'https://github.com/deswanth12'
   }
 };
 
@@ -42,7 +42,7 @@ export const faqData: FAQItem[] = [
     id: 'process',
     category: 'Collaboration',
     question: 'How do we collaborate with your team day-to-day?',
-    answer: 'You communicate directly with the specialist co-founders leading your project. We maintain a shared Slack or WhatsApp channel, conduct weekly video walkthroughs of your staging environment, and provide async milestone updates.'
+    answer: 'You communicate directly with Founder Desvanth and the specialist leads driving your project. We maintain a shared Slack or WhatsApp channel, conduct weekly video walkthroughs of your staging environment, and provide async milestone updates.'
   },
   {
     id: 'revisions',

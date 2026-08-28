@@ -1,7 +1,7 @@
 # Contact Channels & Office Details
 
-- **Official Email**: hello@kairosflow.agency
-- **Founder Direct Email**: desvanth@kairosflow.agency
+- **Official Email**: kairosflowagency@gmail.com
+- **Founder Direct Email**: kairosflowagency@gmail.com
 - **Official Phone**: +91 77022 56073
 - **Official WhatsApp**: +91 77022 56073 (Direct WhatsApp link: https://wa.me/917702256073)
 - **Primary Office**: Hyderabad & Bangalore, India

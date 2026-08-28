@@ -1,6 +1,6 @@
 # Kairos Flow Agency
 
-> **Digital experiences built for businesses that want to move forward.**  
+> **Digital products built to move your business forward.**  
 > Websites, applications, AI systems, branding, marketing, and commercial cinematography designed and engineered by one multidisciplinary team.
 
 [![Next.js](https://img.shields.io/badge/Next.js-15+-0D1117?style=flat-square&logo=next.js)](https://nextjs.org/)
@@ -33,7 +33,7 @@ We eliminate generic agency fluff and deliver production-ready software, verifia
 
 ---
 
-## 👥 Leadership & Functional Roles
+## 👥 Five People. Five Disciplines. One Team.
 
 ### 👨‍💻 Desvanth — Founder & Technology Lead
 - Web and app development
@@ -100,24 +100,6 @@ Champagne     #B99A62   1%–2% visual budget for luxury badges, milestone metri
 
 ---
 
-## 📊 Operations CRM & Admin Portal (`/admin`)
-
-The website includes a full internal CRM to manage incoming project inquiries and client pipeline stages:
-
-- **Security Gate**: Protected by admin key / password (default: `Kairos@$$` or via `ADMIN_PASSWORD` env).
-- **9-Stage Workflow**:
-  $$\text{New Lead} \rightarrow \text{Contacted} \rightarrow \text{Discovery Call} \rightarrow \text{Proposal Sent} \rightarrow \text{Negotiation} \rightarrow \text{Won} \rightarrow \text{In Progress} \rightarrow \text{Completed} \rightarrow \text{Lost / Closed}$$
-- **Interactive Views**: Switch between a visual **Kanban Pipeline Board** and **Data Table**.
-- **Business Management**:
-  - Lead Priority (`High` / `Medium` / `Low`)
-  - Expected Deal Value tracking
-  - Proposal Status (`Not Started`, `Draft`, `Sent`, `Approved`, `Declined`)
-  - Payment Status (`Pending Deposit`, `Deposit Paid`, `Milestone Paid`, `Fully Paid`)
-  - Founder assignment & timestamped internal team notes
-  - One-click CSV export
-
----
-
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -142,7 +124,7 @@ The website includes a full internal CRM to manage incoming project inquiries an
    ```env
    ADMIN_PASSWORD=Kairos@$$
    NEXT_PUBLIC_WHATSAPP_NUMBER=917702256073
-   NEXT_PUBLIC_CONTACT_EMAIL=hello@kairosflow.agency
+   NEXT_PUBLIC_CONTACT_EMAIL=kairosflowagency@gmail.com
    NEXT_PUBLIC_SITE_URL=https://kairosflow.agency
    ```
 
@@ -160,24 +142,10 @@ The website includes a full internal CRM to manage incoming project inquiries an
 
 ---
 
-## ☁️ Deployment to Vercel
-
-1. Push your changes to GitHub:
-   ```bash
-   git add .
-   git commit -m "feat: deploy to production"
-   git push origin main
-   ```
-2. Connect the repository on [Vercel](https://vercel.com).
-3. Add the `ADMIN_PASSWORD` environment variable in the Vercel dashboard.
-4. Click **Deploy**.
-
----
-
 ## 📞 Direct Agency Contact
 
+- **Email**: [kairosflowagency@gmail.com](mailto:kairosflowagency@gmail.com)
 - **Phone / WhatsApp**: [+91 77022 56073](https://wa.me/917702256073)
-- **Email**: [hello@kairosflow.agency](mailto:hello@kairosflow.agency)
 - **Location**: Hyderabad & Bangalore, India • Global Client Delivery
 - **Business Turnaround**: Inquiries reviewed within 24 hours on business days.
 
