@@ -192,7 +192,7 @@ export default function AboutPage() {
                   </div>
 
                   <div className="pt-4 border-t border-ivory-border flex items-center justify-between">
-                    <span className="text-xs text-slate font-medium">
+                    <span className={`text-[11px] font-mono font-semibold ${isFounder ? 'text-softblack uppercase tracking-wider' : 'text-slate-muted'}`}>
                       {isFounder ? 'Founder' : 'Founding Lead'}
                     </span>
                     <div className="flex items-center gap-2 text-slate">
@@ -211,7 +211,7 @@ export default function AboutPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="p-1.5 hover:text-teal transition-colors"
-                          aria-label={`LinkedIn ${founder.name}`}
+                          aria-label={`LinkedIn for ${founder.name}`}
                         >
                           <LinkedInIcon className="w-4 h-4" />
                         </a>
@@ -222,7 +222,7 @@ export default function AboutPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="p-1.5 hover:text-teal transition-colors"
-                          aria-label={`GitHub ${founder.name}`}
+                          aria-label={`GitHub for ${founder.name}`}
                         >
                           <GitHubIcon className="w-4 h-4" />
                         </a>

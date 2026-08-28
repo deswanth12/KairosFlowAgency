@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { foundersData } from '@/data/team';
-import { Users, Mail, ArrowRight, Crown } from 'lucide-react';
+import { Users, Mail, ArrowRight } from 'lucide-react';
 import { LinkedInIcon, GitHubIcon } from '@/components/ui/SocialIcons';
 
 export const TeamPreview: React.FC = () => {
@@ -100,7 +100,7 @@ export const TeamPreview: React.FC = () => {
 
                 {/* Footer Social Actions */}
                 <div className="pt-4 border-t border-ivory-border flex items-center justify-between text-slate">
-                  <span className="text-[11px] font-mono text-slate-muted">
+                  <span className={`text-[11px] font-mono font-semibold ${isFounder ? 'text-softblack uppercase tracking-wider' : 'text-slate-muted'}`}>
                     {isFounder ? 'Founder' : 'Founding Lead'}
                   </span>
                   <div className="flex items-center gap-2">

@@ -11,9 +11,8 @@ export const foundersData: Founder[] = [
     photo: '',
     skills: ['System Architecture', 'Next.js & React', 'Client Strategy', 'Cloud Infrastructure', 'Product Engineering'],
     socialLinks: {
-      linkedin: 'https://linkedin.com',
-      twitter: 'https://twitter.com',
-      github: 'https://github.com',
+      linkedin: 'https://www.linkedin.com/in/deswanth',
+      github: 'https://github.com/deswanth12',
       email: 'desvanth@kairosflow.agency'
     }
   },
