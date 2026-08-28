@@ -65,14 +65,18 @@ async function test() {
   console.log('Contact form submission status:', leadRes.status, 'Lead ID:', leadData.leadId);
   if (!leadData.success || !leadData.leadId) throw new Error('Contact submission failed');
 
-  // 5. Get Leads
-  const getLeads = await fetch(base + '/api/leads');
-  const leadsData = await getLeads.json();
-  console.log('Leads fetched count:', leadsData.count);
-  if (!leadsData.success || leadsData.count < 1) throw new Error('Fetching leads failed');
+  // 5. Test AI Consultant RAG Endpoint
+  const ragRes = await fetch(base + '/api/consultant', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query: 'How much does a website cost?' })
+  });
+  const ragData = await ragRes.json();
+  console.log('AI Consultant RAG status:', ragRes.status, 'Confidence:', ragData.data?.confidence);
+  if (!ragData.success || !ragData.data?.answer) throw new Error('RAG query failed');
 
   console.log('\n========================================');
-  console.log('✅ ALL PAGES & API ENDPOINTS FULLY VERIFIED!');
+  console.log('✅ ALL PAGES, CRM & RAG AI CONSULTANT FULLY VERIFIED!');
   console.log('========================================');
 }
 

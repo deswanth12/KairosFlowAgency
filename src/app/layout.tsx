@@ -3,6 +3,7 @@ import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import { AIConsultant } from '@/components/consultant/AIConsultant';
 import { siteSettingsData } from '@/data/settings';
 
 const inter = Inter({
@@ -132,6 +133,7 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-1 w-full">{children}</main>
         <Footer />
+        <AIConsultant />
       </body>
     </html>
   );
