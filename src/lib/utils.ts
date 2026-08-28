@@ -48,11 +48,14 @@ export function generateWhatsAppLink(
     timeline?: string;
   }
 ): string {
-  const cleanPhone = phoneNumber.replace(/[^0-9]/g, '');
+  let cleanPhone = phoneNumber.replace(/[^0-9]/g, '');
+  if (cleanPhone.length === 10) {
+    cleanPhone = '91' + cleanPhone;
+  }
 
   if (!data || !data.name) {
     const defaultMsg = encodeURIComponent(
-      'Hi Kairos Flow Agency team, I would like to discuss a potential project for my business.'
+      'Hi, I am contacting you from Kairos Flow Agency regarding your project inquiry.'
     );
     return `https://wa.me/${cleanPhone}?text=${defaultMsg}`;
   }

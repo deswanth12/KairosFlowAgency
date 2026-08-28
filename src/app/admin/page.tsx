@@ -289,12 +289,19 @@ export default function AdminPage() {
   };
 
   const handleUpdateLead = async (id: string, updates: Partial<Lead>) => {
+    // 1. Optimistic Instant UI Update
+    setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, ...updates, updatedAt: new Date().toISOString() } : l)));
+    if (activeLead && activeLead.id === id) {
+      setActiveLead((prev) => (prev ? { ...prev, ...updates, updatedAt: new Date().toISOString() } : null));
+    }
+
     try {
+      const activeToken = authToken || (typeof window !== 'undefined' ? sessionStorage.getItem('kairos_admin_token') : null);
       const res = await fetch('/api/leads', {
         method: 'PATCH',
         headers: { 
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
+          ...(activeToken ? { 'Authorization': `Bearer ${activeToken}` } : {})
         },
         body: JSON.stringify({ id, ...updates })
       });
@@ -313,39 +320,50 @@ export default function AdminPage() {
 
   const handleDeleteLead = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this lead? This action is recorded in the permanent audit trail.')) return;
+    
+    // Optimistic remove
+    setLeads((prev) => prev.filter((l) => l.id !== id));
+    if (activeLead?.id === id) setActiveLead(null);
+
     try {
+      const activeToken = authToken || (typeof window !== 'undefined' ? sessionStorage.getItem('kairos_admin_token') : null);
       const res = await fetch(`/api/leads?id=${id}`, { 
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${authToken}` }
+        headers: { 
+          ...(activeToken ? { 'Authorization': `Bearer ${activeToken}` } : {})
+        }
       });
       const data = await res.json();
       if (data.success) {
-        setLeads((prev) => prev.filter((l) => l.id !== id));
-        if (activeLead?.id === id) setActiveLead(null);
         fetchActivityLogs();
       } else {
         alert(data.message || 'Permission denied.');
+        fetchLeads(); // rollback on failure
       }
     } catch (err) {
       console.error('Error deleting lead:', err);
+      fetchLeads(); // rollback on failure
     }
   };
 
   const handleAddNote = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!activeLead || !newNoteContent.trim() || !currentUser) return;
+    if (!activeLead || !newNoteContent.trim()) return;
+
+    const authorName = currentUser?.name || 'Desvanth';
+    const authorId = currentUser?.id || 'usr-desvanth';
 
     const newNote = {
       id: `note-${Date.now()}`,
-      author: currentUser.name,
-      authorId: currentUser.id,
+      author: authorName,
+      authorId: authorId,
       content: newNoteContent.trim(),
       createdAt: new Date().toISOString()
     };
 
     const updatedNotes = [...(activeLead.notes || []), newNote];
-    await handleUpdateLead(activeLead.id, { notes: updatedNotes });
     setNewNoteContent('');
+    await handleUpdateLead(activeLead.id, { notes: updatedNotes });
   };
 
   const handleCreateManualLead = async (e: React.FormEvent) => {
@@ -1441,7 +1459,7 @@ export default function AdminPage() {
 
       {/* SPECIFIC RECORD AUDIT HISTORY MODAL */}
       {leadHistoryModalId && (
-        <div className="fixed inset-0 z-50 bg-[#0B1F33]/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[60] bg-[#0B1F33]/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="w-full max-w-2xl bg-white border border-[#D9E0E5] rounded-2xl p-6 sm:p-8 shadow-2xl space-y-5 max-h-[85vh] flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-[#D9E0E5]">
@@ -1501,7 +1519,7 @@ export default function AdminPage() {
 
       {/* MANUAL LEAD CREATION MODAL */}
       {isManualModalOpen && (
-        <div className="fixed inset-0 z-50 bg-[#0B1F33]/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[60] bg-[#0B1F33]/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="w-full max-w-lg bg-white border border-[#D9E0E5] rounded-2xl p-6 sm:p-8 shadow-2xl space-y-5">
             <div className="flex items-center justify-between pb-4 border-b border-[#D9E0E5]">
               <h3 className="text-lg font-bold font-display text-[#0B1F33]">Log New Client Lead</h3>
