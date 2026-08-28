@@ -40,7 +40,8 @@ import {
   Layers,
   Key,
   Terminal,
-  Radio
+  Radio,
+  RefreshCw
 } from 'lucide-react';
 import { Logo } from '@/components/brand/Logo';
 import { 
@@ -162,6 +163,27 @@ export default function AdminPage() {
       fetchUsersList();
     }
   }, []);
+
+  // Real-time Presence Poller (every 4 seconds)
+  useEffect(() => {
+    if (!currentUser) return;
+    const interval = setInterval(() => {
+      fetchUsersList();
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [currentUser, authToken]);
+
+  // Tab switch sync
+  useEffect(() => {
+    if (!currentUser) return;
+    if (activeTab === 'team') {
+      fetchUsersList();
+    } else if (activeTab === 'activity') {
+      fetchActivityLogs();
+    } else if (activeTab === 'pipeline') {
+      fetchLeads();
+    }
+  }, [activeTab, currentUser]);
 
   const fetchUsersList = async (tokenOverride?: string) => {
     try {
@@ -1109,15 +1131,24 @@ export default function AdminPage() {
         {activeTab === 'team' && (
           <div className="space-y-6">
             <div className="p-6 sm:p-8 rounded-2xl bg-white border border-[#D9E0E5] shadow-subtle-card space-y-6">
-              <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FBF4F0] border border-[#B8613A]/20 text-[11px] font-mono text-[#B8613A] uppercase tracking-widest mb-2 font-semibold">
-                  <Shield className="w-3.5 h-3.5 text-[#B8613A]" />
-                  <span>FOUNDER IDENTITIES & RBAC</span>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FBF4F0] border border-[#B8613A]/20 text-[11px] font-mono text-[#B8613A] uppercase tracking-widest mb-2 font-semibold">
+                    <Shield className="w-3.5 h-3.5 text-[#B8613A]" />
+                    <span>FOUNDER IDENTITIES & RBAC</span>
+                  </div>
+                  <h3 className="text-xl font-bold font-display text-[#0B1F33]">Founder Accounts & Role Permissions</h3>
+                  <p className="text-xs sm:text-sm text-[#5B6875] mt-1">
+                    Individual accounts for each of the 5 founding leads with server-enforced role access and live presence tracking.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold font-display text-[#0B1F33]">Founder Accounts & Role Permissions</h3>
-                <p className="text-xs sm:text-sm text-[#5B6875] mt-1">
-                  Individual accounts for each of the 5 founding leads with server-enforced role access and live presence tracking.
-                </p>
+                <button
+                  onClick={() => fetchUsersList()}
+                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#F7F7F4] hover:bg-[#FBF4F0] text-[#0B1F33] hover:text-[#B8613A] border border-[#D9E0E5] text-xs font-mono font-semibold transition-colors shadow-sm self-start sm:self-center"
+                >
+                  <RefreshCw className="w-3.5 h-3.5 text-[#B8613A]" />
+                  <span>Sync Presence</span>
+                </button>
               </div>
 
               <div className="overflow-x-auto rounded-xl border border-[#D9E0E5]">
