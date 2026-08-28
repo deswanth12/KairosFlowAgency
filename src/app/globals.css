@@ -6,53 +6,54 @@
   :root {
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
     --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
   }
 
   html {
     scroll-behavior: smooth;
     color-scheme: light;
-    background-color: #FFFFFF;
+    background-color: #F8FAFC;
   }
 
   body {
-    background-color: #FFFFFF;
-    color: #172033;
+    background-color: #F8FAFC;
+    color: #0F172A;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
 
-  /* Custom corporate blue selection */
+  /* Electric blue developer selection */
   ::selection {
-    background-color: #2563EB;
+    background-color: #1677FF;
     color: #FFFFFF;
   }
 }
 
-/* Custom corporate scrollbar */
+/* Custom developer technical scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F6F9FC;
+  background: #F8FAFC;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #CBD5E1;
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
 }
 
-/* Glassmorphic subtle utilities */
-.glass-panel-light {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid #E5EAF0;
+/* Developer technical glass panels */
+.glass-panel-dev {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid #DCE5EF;
 }

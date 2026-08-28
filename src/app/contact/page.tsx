@@ -11,40 +11,41 @@ import {
   Clock, 
   ShieldCheck, 
   Sparkles,
-  ArrowUpRight 
+  ArrowUpRight,
+  Terminal
 } from 'lucide-react';
 
 export default function ContactPage() {
   const whatsappUrl = generateWhatsAppLink(siteSettingsData.whatsappNumber);
 
   return (
-    <div className="bg-white text-corporate-text min-h-screen">
+    <div className="bg-[#F8FAFC] text-[#0F172A] min-h-screen">
       {/* Top Hero Section */}
-      <section className="bg-white text-corporate-text pt-32 pb-16 px-4 sm:px-6 lg:px-8 border-b border-corporate-border">
+      <section className="bg-[#F8FAFC] text-[#0F172A] pt-32 pb-16 px-4 sm:px-6 lg:px-8 border-b border-[#DCE5EF]">
         <div className="max-w-7xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-corporate-softBlue border border-blue-200 text-xs font-mono uppercase tracking-widest text-corporate-blue mb-4 font-semibold">
-            <Sparkles className="w-3.5 h-3.5 text-corporate-blue" />
-            <span>Project Intake & Discovery</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#DCE5EF] text-xs font-mono uppercase tracking-widest text-[#1677FF] mb-4 font-semibold shadow-subtle-card">
+            <Terminal className="w-3.5 h-3.5 text-[#1677FF]" />
+            <span>/ PROJECT INTAKE & DISCOVERY</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-corporate-dark font-display max-w-3xl mb-6">
-            Start a project with Kairos Flow.
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#071A2F] font-display max-w-3xl mb-6">
+            Start a project with <span className="text-[#1677FF]">Kairos Flow.</span>
           </h1>
-          <p className="text-corporate-mutedText text-base sm:text-lg max-w-2xl font-normal leading-relaxed">
+          <p className="text-[#64748B] text-base sm:text-lg max-w-2xl font-normal leading-relaxed">
             Fill in the structured brief below or connect directly with our founding leads via WhatsApp, Email, or Phone.
           </p>
         </div>
       </section>
 
       {/* Main Intake Section */}
-      <div className="bg-corporate-offwhite py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b border-corporate-border">
+      <div className="bg-[#F8FAFC] py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b border-[#DCE5EF]">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             {/* Left Column: Direct Channels & Guarantee (4 cols) */}
             <div className="lg:col-span-4 space-y-6">
               {/* Quick Contact Cards */}
-              <div className="bg-white border border-corporate-border rounded-2xl p-6 sm:p-8 shadow-subtle-card space-y-6">
-                <h3 className="text-base font-bold text-corporate-dark tracking-tight uppercase tracking-wider font-mono text-xs">
-                  Direct Communication
+              <div className="bg-white border border-[#DCE5EF] rounded-2xl p-6 sm:p-8 shadow-subtle-card space-y-6">
+                <h3 className="text-base font-bold text-[#071A2F] tracking-tight uppercase tracking-wider font-mono text-xs">
+                  / DIRECT CHANNELS
                 </h3>
 
                 {/* WhatsApp Direct Link */}
@@ -52,18 +53,18 @@ export default function ContactPage() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-start gap-4 p-4 rounded-xl bg-corporate-offwhite hover:bg-corporate-softBlue border border-corporate-border hover:border-corporate-blue/30 transition-all"
+                  className="group flex items-start gap-4 p-4 rounded-xl bg-[#F8FAFC] hover:bg-[#EFF6FF] border border-[#DCE5EF] hover:border-[#1677FF]/30 transition-all"
                 >
                   <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0 border border-emerald-100">
                     <MessageCircle className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
-                    <div className="text-xs font-mono text-corporate-blue font-semibold flex items-center gap-1">
+                    <div className="text-xs font-mono text-[#1677FF] font-semibold flex items-center gap-1">
                       <span>Fastest Response</span>
                       <ArrowUpRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
                     </div>
-                    <div className="text-sm font-bold text-corporate-dark font-display">WhatsApp Chat</div>
-                    <div className="text-xs text-corporate-mutedText mt-0.5">Instant lead coordinator connection</div>
+                    <div className="text-sm font-bold text-[#071A2F] font-display">WhatsApp Chat</div>
+                    <div className="text-xs text-[#64748B] mt-0.5">Instant lead coordinator connection</div>
                   </div>
                 </a>
 
@@ -72,41 +73,41 @@ export default function ContactPage() {
                   href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(siteSettingsData.email)}&su=${encodeURIComponent('Project Inquiry | Kairos Flow Agency')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-start gap-4 p-4 rounded-xl bg-corporate-offwhite hover:bg-corporate-softBlue border border-corporate-border hover:border-corporate-blue/30 transition-all"
+                  className="group flex items-start gap-4 p-4 rounded-xl bg-[#F8FAFC] hover:bg-[#EFF6FF] border border-[#DCE5EF] hover:border-[#1677FF]/30 transition-all"
                   title="Click to compose in Gmail"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-blue-50 text-corporate-blue flex items-center justify-center flex-shrink-0 border border-blue-100">
-                    <Mail className="w-5 h-5 text-corporate-blue" />
+                  <div className="w-10 h-10 rounded-lg bg-blue-50 text-[#1677FF] flex items-center justify-center flex-shrink-0 border border-blue-100">
+                    <Mail className="w-5 h-5 text-[#1677FF]" />
                   </div>
                   <div className="flex-1">
-                    <div className="text-xs font-mono text-corporate-blue font-semibold flex items-center gap-1">
+                    <div className="text-xs font-mono text-[#1677FF] font-semibold flex items-center gap-1">
                       <span>Email Us</span>
                       <ArrowUpRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
                     </div>
-                    <div className="text-sm font-bold text-corporate-dark break-all font-display">{siteSettingsData.email}</div>
-                    <div className="text-xs text-corporate-mutedText mt-0.5">&lt; 4 hour reply guarantee</div>
+                    <div className="text-sm font-bold text-[#071A2F] break-all font-display">{siteSettingsData.email}</div>
+                    <div className="text-xs text-[#64748B] mt-0.5">&lt; 4 hour SLA reply guarantee</div>
                   </div>
                 </a>
 
                 {/* Phone */}
                 <a
                   href={`tel:${siteSettingsData.phone.replace(/[^0-9+]/g, '')}`}
-                  className="group flex items-start gap-4 p-4 rounded-xl bg-corporate-offwhite hover:bg-corporate-softBlue border border-corporate-border hover:border-corporate-blue/30 transition-all"
+                  className="group flex items-start gap-4 p-4 rounded-xl bg-[#F8FAFC] hover:bg-[#EFF6FF] border border-[#DCE5EF] hover:border-[#1677FF]/30 transition-all"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-slate-100 text-corporate-dark flex items-center justify-center flex-shrink-0 border border-slate-200">
-                    <Phone className="w-5 h-5 text-corporate-blue" />
+                  <div className="w-10 h-10 rounded-lg bg-slate-100 text-[#071A2F] flex items-center justify-center flex-shrink-0 border border-slate-200">
+                    <Phone className="w-5 h-5 text-[#1677FF]" />
                   </div>
                   <div className="flex-1">
-                    <div className="text-xs font-mono text-corporate-mutedText font-semibold">Direct Call</div>
-                    <div className="text-sm font-bold text-corporate-dark font-display">{siteSettingsData.phone}</div>
-                    <div className="text-xs text-corporate-mutedText mt-0.5">Mon–Sat, 9AM–7PM IST</div>
+                    <div className="text-xs font-mono text-[#64748B] font-semibold">Direct Call</div>
+                    <div className="text-sm font-bold text-[#071A2F] font-display">{siteSettingsData.phone}</div>
+                    <div className="text-xs text-[#64748B] mt-0.5">Mon–Sat, 9AM–7PM IST</div>
                   </div>
                 </a>
               </div>
 
               {/* Response SLA & Security Box */}
-              <div className="bg-corporate-dark text-white p-6 sm:p-7 rounded-2xl border border-corporate-dark shadow-elevated-card space-y-4">
-                <div className="flex items-center gap-2 text-xs font-mono text-corporate-sky uppercase tracking-wider font-bold">
+              <div className="bg-[#071A2F] text-white p-6 sm:p-7 rounded-2xl border border-[#071A2F] shadow-elevated-card space-y-4">
+                <div className="flex items-center gap-2 text-xs font-mono text-[#38BDF8] uppercase tracking-wider font-bold">
                   <Clock className="w-4 h-4" />
                   <span>Our Turnaround SLA</span>
                 </div>
@@ -114,8 +115,8 @@ export default function ContactPage() {
                   We review briefs in detail within 4 business hours. If there is a mutual fit, we schedule a 25-minute technical discovery call with the founding leads.
                 </p>
 
-                <div className="pt-3 border-t border-white/15 flex items-center gap-2 text-xs text-slate-300">
-                  <ShieldCheck className="w-4 h-4 text-corporate-sky flex-shrink-0" />
+                <div className="pt-3 border-t border-white/15 flex items-center gap-2 text-xs text-slate-300 font-mono">
+                  <ShieldCheck className="w-4 h-4 text-[#38BDF8] flex-shrink-0" />
                   <span>Standard NDA applied to all submissions.</span>
                 </div>
               </div>
@@ -123,7 +124,7 @@ export default function ContactPage() {
 
             {/* Right Column: Interactive Brief Form (8 cols) */}
             <div className="lg:col-span-8">
-              <Suspense fallback={<div className="p-12 text-center text-corporate-mutedText text-sm">Loading intake form...</div>}>
+              <Suspense fallback={<div className="p-12 text-center text-[#64748B] text-sm font-mono">Loading intake form...</div>}>
                 <ContactForm />
               </Suspense>
             </div>

@@ -129,9 +129,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-white text-slate-dark antialiased selection:bg-teal selection:text-white">
+      <body className="min-h-screen flex flex-col bg-[#F8FAFC] text-[#0F172A] antialiased selection:bg-[#1677FF] selection:text-white">
         <Navbar />
-        <main className="flex-1 w-full bg-white">{children}</main>
+        <main className="flex-1 w-full bg-[#F8FAFC]">{children}</main>
         <Footer />
         <AIConsultant />
       </body>

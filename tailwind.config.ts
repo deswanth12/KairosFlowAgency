@@ -9,66 +9,78 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Core Corporate White + Dark Blue + Light Blue Palette
-        corporate: {
-          dark: '#0B1F3A',        // Dark Blue (20%)
-          darkHover: '#162E52',
-          blue: '#2563EB',        // Bright Blue (10%)
-          lightBlue: '#3B82F6',
-          sky: '#60A5FA',
-          softBlue: '#EFF6FF',    // Very Light Blue
-          white: '#FFFFFF',       // Primary White (70%)
-          offwhite: '#F6F9FC',    // Alternating Section Background
-          border: '#E5EAF0',      // Subtle Card & Section Border
-          borderDark: '#CBD5E1',
-          text: '#172033',        // Dark Crisp Text
-          mutedText: '#64748B',   // Muted Slate Text
+        // Precise Developer Technical Palette
+        tech: {
+          navy: '#071A2F',        // Deep Developer Navy
+          navyHover: '#0B2544',
+          electric: '#1677FF',    // Electric Blue (Action)
+          electricHover: '#0E62DA',
+          code: '#38BDF8',        // Bright Cyan-Blue (Syntax Highlight)
+          canvas: '#F8FAFC',      // Developer White
+          pureWhite: '#FFFFFF',
+          ink: '#0F172A',         // Code Black Text
+          slate: '#64748B',       // Slate Muted Text
+          border: '#DCE5EF',      // Technical Border
+          softBlue: '#EFF6FF',
         },
-        // Backward-compatible semantic aliases mapped to the new palette
+        corporate: {
+          dark: '#071A2F',        // Deep Developer Navy
+          darkHover: '#0B2544',
+          blue: '#1677FF',        // Electric Blue
+          lightBlue: '#1677FF',
+          sky: '#38BDF8',         // Technical Code Blue
+          softBlue: '#EFF6FF',
+          white: '#FFFFFF',
+          offwhite: '#F8FAFC',    // Developer White
+          border: '#DCE5EF',      // Technical Border
+          borderDark: '#CBD5E1',
+          text: '#0F172A',        // Code Black
+          mutedText: '#64748B',   // Slate
+        },
         ink: {
-          DEFAULT: '#0B1F3A',
-          light: '#162E52',
-          surface: '#11284A',
+          DEFAULT: '#071A2F',
+          light: '#0B2544',
+          surface: '#0B2544',
           border: '#1E3A63',
         },
         navy: {
-          DEFAULT: '#0B1F3A',
-          dark: '#071529',
-          light: '#162E52',
-          surface: '#11284A',
+          DEFAULT: '#071A2F',
+          dark: '#04101E',
+          light: '#0B2544',
+          surface: '#0B2544',
           border: '#1E3A63',
         },
         ivory: {
-          DEFAULT: '#FFFFFF',
+          DEFAULT: '#F8FAFC',
           card: '#FFFFFF',
-          muted: '#F6F9FC',
-          border: '#E5EAF0',
+          muted: '#F1F5F9',
+          border: '#DCE5EF',
           borderDark: '#CBD5E1',
         },
         softblack: {
-          DEFAULT: '#172033',
-          light: '#2D3748',
+          DEFAULT: '#0F172A',
+          light: '#1E293B',
           muted: '#64748B',
         },
         slate: {
           DEFAULT: '#64748B',
           muted: '#94A3B8',
-          light: '#E2E8F0',
-          dark: '#172033',
+          light: '#DCE5EF',
+          dark: '#0F172A',
         },
         teal: {
-          DEFAULT: '#2563EB',     // Upgraded to refined Trust Blue
-          hover: '#1D4ED8',
-          active: '#1E40AF',
+          DEFAULT: '#1677FF',     // Electric Blue
+          hover: '#0E62DA',
+          active: '#094EAF',
           subtle: '#EFF6FF',
-          border: '#3B82F6',
+          border: '#38BDF8',
         },
         champagne: {
-          DEFAULT: '#2563EB',     // Blue accent badge
-          hover: '#1D4ED8',
-          active: '#1E40AF',
+          DEFAULT: '#38BDF8',     // Technical Code Blue
+          hover: '#0284C7',
+          active: '#0369A1',
           subtle: '#EFF6FF',
-          border: '#60A5FA',
+          border: '#38BDF8',
         },
       },
       fontFamily: {
@@ -77,10 +89,10 @@ const config: Config = {
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       boxShadow: {
-        'subtle-card': '0 1px 3px 0 rgba(11, 31, 58, 0.04), 0 1px 2px -1px rgba(11, 31, 58, 0.04)',
-        'elevated-card': '0 10px 30px -4px rgba(11, 31, 58, 0.08), 0 4px 12px -2px rgba(11, 31, 58, 0.04)',
-        'hover-card': '0 20px 35px -8px rgba(11, 31, 58, 0.12), 0 6px 16px -4px rgba(11, 31, 58, 0.06)',
-        'glow-blue': '0 0 20px -2px rgba(37, 99, 235, 0.25)',
+        'subtle-card': '0 1px 3px 0 rgba(7, 26, 47, 0.04), 0 1px 2px -1px rgba(7, 26, 47, 0.04)',
+        'elevated-card': '0 10px 25px -4px rgba(7, 26, 47, 0.06), 0 4px 10px -2px rgba(7, 26, 47, 0.03)',
+        'hover-card': '0 20px 30px -8px rgba(7, 26, 47, 0.09), 0 6px 14px -4px rgba(7, 26, 47, 0.04)',
+        'glow-electric': '0 0 20px -2px rgba(22, 119, 255, 0.25)',
       },
       animation: {
         'fade-in': 'fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',

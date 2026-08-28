@@ -7,7 +7,7 @@ import { Logo } from '@/components/brand/Logo';
 import { navLinks, siteSettingsData } from '@/data/settings';
 import { servicesData } from '@/data/services';
 import { generateWhatsAppLink } from '@/lib/utils';
-import { ArrowUpRight, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
+import { ArrowUpRight, MessageCircle, Mail, Phone, MapPin, Terminal } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const pathname = usePathname();
@@ -20,9 +20,9 @@ export const Footer: React.FC = () => {
   const whatsappUrl = generateWhatsAppLink(siteSettingsData.whatsappNumber);
 
   return (
-    <footer className="bg-corporate-dark text-slate-300 border-t border-corporate-dark/80 relative overflow-hidden">
+    <footer className="bg-[#071A2F] text-slate-300 border-t border-[#071A2F] relative overflow-hidden">
       {/* Subtle top ambient glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-corporate-blue/40 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-[#1677FF]/40 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-16">
@@ -36,10 +36,10 @@ export const Footer: React.FC = () => {
                 Kairos represents the right moment. Flow represents continuous execution. We help forward-thinking businesses scale through high-performance digital products, AI systems, and brand craftsmanship.
               </p>
 
-              {/* Status Indicator */}
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs text-white">
-                <span className="w-2 h-2 rounded-full bg-corporate-sky animate-pulse" />
-                <span className="font-medium">Accepting Selected Q1/Q2 Projects</span>
+              {/* Status Indicator with Developer Mono Syntax */}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs text-white font-mono">
+                <span className="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse" />
+                <span className="font-semibold">STATUS: Q1/Q2 SPRINTS ACTIVE</span>
               </div>
             </div>
 
@@ -60,22 +60,22 @@ export const Footer: React.FC = () => {
                 className="p-2.5 bg-white/10 hover:bg-white/20 border border-white/15 rounded-lg text-white transition-colors"
                 aria-label="Email"
               >
-                <Mail className="w-4 h-4 text-corporate-sky" />
+                <Mail className="w-4 h-4 text-[#38BDF8]" />
               </a>
               <a
                 href={`tel:${siteSettingsData.phone.replace(/[^0-9+]/g, '')}`}
                 className="p-2.5 bg-white/10 hover:bg-white/20 border border-white/15 rounded-lg text-white transition-colors"
                 aria-label="Phone"
               >
-                <Phone className="w-4 h-4 text-corporate-sky" />
+                <Phone className="w-4 h-4 text-[#38BDF8]" />
               </a>
             </div>
           </div>
 
           {/* Navigation Links */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-white mb-4">Structure</h4>
-            <ul className="space-y-2.5 text-sm">
+            <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-[#38BDF8] mb-4">/ STRUCTURE</h4>
+            <ul className="space-y-2.5 text-xs font-mono">
               {navLinks.map((link) => (
                 <li key={link.name}>
                   <Link
@@ -83,7 +83,7 @@ export const Footer: React.FC = () => {
                     className="text-slate-300 hover:text-white transition-colors inline-flex items-center gap-1 group"
                   >
                     <span>{link.name}</span>
-                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-corporate-sky" />
+                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-[#38BDF8]" />
                   </Link>
                 </li>
               ))}
@@ -92,8 +92,8 @@ export const Footer: React.FC = () => {
 
           {/* Services Disciplines */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-white mb-4">Disciplines</h4>
-            <ul className="space-y-2.5 text-sm">
+            <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-[#38BDF8] mb-4">/ DISCIPLINES</h4>
+            <ul className="space-y-2.5 text-xs font-mono">
               {servicesData.map((svc) => (
                 <li key={svc.id}>
                   <Link
@@ -109,31 +109,31 @@ export const Footer: React.FC = () => {
 
           {/* Direct Office & Direct Contact */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-white mb-4">Direct Contact</h4>
-            <div className="space-y-3 text-sm text-slate-300">
+            <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-[#38BDF8] mb-4">/ DIRECT COMMS</h4>
+            <div className="space-y-3 text-xs font-mono text-slate-300">
               <div className="flex items-start gap-2.5">
-                <Mail className="w-4 h-4 text-corporate-sky flex-shrink-0 mt-0.5" />
+                <Mail className="w-4 h-4 text-[#38BDF8] flex-shrink-0 mt-0.5" />
                 <a 
                   href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(siteSettingsData.email)}&su=${encodeURIComponent('Project Inquiry | Kairos Flow Agency')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors break-all"
+                  className="hover:text-white transition-colors break-all font-semibold"
                   title="Click to compose in Gmail"
                 >
                   {siteSettingsData.email}
                 </a>
               </div>
               <div className="flex items-start gap-2.5">
-                <Phone className="w-4 h-4 text-corporate-sky flex-shrink-0 mt-0.5" />
+                <Phone className="w-4 h-4 text-[#38BDF8] flex-shrink-0 mt-0.5" />
                 <a href={`tel:${siteSettingsData.phone.replace(/[^0-9+]/g, '')}`} className="hover:text-white transition-colors">
                   {siteSettingsData.phone}
                 </a>
               </div>
               <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-corporate-sky flex-shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-[#38BDF8] flex-shrink-0 mt-0.5" />
                 <span>{siteSettingsData.address}</span>
               </div>
-              <div className="pt-2 text-xs text-slate-400">
+              <div className="pt-2 text-[11px] text-slate-400">
                 {siteSettingsData.workingHours}
               </div>
             </div>
@@ -141,7 +141,7 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Legal Strip */}
-        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-400">
           <p>© {new Date().getFullYear()} Kairos Flow Agency. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <Link href="/privacy" className="hover:text-white transition-colors">
