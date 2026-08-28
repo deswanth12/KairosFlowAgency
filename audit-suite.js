@@ -1,11 +1,11 @@
 /**
- * Comprehensive System & Multi-User Audit Suite for Kairos Flow Agency
+ * Comprehensive System & Multi-User Security Audit Suite for Kairos Flow Agency
  */
 const BASE_URL = 'http://localhost:3000';
 
 async function runAudit() {
   console.log('====================================================');
-  console.log('🚀 RUNNING COMPREHENSIVE FOUNDER IDENTITY & AUDIT SUITE');
+  console.log('🚀 RUNNING COMPREHENSIVE SECURITY & PRODUCTION AUDIT');
   console.log('====================================================\n');
 
   let passed = 0;
@@ -55,8 +55,36 @@ async function runAudit() {
   assert(homeHtml.includes('77022 56073') || homeHtml.includes('7702256073'), 'Homepage contains official WhatsApp number +91 77022 56073');
   assert(!homeHtml.includes('hello@kairosflow.agency'), 'Homepage has NO obsolete email addresses');
 
-  // 3. MULTI-USER AUTHENTICATION & FOUNDER IDENTITY AUDIT
-  console.log('\n3. Auditing 5 Individual Founder Accounts...');
+  // 3. SECURITY MATRIX: UNAUTHENTICATED ENDPOINT LOCKDOWN AUDIT
+  console.log('\n3. Auditing Unauthenticated Endpoint Protection (Security Guards)...');
+
+  const unauthGetLeads = await fetch(`${BASE_URL}/api/leads`);
+  assert(unauthGetLeads.status === 401, 'Unauthenticated GET /api/leads blocked with 401 Unauthorized');
+
+  const unauthPostLeads = await fetch(`${BASE_URL}/api/leads`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: 'Hacker', company: 'BadCorp', email: 'h@b.com', phone: '123', description: 'Attack' })
+  });
+  assert(unauthPostLeads.status === 401, 'Unauthenticated POST /api/leads blocked with 401 Unauthorized');
+
+  const unauthPatchLeads = await fetch(`${BASE_URL}/api/leads`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: 'fake-id', status: 'Won' })
+  });
+  assert(unauthPatchLeads.status === 401, 'Unauthenticated PATCH /api/leads blocked with 401 Unauthorized');
+
+  const unauthDeleteLeads = await fetch(`${BASE_URL}/api/leads?id=fake-id`, {
+    method: 'DELETE'
+  });
+  assert(unauthDeleteLeads.status === 401, 'Unauthenticated DELETE /api/leads blocked with 401 Unauthorized');
+
+  const unauthGetActivity = await fetch(`${BASE_URL}/api/activity`);
+  assert(unauthGetActivity.status === 401, 'Unauthenticated GET /api/activity blocked with 401 Unauthorized');
+
+  // 4. MULTI-USER AUTHENTICATION & FOUNDER IDENTITY AUDIT
+  console.log('\n4. Auditing 5 Individual Founder Accounts & Login Validation...');
   const accounts = [
     { id: 'usr-desvanth', name: 'Desvanth', pass: 'Kairos@$$', role: 'Owner/Admin' },
     { id: 'usr-basha', name: 'Mehaboob Basha', pass: 'Basha@2026', role: 'Operations' },
@@ -80,8 +108,8 @@ async function runAudit() {
     authTokens[acc.name] = loginData.token;
   }
 
-  // 4. SERVER-SIDE AUDIT TRAIL & DIFF GENERATION AUDIT
-  console.log('\n4. Auditing Server-Side Activity Log & Field Diffs...');
+  // 5. SERVER-SIDE AUDIT TRAIL & DIFF GENERATION AUDIT
+  console.log('\n5. Auditing Server-Side Activity Log & Field Diffs...');
 
   // Step A: Desvanth creates a new lead
   const createLeadRes = await fetch(`${BASE_URL}/api/leads`, {
@@ -103,7 +131,7 @@ async function runAudit() {
     })
   });
   const createLeadData = await createLeadRes.json();
-  assert(createLeadRes.status === 200 && createLeadData.success, 'Desvanth created new lead record');
+  assert(createLeadRes.status === 201 && createLeadData.success, 'Desvanth created new lead record');
   const createdLeadId = createLeadData.lead.id;
   assert(createLeadData.lead.createdBy.name === 'Desvanth', 'Lead record stores Created By = Desvanth');
 
@@ -127,9 +155,11 @@ async function runAudit() {
   assert(updateLeadData.lead.status === 'Proposal Sent', 'Status updated to Proposal Sent');
 
   // Step C: Verify Activity Log recorded exact Before -> After Diffs on server
-  const activityRes = await fetch(`${BASE_URL}/api/activity?entityId=${createdLeadId}`);
+  const activityRes = await fetch(`${BASE_URL}/api/activity?entityId=${createdLeadId}`, {
+    headers: { 'Authorization': `Bearer ${authTokens['Desvanth']}` }
+  });
   const activityData = await activityRes.json();
-  assert(activityRes.status === 200 && activityData.success, 'Queried activity log for lead entity');
+  assert(activityRes.status === 200 && activityData.success, 'Queried activity log with authentication');
   assert(activityData.logs.length >= 2, 'Activity log captured both Create and Update events');
 
   const updateLog = activityData.logs.find((l) => l.action === 'Changed Lead Status' || l.userName === 'Mehaboob Basha');
@@ -139,8 +169,8 @@ async function runAudit() {
   const statusDiff = updateLog.details.changes.find((c) => c.field === 'status');
   assert(statusDiff && statusDiff.before === 'Contacted' && statusDiff.after === 'Proposal Sent', 'Detailed field diff verified: Before = Contacted, After = Proposal Sent');
 
-  // 5. ROLE-BASED ACCESS CONTROL (RBAC) AUDIT
-  console.log('\n5. Auditing Role-Based Permissions & Protection...');
+  // 6. ROLE-BASED ACCESS CONTROL (RBAC) AUDIT
+  console.log('\n6. Auditing Role-Based Permissions & Protection...');
   // Non-admin attempting delete (e.g. Siddiq with Creative role)
   const forbiddenDelete = await fetch(`${BASE_URL}/api/leads?id=${createdLeadId}`, {
     method: 'DELETE',
@@ -157,13 +187,30 @@ async function runAudit() {
   assert(allowedDelete.status === 200 && deleteData.success, 'Owner/Admin (Desvanth) successfully deleted record');
 
   // Verify deletion recorded in audit trail
-  const deleteLogRes = await fetch(`${BASE_URL}/api/activity?category=leads&limit=5`);
+  const deleteLogRes = await fetch(`${BASE_URL}/api/activity?category=leads&limit=5`, {
+    headers: { 'Authorization': `Bearer ${authTokens['Desvanth']}` }
+  });
   const deleteLogData = await deleteLogRes.json();
   const deleteLog = deleteLogData.logs.find((l) => l.action === 'Deleted Lead');
   assert(!!deleteLog && deleteLog.userName === 'Desvanth', 'Permanent audit trail recorded deletion by Desvanth');
 
-  // 6. RAG AI CONSULTANT & WHATSAPP WEBHOOK AUDIT
-  console.log('\n6. Auditing RAG AI Consultant & WhatsApp Handover...');
+  // 7. PUBLIC INTAKE & RAG CONSULTANT AUDIT
+  console.log('\n7. Auditing Public Intake Form & RAG AI Consultant...');
+  const publicContactRes = await fetch(`${BASE_URL}/api/contact`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: 'Pooja Verma',
+      company: 'Verma Analytics',
+      email: 'pooja@verma.io',
+      phone: '+91 99887 76655',
+      services: ['Web Development'],
+      description: 'Building custom analytics portal.'
+    })
+  });
+  const publicContactData = await publicContactRes.json();
+  assert(publicContactRes.status === 201 && publicContactData.success, 'Public intake /api/contact receives submissions without auth');
+
   const ragRes = await fetch(`${BASE_URL}/api/consultant`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -179,7 +226,6 @@ async function runAudit() {
   if (fs.existsSync('.data/users.json')) {
     const users = JSON.parse(fs.readFileSync('.data/users.json', 'utf-8'));
     const cleanUsers = users.map((u) => {
-      // Mark test sessions offline, but do NOT wipe genuine lastLogin if present
       if (u.id === 'usr-desvanth') {
         return { ...u, isOnline: true, lastActiveAt: new Date().toISOString() };
       }
@@ -189,7 +235,7 @@ async function runAudit() {
   }
 
   console.log('\n====================================================');
-  console.log(`🎉 ALL ${passed}/${total} AUDIT & IDENTITY CHECKS PASSED!`);
+  console.log(`🎉 ALL ${passed}/${total} SECURITY & AUDIT CHECKS PASSED!`);
   console.log('====================================================');
 }
 

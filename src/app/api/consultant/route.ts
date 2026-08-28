@@ -1,8 +1,15 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { queryConsultant } from '@/lib/rag';
+import { checkRateLimit, rateLimitExceededResponse } from '@/lib/ratelimit';
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    // 1. Rate Limiting (20 AI queries per minute per IP to prevent compute abuse)
+    const rateLimit = checkRateLimit(request, 'consultant', 20, 60000);
+    if (!rateLimit.success) {
+      return rateLimitExceededResponse(rateLimit);
+    }
+
     const body = await request.json();
     const { query } = body;
 

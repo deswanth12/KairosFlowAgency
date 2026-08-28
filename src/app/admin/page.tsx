@@ -226,8 +226,8 @@ export default function AdminPage() {
         setAuthToken(data.token);
         setPasswordInput('');
         fetchUsersList(data.token);
-        fetchLeads();
-        fetchActivityLogs();
+        fetchLeads(data.token);
+        fetchActivityLogs(data.token);
       } else {
         setAuthError(data.message || 'Invalid administrative credentials.');
       }
@@ -258,10 +258,15 @@ export default function AdminPage() {
     fetchUsersList();
   };
 
-  const fetchLeads = async () => {
+  const fetchLeads = async (tokenOverride?: string) => {
+    const activeToken = tokenOverride || authToken || (typeof window !== 'undefined' ? sessionStorage.getItem('kairos_admin_token') : null);
+    if (!activeToken) return;
+
     setIsLoadingLeads(true);
     try {
-      const res = await fetch('/api/leads');
+      const res = await fetch('/api/leads', {
+        headers: { Authorization: `Bearer ${activeToken}` }
+      });
       const data = await res.json();
       if (data.success) {
         setLeads(data.leads || []);
@@ -273,10 +278,15 @@ export default function AdminPage() {
     }
   };
 
-  const fetchActivityLogs = async () => {
+  const fetchActivityLogs = async (tokenOverride?: string) => {
+    const activeToken = tokenOverride || authToken || (typeof window !== 'undefined' ? sessionStorage.getItem('kairos_admin_token') : null);
+    if (!activeToken) return;
+
     setIsLoadingLogs(true);
     try {
-      const res = await fetch('/api/activity');
+      const res = await fetch('/api/activity', {
+        headers: { Authorization: `Bearer ${activeToken}` }
+      });
       const data = await res.json();
       if (data.success) {
         setActivityLogs(data.logs || []);

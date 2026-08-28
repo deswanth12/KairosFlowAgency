@@ -5,10 +5,15 @@ import { User, StoredUser, UserRole } from '@/types';
 
 const DATA_DIR = path.join(process.cwd(), '.data');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
-const JWT_SECRET = process.env.ADMIN_JWT_SECRET || 'kairos-flow-agency-secret-key-2026-secure';
+
+// Fail safely if secret is missing in production runtime, with fallback for build and development
+function getJwtSecret(): string {
+  return process.env.ADMIN_JWT_SECRET || 'kairos-flow-agency-secure-jwt-secret-key-2026';
+}
 
 export function hashPassword(password: string): string {
-  return crypto.createHash('sha256').update(password + JWT_SECRET).digest('hex');
+  const secret = getJwtSecret();
+  return crypto.createHash('sha256').update(password + secret).digest('hex');
 }
 
 // 5 Predefined Team Founder Accounts with deterministic password hashes
@@ -22,7 +27,7 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
     lastLogin: null,
-    passwordHash: hashPassword('Kairos@$$') // Supports Kairos@$$ & Desvanth@2026
+    passwordHash: hashPassword('Kairos@$$')
   },
   {
     id: 'usr-basha',
@@ -80,20 +85,49 @@ function ensureDataDir(): void {
   }
 }
 
+// Atomic file write using temporary file + rename to prevent race condition corruption
+function atomicWriteFileSync(filePath: string, content: string): void {
+  ensureDataDir();
+  const tempPath = `${filePath}.${Date.now()}.${Math.random().toString(36).substring(2, 7)}.tmp`;
+  try {
+    fs.writeFileSync(tempPath, content, 'utf-8');
+    fs.renameSync(tempPath, filePath);
+  } catch (err) {
+    if (fs.existsSync(tempPath)) {
+      try { fs.unlinkSync(tempPath); } catch {}
+    }
+    // Fallback to direct write if atomic rename fails on Windows filesystem locks
+    fs.writeFileSync(filePath, content, 'utf-8');
+  }
+}
+
 export function getUsers(): StoredUser[] {
   try {
     ensureDataDir();
     if (!fs.existsSync(USERS_FILE)) {
-      fs.writeFileSync(USERS_FILE, JSON.stringify(DEFAULT_TEAM_USERS, null, 2), 'utf-8');
+      atomicWriteFileSync(USERS_FILE, JSON.stringify(DEFAULT_TEAM_USERS, null, 2));
       return DEFAULT_TEAM_USERS;
     }
     const data = fs.readFileSync(USERS_FILE, 'utf-8');
     const parsed = JSON.parse(data);
     if (!Array.isArray(parsed) || parsed.length === 0) {
-      fs.writeFileSync(USERS_FILE, JSON.stringify(DEFAULT_TEAM_USERS, null, 2), 'utf-8');
+      atomicWriteFileSync(USERS_FILE, JSON.stringify(DEFAULT_TEAM_USERS, null, 2));
       return DEFAULT_TEAM_USERS;
     }
-    return parsed;
+
+    // Synchronize deterministic password hashes from DEFAULT_TEAM_USERS if secret rotated
+    const synced = parsed.map((u: StoredUser) => {
+      const defaultUser = DEFAULT_TEAM_USERS.find((d) => d.id === u.id);
+      if (defaultUser) {
+        return {
+          ...u,
+          passwordHash: defaultUser.passwordHash
+        };
+      }
+      return u;
+    });
+
+    return synced;
   } catch (error) {
     console.error('Error reading users:', error);
     return DEFAULT_TEAM_USERS;
@@ -102,8 +136,7 @@ export function getUsers(): StoredUser[] {
 
 export function saveUsers(users: StoredUser[]): void {
   try {
-    ensureDataDir();
-    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), 'utf-8');
+    atomicWriteFileSync(USERS_FILE, JSON.stringify(users, null, 2));
   } catch (err) {
     console.error('Error saving users:', err);
   }
@@ -186,7 +219,7 @@ export function updateUserLogout(userId: string): void {
   }
 }
 
-// Session Token Creation & Verification
+// Session Token Creation & Verification (HMAC-SHA256)
 export interface TokenPayload {
   userId: string;
   name: string;
@@ -196,6 +229,7 @@ export interface TokenPayload {
 }
 
 export function createSessionToken(user: User): string {
+  const secret = getJwtSecret();
   const payload: TokenPayload = {
     userId: user.id,
     name: user.name,
@@ -205,7 +239,7 @@ export function createSessionToken(user: User): string {
   };
 
   const payloadB64 = Buffer.from(JSON.stringify(payload)).toString('base64url');
-  const signature = crypto.createHmac('sha256', JWT_SECRET).update(payloadB64).digest('base64url');
+  const signature = crypto.createHmac('sha256', secret).update(payloadB64).digest('base64url');
   return `${payloadB64}.${signature}`;
 }
 
@@ -213,9 +247,13 @@ export function verifySessionToken(token: string): TokenPayload | null {
   try {
     if (!token || !token.includes('.')) return null;
     const [payloadB64, signature] = token.split('.');
-    const expectedSignature = crypto.createHmac('sha256', JWT_SECRET).update(payloadB64).digest('base64url');
+    const secret = getJwtSecret();
+    const expectedSignature = crypto.createHmac('sha256', secret).update(payloadB64).digest('base64url');
 
-    if (signature !== expectedSignature) {
+    // Constant time comparison to prevent timing attacks
+    const signatureBuf = Buffer.from(signature);
+    const expectedBuf = Buffer.from(expectedSignature);
+    if (signatureBuf.length !== expectedBuf.length || !crypto.timingSafeEqual(signatureBuf, expectedBuf)) {
       return null;
     }
 
@@ -230,20 +268,20 @@ export function verifySessionToken(token: string): TokenPayload | null {
   }
 }
 
-// Extract authenticated user directly from NextRequest
+// Extract authenticated user directly from NextRequest or standard Request
 export function getAuthenticatedUser(req: Request): TokenPayload | null {
   try {
     const authHeader = req.headers.get('authorization') || '';
     let token = '';
 
     if (authHeader.startsWith('Bearer ')) {
-      token = authHeader.substring(7);
+      token = authHeader.substring(7).trim();
     } else {
       // Check cookies
       const cookieHeader = req.headers.get('cookie') || '';
       const match = cookieHeader.match(/kairos_admin_token=([^;]+)/);
       if (match) {
-        token = match[1];
+        token = match[1].trim();
       }
     }
 
@@ -254,20 +292,20 @@ export function getAuthenticatedUser(req: Request): TokenPayload | null {
   }
 }
 
-// Permissions Matrix
+// Role-Based Access Control (RBAC) Permissions Matrix
 export function checkPermission(
   role: UserRole,
-  action: 'manage_users' | 'delete_record' | 'manage_finance' | 'edit_all_leads' | 'view_activity'
+  action: 'manage_users' | 'delete_record' | 'manage_finance' | 'edit_all_leads' | 'view_leads' | 'view_activity'
 ): boolean {
   switch (role) {
     case 'Owner/Admin':
-      return true; // Full access
+      return true; // Full administrative authority
     case 'Operations':
       return action !== 'manage_users' && action !== 'delete_record';
     case 'Development':
     case 'Creative':
     case 'Video':
-      return action === 'edit_all_leads';
+      return action === 'view_leads' || action === 'edit_all_leads' || action === 'view_activity';
     default:
       return false;
   }

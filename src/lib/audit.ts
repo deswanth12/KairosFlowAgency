@@ -15,11 +15,26 @@ function ensureDataDir(): void {
   }
 }
 
+// Atomic file write using temporary file + rename
+function atomicWriteFileSync(filePath: string, content: string): void {
+  ensureDataDir();
+  const tempPath = `${filePath}.${Date.now()}.${Math.random().toString(36).substring(2, 7)}.tmp`;
+  try {
+    fs.writeFileSync(tempPath, content, 'utf-8');
+    fs.renameSync(tempPath, filePath);
+  } catch (err) {
+    if (fs.existsSync(tempPath)) {
+      try { fs.unlinkSync(tempPath); } catch {}
+    }
+    fs.writeFileSync(filePath, content, 'utf-8');
+  }
+}
+
 export function getAllActivityLogs(): ActivityLog[] {
   try {
     ensureDataDir();
     if (!fs.existsSync(AUDIT_FILE)) {
-      fs.writeFileSync(AUDIT_FILE, JSON.stringify([], null, 2), 'utf-8');
+      atomicWriteFileSync(AUDIT_FILE, JSON.stringify([], null, 2));
       return [];
     }
     const data = fs.readFileSync(AUDIT_FILE, 'utf-8');
@@ -73,11 +88,10 @@ export function logActivity(params: LogActionParams): ActivityLog {
 
     logs.unshift(newLog);
 
-    // Keep last 500 logs
-    const trimmedLogs = logs.slice(0, 500);
+    // Keep last 1,000 logs
+    const trimmedLogs = logs.slice(0, 1000);
 
-    ensureDataDir();
-    fs.writeFileSync(AUDIT_FILE, JSON.stringify(trimmedLogs, null, 2), 'utf-8');
+    atomicWriteFileSync(AUDIT_FILE, JSON.stringify(trimmedLogs, null, 2));
     return newLog;
   } catch (error) {
     console.error('Error recording activity log:', error);
@@ -98,26 +112,29 @@ export function computeFieldDiffs(
     proposalStatus: 'Proposal Status',
     company: 'Company',
     email: 'Email',
-    phone: 'Phone Number',
-    description: 'Project Brief'
+    phone: 'Phone',
+    budget: 'Budget',
+    timeline: 'Target Timeline'
   }
 ): FieldChange[] {
   const changes: FieldChange[] = [];
-
-  const keys = Array.from(new Set([...Object.keys(before || {}), ...Object.keys(after || {})]));
+  const keys = new Set([...Object.keys(before || {}), ...Object.keys(after || {})]);
 
   for (const key of keys) {
-    if (['updatedAt', 'notes', 'id', 'createdAt'].includes(key)) continue;
+    // Ignore internal timestamp fields
+    if (['updatedAt', 'createdAt', 'notes', 'createdBy', 'updatedBy', 'id'].includes(key)) {
+      continue;
+    }
 
-    const valBefore = before ? before[key] : undefined;
-    const valAfter = after ? after[key] : undefined;
+    const beforeVal = before ? before[key] : undefined;
+    const afterVal = after ? after[key] : undefined;
 
-    if (JSON.stringify(valBefore) !== JSON.stringify(valAfter) && (valBefore !== undefined || valAfter !== undefined)) {
+    if (beforeVal !== afterVal && afterVal !== undefined) {
       changes.push({
         field: key,
-        label: fieldLabels[key] || key,
-        before: valBefore === undefined ? 'None' : valBefore,
-        after: valAfter === undefined ? 'None' : valAfter
+        label: fieldLabels[key] || key.charAt(0).toUpperCase() + key.slice(1),
+        before: beforeVal !== undefined && beforeVal !== null && beforeVal !== '' ? beforeVal : '(empty)',
+        after: afterVal !== undefined && afterVal !== null && afterVal !== '' ? afterVal : '(empty)'
       });
     }
   }
@@ -132,35 +149,29 @@ export function filterActivityLogs(filters: {
   search?: string;
   limit?: number;
 }): ActivityLog[] {
-  let logs = getAllActivityLogs();
-
-  if (filters.category && filters.category !== 'all') {
-    logs = logs.filter((l) => l.category === filters.category);
-  }
-
-  if (filters.userId && filters.userId !== 'all') {
-    const uid = filters.userId.toLowerCase();
-    logs = logs.filter((l) => l.userId.toLowerCase() === uid || l.userName.toLowerCase() === uid);
-  }
-
-  if (filters.entityId) {
-    logs = logs.filter((l) => l.entityId === filters.entityId);
-  }
-
-  if (filters.search && filters.search.trim()) {
-    const q = filters.search.toLowerCase();
-    logs = logs.filter(
-      (l) =>
-        l.userName.toLowerCase().includes(q) ||
-        l.action.toLowerCase().includes(q) ||
-        l.entityTitle.toLowerCase().includes(q) ||
-        l.details.summary.toLowerCase().includes(q)
-    );
-  }
-
-  if (filters.limit) {
-    logs = logs.slice(0, filters.limit);
-  }
-
-  return logs;
+  const logs = getAllActivityLogs();
+  return logs
+    .filter((log) => {
+      if (filters.category && filters.category !== 'all' && log.category !== filters.category) {
+        return false;
+      }
+      if (filters.userId && filters.userId !== 'all' && log.userId !== filters.userId) {
+        return false;
+      }
+      if (filters.entityId && log.entityId !== filters.entityId) {
+        return false;
+      }
+      if (filters.search) {
+        const q = filters.search.toLowerCase();
+        const matchesSummary = log.details.summary.toLowerCase().includes(q);
+        const matchesEntity = log.entityTitle.toLowerCase().includes(q);
+        const matchesUser = log.userName.toLowerCase().includes(q);
+        const matchesAction = log.action.toLowerCase().includes(q);
+        if (!matchesSummary && !matchesEntity && !matchesUser && !matchesAction) {
+          return false;
+        }
+      }
+      return true;
+    })
+    .slice(0, filters.limit || 100);
 }

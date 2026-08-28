@@ -1,8 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { filterActivityLogs, getAllActivityLogs } from '@/lib/audit';
+import { getAuthenticatedUser } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
   try {
+    const authUser = getAuthenticatedUser(request);
+    if (!authUser) {
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized: Authentication required to view audit logs.' },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category') || undefined;
     const userId = searchParams.get('userId') || undefined;
