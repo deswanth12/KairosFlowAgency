@@ -4,9 +4,9 @@
 
 @layer base {
   :root {
-    --font-sans: 'Geist', 'Inter', system-ui, -apple-system, sans-serif;
-    --font-display: 'Plus Jakarta Sans', 'Geist', system-ui, sans-serif;
-    --font-mono: 'Geist Mono', 'JetBrains Mono', 'Fira Code', monospace;
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
   }
 
   html {
@@ -21,6 +21,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     overflow-x: hidden;
   }
 
@@ -28,6 +29,12 @@
   ::selection {
     background-color: #0B1F33;
     color: #F7F7F4;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.035em;
+    text-wrap: balance;
   }
 }
 
@@ -52,8 +59,17 @@
 
 /* Editorial Glass Panels */
 .glass-panel-warm {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid #D9E0E5;
+}
+
+/* Smooth typography utilities */
+.tracking-ultra-tight {
+  letter-spacing: -0.04em;
+}
+
+.tracking-mono-wide {
+  letter-spacing: 0.16em;
 }

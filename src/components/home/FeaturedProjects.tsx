@@ -22,14 +22,14 @@ export const FeaturedProjects: React.FC = () => {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#D9E0E5] text-xs font-mono uppercase tracking-widest text-[#B8613A] mb-3 font-semibold shadow-subtle-card">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#D9E0E5] text-xs font-mono uppercase tracking-widest text-[#B8613A] mb-4 font-semibold shadow-subtle-card">
               <Terminal className="w-3.5 h-3.5 text-[#B8613A]" />
               <span>/ SELECTED WORK</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#0B1F33] font-display">
               Production Systems & Case Studies
             </h2>
-            <p className="text-[#5B6875] text-base sm:text-lg mt-3 max-w-xl">
+            <p className="text-[#5B6875] text-base sm:text-lg mt-3 max-w-xl leading-relaxed">
               Real projects delivered across modern web architecture, autonomous AI pipelines, native mobile applications, and brand systems.
             </p>
           </div>
@@ -93,11 +93,11 @@ export const FeaturedProjects: React.FC = () => {
 
                 {/* Metric Badge Overlay */}
                 {project.results?.[0] && (
-                  <div className="absolute bottom-4 right-4 px-3 py-1.5 rounded-xl bg-[#0B1F33]/90 backdrop-blur-md border border-white/15 text-right font-mono">
+                  <div className="absolute bottom-4 right-4 px-3.5 py-1.5 rounded-xl bg-[#0B1F33]/90 backdrop-blur-md border border-white/15 text-right font-mono">
                     <div className="text-xs font-bold text-[#F7F7F4]">
                       {project.results[0].metric}
                     </div>
-                    <div className="text-[10px] text-slate-300">
+                    <div className="text-[10px] text-slate-300 font-medium">
                       {project.results[0].label}
                     </div>
                   </div>
@@ -105,15 +105,15 @@ export const FeaturedProjects: React.FC = () => {
               </div>
 
               {/* Card Content */}
-              <div className="flex flex-col flex-1 p-6 sm:p-7 justify-between">
+              <div className="flex flex-col flex-1 p-7 sm:p-8 justify-between">
                 <div>
                   <div className="text-xs font-mono text-[#5B6875] mb-2 font-semibold">
                     {project.client} • {project.year}
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-[#0B1F33] tracking-tight mb-2 group-hover:text-[#B8613A] transition-colors font-display">
+                  <h3 className="text-xl sm:text-2xl font-bold text-[#0B1F33] tracking-tight mb-2.5 group-hover:text-[#B8613A] transition-colors font-display">
                     {project.title}
                   </h3>
-                  <p className="text-[#5B6875] text-sm leading-relaxed line-clamp-2 mb-4">
+                  <p className="text-[#5B6875] text-sm leading-relaxed line-clamp-2 mb-5">
                     {project.tagline}
                   </p>
 
@@ -122,13 +122,13 @@ export const FeaturedProjects: React.FC = () => {
                     {project.techStack.slice(0, 4).map((tech) => (
                       <span
                         key={tech}
-                        className="px-2.5 py-0.5 text-[11px] bg-[#F7F7F4] text-[#111827] rounded-md border border-[#D9E0E5]"
+                        className="px-2.5 py-1 text-[11px] bg-[#F7F7F4] text-[#111827] rounded-md border border-[#D9E0E5]"
                       >
                         {tech}
                       </span>
                     ))}
                     {project.techStack.length > 4 && (
-                      <span className="px-2 py-0.5 text-[11px] text-[#5B6875]">
+                      <span className="px-2 py-1 text-[11px] text-[#5B6875]">
                         +{project.techStack.length - 4} more
                       </span>
                     )}
@@ -136,7 +136,7 @@ export const FeaturedProjects: React.FC = () => {
                 </div>
 
                 {/* Footer Action */}
-                <div className="pt-4 border-t border-[#D9E0E5] flex items-center justify-between font-mono">
+                <div className="pt-5 border-t border-[#D9E0E5] flex items-center justify-between font-mono">
                   <span className="text-xs text-[#5B6875]">TIMELINE: {project.duration}</span>
                   <Link
                     href={`/work/${project.slug}`}

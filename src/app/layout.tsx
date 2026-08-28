@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
+import { Inter, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -15,6 +15,12 @@ const inter = Inter({
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-display',
+  display: 'swap',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
   display: 'swap',
 });
 
@@ -122,14 +128,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${plusJakartaSans.variable}`}>
+    <html lang="en" className={`${inter.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} scroll-smooth`}>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#F7F7F4] text-[#111827] antialiased selection:bg-[#0B1F33] selection:text-[#F7F7F4]">
+      <body className="min-h-screen flex flex-col bg-[#F7F7F4] text-[#111827] antialiased selection:bg-[#0B1F33] selection:text-[#F7F7F4] font-sans">
         <Navbar />
         <main className="flex-1 w-full bg-[#F7F7F4]">{children}</main>
         <Footer />
