@@ -29,6 +29,78 @@ export type LeadPriority = 'High' | 'Medium' | 'Low';
 export type ProposalStatus = 'Not Started' | 'Draft' | 'Sent' | 'Approved' | 'Declined';
 export type PaymentStatus = 'Pending Deposit' | 'Deposit Paid' | 'Milestone Paid' | 'Fully Paid' | 'N/A';
 
+export type UserRole = 
+  | 'Owner/Admin' 
+  | 'Operations' 
+  | 'Development' 
+  | 'Creative' 
+  | 'Video';
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  profilePhoto?: string;
+  status: 'Active' | 'Inactive';
+  createdAt: string;
+  lastLogin?: string;
+}
+
+export interface StoredUser extends User {
+  passwordHash: string;
+}
+
+export type ActivityCategory = 'leads' | 'projects' | 'payments' | 'users' | 'settings' | 'auth';
+
+export type ActivityAction = 
+  | 'Created Lead'
+  | 'Updated Lead'
+  | 'Changed Lead Status'
+  | 'Assigned Lead'
+  | 'Updated Payment'
+  | 'Deleted Lead'
+  | 'Added Note'
+  | 'Created Project'
+  | 'Updated Project'
+  | 'User Logged In'
+  | 'User Logged Out'
+  | 'Updated User';
+
+export interface FieldChange {
+  field: string;
+  label: string;
+  before: any;
+  after: any;
+}
+
+export interface ActivityLog {
+  id: string;
+  userId: string;
+  userName: string;
+  userRole: UserRole;
+  action: ActivityAction;
+  category: ActivityCategory;
+  entityType: 'lead' | 'project' | 'user' | 'payment' | 'settings' | 'auth';
+  entityId: string;
+  entityTitle: string;
+  timestamp: string;
+  ipAddress?: string;
+  details: {
+    summary: string;
+    changes?: FieldChange[];
+    before?: Record<string, any>;
+    after?: Record<string, any>;
+    meta?: Record<string, any>;
+  };
+}
+
+export interface UserAuditRef {
+  id: string;
+  name: string;
+  role: UserRole;
+}
+
 export interface ProjectResult {
   metric: string;
   label: string;
@@ -62,6 +134,8 @@ export interface Project {
   gallery?: string[];
   liveUrl?: string;
   featured: boolean;
+  createdBy?: UserAuditRef;
+  updatedBy?: UserAuditRef;
 }
 
 export interface ServiceDeliverable {
@@ -116,6 +190,7 @@ export interface ProcessStep {
 export interface LeadNote {
   id: string;
   author: string;
+  authorId?: string;
   content: string;
   createdAt: string;
 }
@@ -135,12 +210,15 @@ export interface Lead {
   status: LeadStatus;
   priority?: LeadPriority;
   assignedTo?: string;
+  assignedUserId?: string;
   estimatedValue?: string;
   followUpDate?: string;
   lastContactedDate?: string;
   proposalStatus?: ProposalStatus;
   paymentStatus?: PaymentStatus;
   notes?: LeadNote[];
+  createdBy?: UserAuditRef;
+  updatedBy?: UserAuditRef;
   createdAt: string;
   updatedAt: string;
 }

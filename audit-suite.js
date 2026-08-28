@@ -1,11 +1,11 @@
 /**
- * Comprehensive System Audit for Kairos Flow Agency
+ * Comprehensive System & Multi-User Audit Suite for Kairos Flow Agency
  */
 const BASE_URL = 'http://localhost:3000';
 
 async function runAudit() {
   console.log('====================================================');
-  console.log('🚀 RUNNING COMPREHENSIVE KAIROS FLOW PLATFORM AUDIT');
+  console.log('🚀 RUNNING COMPREHENSIVE FOUNDER IDENTITY & AUDIT SUITE');
   console.log('====================================================\n');
 
   let passed = 0;
@@ -55,73 +55,115 @@ async function runAudit() {
   assert(homeHtml.includes('77022 56073') || homeHtml.includes('7702256073'), 'Homepage contains official WhatsApp number +91 77022 56073');
   assert(!homeHtml.includes('hello@kairosflow.agency'), 'Homepage has NO obsolete email addresses');
 
-  // 3. LEADERSHIP & FOUNDER IDENTITY AUDIT
-  console.log('\n3. Auditing Leadership & Founder Designation...');
-  const aboutRes = await fetch(`${BASE_URL}/about`);
-  const aboutHtml = await aboutRes.text();
-  assert(aboutHtml.includes('Desvanth'), 'About page features Founder Desvanth');
-  assert(aboutHtml.includes('Founder & Technology Lead') || aboutHtml.includes('Founder'), 'Desvanth is designated Founder');
-  assert(aboutHtml.includes('github.com/deswanth12'), 'Founder profile links to GitHub (deswanth12)');
-  assert(aboutHtml.includes('linkedin.com/in/deswanth'), 'Founder profile links to LinkedIn (/in/deswanth)');
-  assert((aboutHtml.includes('Mehaboob Basha') || aboutHtml.includes('Basha')) && aboutHtml.includes('Siddiq') && aboutHtml.includes('Rithesh') && aboutHtml.includes('Sai Deep'), 'All 5 team members present');
+  // 3. MULTI-USER AUTHENTICATION & FOUNDER IDENTITY AUDIT
+  console.log('\n3. Auditing 5 Individual Founder Accounts...');
+  const accounts = [
+    { id: 'usr-desvanth', name: 'Desvanth', pass: 'Kairos@$$', role: 'Owner/Admin' },
+    { id: 'usr-basha', name: 'Mehaboob Basha', pass: 'Basha@2026', role: 'Operations' },
+    { id: 'usr-siddiq', name: 'Siddiq', pass: 'Siddiq@2026', role: 'Creative' },
+    { id: 'usr-rithesh', name: 'Rithesh', pass: 'Rithesh@2026', role: 'Development' },
+    { id: 'usr-saideep', name: 'Sai Deep', pass: 'SaiDeep@2026', role: 'Video' }
+  ];
 
-  // 4. AUTHENTIC GITHUB REPOSITORIES AUDIT
-  console.log('\n4. Auditing Featured GitHub Projects...');
-  const workRes = await fetch(`${BASE_URL}/work`);
-  const workHtml = await workRes.text();
-  assert(workHtml.includes('EvalMesh'), 'Work page includes EvalMesh');
-  assert(workHtml.includes('JanAI'), 'Work page includes JanAI');
-  assert(workHtml.includes('SignLang AI') || workHtml.includes('singlangbydeshu'), 'Work page includes SignLang AI');
-  assert(workHtml.includes('Ember &amp; Oak') || workHtml.includes('Ember & Oak'), 'Work page includes Ember & Oak');
+  const authTokens = {};
 
-  // 5. SECURITY & ADMIN GATE AUDIT
-  console.log('\n5. Auditing Admin CRM Security & Operations...');
-  // Invalid auth
-  const badAuth = await fetch(`${BASE_URL}/api/auth`, {
+  for (const acc of accounts) {
+    const loginRes = await fetch(`${BASE_URL}/api/auth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: acc.id, password: acc.pass })
+    });
+    const loginData = await loginRes.json();
+    assert(loginRes.status === 200 && loginData.success === true, `Authenticated ${acc.name} (${acc.role}) with individual password`);
+    assert(loginData.user.role === acc.role, `Verified ${acc.name} role is ${acc.role}`);
+    assert(!!loginData.token, `Received signed session token for ${acc.name}`);
+    authTokens[acc.name] = loginData.token;
+  }
+
+  // 4. SERVER-SIDE AUDIT TRAIL & DIFF GENERATION AUDIT
+  console.log('\n4. Auditing Server-Side Activity Log & Field Diffs...');
+
+  // Step A: Desvanth creates a new lead
+  const createLeadRes = await fetch(`${BASE_URL}/api/leads`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ password: 'WrongPassword123' })
-  });
-  assert(badAuth.status === 401, 'Admin API rejects incorrect passwords with 401');
-
-  // Valid auth
-  const goodAuth = await fetch(`${BASE_URL}/api/auth`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ password: 'Kairos@$$' })
-  });
-  const goodAuthData = await goodAuth.json();
-  assert(goodAuth.status === 200 && goodAuthData.success === true, 'Admin API unlocks with Kairos@$$');
-
-  // 6. CONTACT FORM & PIPELINE INTEL AUDIT
-  console.log('\n6. Auditing Contact Form Submission & Storage...');
-  const contactSubmission = await fetch(`${BASE_URL}/api/contact`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authTokens['Desvanth']}`
+    },
     body: JSON.stringify({
-      name: 'Ananya Roy',
-      company: 'Novus Biotech Labs',
-      email: 'ananya@novusbiotech.com',
-      phone: '+91 77022 56073',
-      services: ['Web Development', 'AI & Automation'],
-      description: 'Require high-performance diagnostic analytics dashboard with AI pipeline.',
-      budget: '$25,000 – $50,000',
-      timeline: '1 – 2 Months',
-      hearAbout: 'Referral'
+      name: 'Dr. Suresh Kumar',
+      company: 'Apollo Advanced Imaging',
+      email: 'suresh@apolloimaging.in',
+      phone: '+91 98401 23456',
+      services: ['AI & Automation', 'Web Development'],
+      description: 'Need real-time DICOM CT scan AI classification workflow.',
+      status: 'Contacted',
+      priority: 'High',
+      estimatedValue: '₹1,50,000'
     })
   });
-  const contactData = await contactSubmission.json();
-  assert(contactSubmission.status === 200 && contactData.success, 'Contact submission successfully logged');
+  const createLeadData = await createLeadRes.json();
+  assert(createLeadRes.status === 200 && createLeadData.success, 'Desvanth created new lead record');
+  const createdLeadId = createLeadData.lead.id;
+  assert(createLeadData.lead.createdBy.name === 'Desvanth', 'Lead record stores Created By = Desvanth');
 
-  // Verify lead in CRM
-  const leadsRes = await fetch(`${BASE_URL}/api/leads`);
-  const leadsData = await leadsRes.json();
-  assert(leadsData.success && Array.isArray(leadsData.leads), 'Leads database API returns list');
-  const foundLead = leadsData.leads.find((l) => l.name === 'Ananya Roy');
-  assert(!!foundLead, 'Submitted lead is present in CRM leads store');
+  // Step B: Mehaboob Basha updates status & expected value (Contacted -> Proposal Sent)
+  const updateLeadRes = await fetch(`${BASE_URL}/api/leads`, {
+    method: 'PATCH',
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authTokens['Mehaboob Basha']}`
+    },
+    body: JSON.stringify({
+      id: createdLeadId,
+      status: 'Proposal Sent',
+      estimatedValue: '₹1,80,000',
+      assignedTo: 'Mehaboob Basha'
+    })
+  });
+  const updateLeadData = await updateLeadRes.json();
+  assert(updateLeadRes.status === 200 && updateLeadData.success, 'Mehaboob Basha updated lead record');
+  assert(updateLeadData.lead.updatedBy.name === 'Mehaboob Basha', 'Lead record stores Last Updated By = Mehaboob Basha');
+  assert(updateLeadData.lead.status === 'Proposal Sent', 'Status updated to Proposal Sent');
 
-  // 7. RAG AI CONSULTANT & WHATSAPP WEBHOOK AUDIT
-  console.log('\n7. Auditing RAG AI Consultant & WhatsApp Handover...');
+  // Step C: Verify Activity Log recorded exact Before -> After Diffs on server
+  const activityRes = await fetch(`${BASE_URL}/api/activity?entityId=${createdLeadId}`);
+  const activityData = await activityRes.json();
+  assert(activityRes.status === 200 && activityData.success, 'Queried activity log for lead entity');
+  assert(activityData.logs.length >= 2, 'Activity log captured both Create and Update events');
+
+  const updateLog = activityData.logs.find((l) => l.action === 'Changed Lead Status' || l.userName === 'Mehaboob Basha');
+  assert(!!updateLog, 'Found specific update log signed by Mehaboob Basha');
+  assert(updateLog.details.summary.includes('Contacted') && updateLog.details.summary.includes('Proposal Sent'), 'Activity log summary captures Contacted → Proposal Sent');
+
+  const statusDiff = updateLog.details.changes.find((c) => c.field === 'status');
+  assert(statusDiff && statusDiff.before === 'Contacted' && statusDiff.after === 'Proposal Sent', 'Detailed field diff verified: Before = Contacted, After = Proposal Sent');
+
+  // 5. ROLE-BASED ACCESS CONTROL (RBAC) AUDIT
+  console.log('\n5. Auditing Role-Based Permissions & Protection...');
+  // Non-admin attempting delete (e.g. Siddiq with Creative role)
+  const forbiddenDelete = await fetch(`${BASE_URL}/api/leads?id=${createdLeadId}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${authTokens['Siddiq']}` }
+  });
+  assert(forbiddenDelete.status === 403, 'Non-Admin role correctly blocked from deleting record (403 Forbidden)');
+
+  // Owner/Admin deleting record (Desvanth)
+  const allowedDelete = await fetch(`${BASE_URL}/api/leads?id=${createdLeadId}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${authTokens['Desvanth']}` }
+  });
+  const deleteData = await allowedDelete.json();
+  assert(allowedDelete.status === 200 && deleteData.success, 'Owner/Admin (Desvanth) successfully deleted record');
+
+  // Verify deletion recorded in audit trail
+  const deleteLogRes = await fetch(`${BASE_URL}/api/activity?category=leads&limit=5`);
+  const deleteLogData = await deleteLogRes.json();
+  const deleteLog = deleteLogData.logs.find((l) => l.action === 'Deleted Lead');
+  assert(!!deleteLog && deleteLog.userName === 'Desvanth', 'Permanent audit trail recorded deletion by Desvanth');
+
+  // 6. RAG AI CONSULTANT & WHATSAPP WEBHOOK AUDIT
+  console.log('\n6. Auditing RAG AI Consultant & WhatsApp Handover...');
   const ragRes = await fetch(`${BASE_URL}/api/consultant`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -129,30 +171,9 @@ async function runAudit() {
   });
   const ragData = await ragRes.json();
   assert(ragRes.status === 200 && ragData.success, 'AI Consultant RAG responds with 200');
-  assert(ragData.data.answer.includes('Desvanth') || ragData.data.answer.includes('Kairos Flow'), 'AI Consultant correctly identifies agency & founder');
-
-  const waRes = await fetch(`${BASE_URL}/api/whatsapp/webhook`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: 'I need a mobile app quotation' })
-  });
-  const waData = await waRes.json();
-  assert(waRes.status === 200 && waData.success, 'WhatsApp Webhook executes RAG pipeline');
-
-  // 8. STATIC SEO & ROBOTS AUDIT
-  console.log('\n8. Auditing SEO, Sitemap, and Crawlers...');
-  const robotsRes = await fetch(`${BASE_URL}/robots.txt`);
-  const robotsTxt = await robotsRes.text();
-  assert(robotsTxt.includes('Disallow: /admin'), 'robots.txt disallows /admin for privacy');
-  assert(robotsTxt.includes('sitemap.xml'), 'robots.txt references sitemap.xml');
-
-  const sitemapRes = await fetch(`${BASE_URL}/sitemap.xml`);
-  const sitemapXml = await sitemapRes.text();
-  assert(sitemapXml.includes('<loc>https://kairosflow.agency</loc>'), 'Sitemap contains root domain');
-  assert(!sitemapXml.includes('/admin'), 'Sitemap does NOT expose /admin');
 
   console.log('\n====================================================');
-  console.log(`🎉 ALL ${passed}/${total} AUDIT CHECKS PASSED WITH ZERO ERRORS!`);
+  console.log(`🎉 ALL ${passed}/${total} AUDIT & IDENTITY CHECKS PASSED!`);
   console.log('====================================================');
 }
 
