@@ -5,13 +5,20 @@ import {
   hashPassword, 
   createSessionToken, 
   updateUserLastLogin,
-  findUserById
+  updateUserHeartbeat,
+  updateUserLogout,
+  findUserById,
+  getAuthenticatedUser
 } from '@/lib/auth';
 import { logActivity } from '@/lib/audit';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const users = getPublicUsers();
+    const authUser = getAuthenticatedUser(request);
+    if (authUser) {
+      updateUserHeartbeat(authUser.userId);
+    }
+    const users = getPublicUsers(authUser?.userId);
     return NextResponse.json({ success: true, users });
   } catch {
     return NextResponse.json({ success: false, message: 'Failed to fetch users' }, { status: 500 });
@@ -61,6 +68,7 @@ export async function POST(request: NextRequest) {
           email: founder.email,
           role: founder.role,
           status: founder.status,
+          isOnline: true,
           createdAt: founder.createdAt,
           lastLogin: new Date().toISOString()
         }
@@ -125,6 +133,7 @@ export async function POST(request: NextRequest) {
         email: targetUser.email,
         role: targetUser.role,
         status: targetUser.status,
+        isOnline: true,
         createdAt: targetUser.createdAt,
         lastLogin: new Date().toISOString()
       }
@@ -135,5 +144,28 @@ export async function POST(request: NextRequest) {
       { success: false, message: 'Server error during authentication' },
       { status: 500 }
     );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const authUser = getAuthenticatedUser(request);
+    if (authUser) {
+      updateUserLogout(authUser.userId);
+      logActivity({
+        userId: authUser.userId,
+        userName: authUser.name,
+        userRole: authUser.role,
+        action: 'User Logged Out',
+        category: 'auth',
+        entityType: 'auth',
+        entityId: authUser.userId,
+        entityTitle: `${authUser.name} (${authUser.role})`,
+        summary: `${authUser.name} signed out of Operations OS`
+      });
+    }
+    return NextResponse.json({ success: true, message: 'Signed out successfully' });
+  } catch {
+    return NextResponse.json({ success: false, message: 'Failed to sign out' }, { status: 500 });
   }
 }

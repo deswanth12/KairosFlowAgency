@@ -43,8 +43,10 @@ export interface User {
   role: UserRole;
   profilePhoto?: string;
   status: 'Active' | 'Inactive';
+  isOnline?: boolean;
+  lastActiveAt?: string;
   createdAt: string;
-  lastLogin?: string;
+  lastLogin?: string | null;
 }
 
 export interface StoredUser extends User {

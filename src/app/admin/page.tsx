@@ -38,7 +38,8 @@ import {
   UserCheck,
   Layers,
   Key,
-  Terminal
+  Terminal,
+  Radio
 } from 'lucide-react';
 import { Logo } from '@/components/brand/Logo';
 import { 
@@ -138,7 +139,6 @@ export default function AdminPage() {
 
   // Check Session Token on Mount
   useEffect(() => {
-    fetchUsersList();
     const token = sessionStorage.getItem('kairos_admin_token');
     const storedUserJson = sessionStorage.getItem('kairos_admin_user');
 
@@ -147,19 +147,27 @@ export default function AdminPage() {
         const user = JSON.parse(storedUserJson);
         setCurrentUser(user);
         setAuthToken(token);
+        fetchUsersList(token);
         fetchLeads();
         fetchActivityLogs();
       } catch {
         sessionStorage.removeItem('kairos_admin_token');
+        fetchUsersList();
       }
     } else {
       setIsLoadingLeads(false);
+      fetchUsersList();
     }
   }, []);
 
-  const fetchUsersList = async () => {
+  const fetchUsersList = async (tokenOverride?: string) => {
     try {
-      const res = await fetch('/api/auth');
+      const activeToken = tokenOverride || authToken || (typeof window !== 'undefined' ? sessionStorage.getItem('kairos_admin_token') : null);
+      const headers: Record<string, string> = {};
+      if (activeToken) {
+        headers['Authorization'] = `Bearer ${activeToken}`;
+      }
+      const res = await fetch('/api/auth', { headers });
       const data = await res.json();
       if (data.success && data.users) {
         setAvailableUsers(data.users);
@@ -192,6 +200,7 @@ export default function AdminPage() {
         setCurrentUser(data.user);
         setAuthToken(data.token);
         setPasswordInput('');
+        fetchUsersList(data.token);
         fetchLeads();
         fetchActivityLogs();
       } else {
@@ -204,13 +213,24 @@ export default function AdminPage() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      if (authToken) {
+        await fetch('/api/auth', {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${authToken}` }
+        });
+      }
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
     sessionStorage.removeItem('kairos_admin_token');
     sessionStorage.removeItem('kairos_admin_user');
     setCurrentUser(null);
     setAuthToken('');
     setLeads([]);
     setActivityLogs([]);
+    fetchUsersList();
   };
 
   const fetchLeads = async () => {
@@ -259,7 +279,6 @@ export default function AdminPage() {
         if (activeLead && activeLead.id === id) {
           setActiveLead(data.lead);
         }
-        // Refresh audit log to reflect change
         fetchActivityLogs();
       }
     } catch (err) {
@@ -559,6 +578,10 @@ export default function AdminPage() {
                 <span className={`px-1.5 py-0.2 rounded text-[9px] font-semibold border ${ROLE_BADGES[currentUser.role]?.bg} ${ROLE_BADGES[currentUser.role]?.text} ${ROLE_BADGES[currentUser.role]?.border}`}>
                   {currentUser.role}
                 </span>
+                <span className="inline-flex items-center gap-1 text-emerald-700 font-bold text-[10px]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>Online</span>
+                </span>
               </div>
             </div>
           </div>
@@ -598,7 +621,10 @@ export default function AdminPage() {
             </button>
 
             <button
-              onClick={() => setActiveTab('team')}
+              onClick={() => {
+                setActiveTab('team');
+                fetchUsersList();
+              }}
               className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                 activeTab === 'team'
                   ? 'bg-[#0B1F33] text-white shadow-sm'
@@ -1078,7 +1104,7 @@ export default function AdminPage() {
                 </div>
                 <h3 className="text-xl font-bold font-display text-[#0B1F33]">Founder Accounts & Role Permissions</h3>
                 <p className="text-xs sm:text-sm text-[#5B6875] mt-1">
-                  Individual accounts for each of the 5 founding leads with server-enforced role access and immutable audit logging.
+                  Individual accounts for each of the 5 founding leads with server-enforced role access and live presence tracking.
                 </p>
               </div>
 
@@ -1089,13 +1115,14 @@ export default function AdminPage() {
                       <th className="p-4">Founder / Lead</th>
                       <th className="p-4">Role</th>
                       <th className="p-4">Permissions Scope</th>
-                      <th className="p-4">Account Status</th>
+                      <th className="p-4">Live Status</th>
                       <th className="p-4">Last Authenticated</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#D9E0E5] bg-white">
                     {availableUsers.map((user) => {
                       const roleBadge = ROLE_BADGES[user.role] || ROLE_BADGES['Development'];
+                      const isUserOnline = user.isOnline || user.id === currentUser.id;
 
                       return (
                         <tr key={user.id} className="hover:bg-[#FBF4F0]/50 transition-colors">
@@ -1121,13 +1148,34 @@ export default function AdminPage() {
                             {user.role === 'Video' && 'Video Projects • Media Assets • Production Shoots'}
                           </td>
                           <td className="p-4 font-mono text-[11px]">
-                            <span className="inline-flex items-center gap-1.5 text-emerald-700 font-semibold">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
-                              <span>{user.status}</span>
-                            </span>
+                            {isUserOnline ? (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                <span>Active Now</span>
+                              </span>
+                            ) : user.lastLogin ? (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 text-[#5B6875] border border-slate-200 font-medium">
+                                <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+                                <span>Offline</span>
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[#5B6875] font-mono text-[10px]">
+                                <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                                <span>Never Logged In</span>
+                              </span>
+                            )}
                           </td>
-                          <td className="p-4 font-mono text-[10px] text-[#5B6875]">
-                            {user.lastLogin ? formatDate(user.lastLogin) : 'Pending first sign-in'}
+                          <td className="p-4 font-mono text-[11px]">
+                            {isUserOnline ? (
+                              <span className="text-emerald-700 font-bold">Active Session</span>
+                            ) : user.lastLogin ? (
+                              <div className="text-[#5B6875]">
+                                <div>{formatDate(user.lastLogin)}</div>
+                                <div className="text-[10px] text-[#5B6875]/70">{formatTimeAgo(user.lastLogin)}</div>
+                              </div>
+                            ) : (
+                              <span className="text-slate-400 italic text-[10px]">Pending first sign-in</span>
+                            )}
                           </td>
                         </tr>
                       );

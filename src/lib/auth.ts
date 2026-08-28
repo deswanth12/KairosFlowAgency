@@ -7,6 +7,10 @@ const DATA_DIR = path.join(process.cwd(), '.data');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const JWT_SECRET = process.env.ADMIN_JWT_SECRET || 'kairos-flow-agency-secret-key-2026-secure';
 
+export function hashPassword(password: string): string {
+  return crypto.createHash('sha256').update(password + JWT_SECRET).digest('hex');
+}
+
 // 5 Predefined Team Founder Accounts
 export const DEFAULT_TEAM_USERS: StoredUser[] = [
   {
@@ -15,8 +19,10 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     email: 'desvanth@kairosflow.agency',
     role: 'Owner/Admin',
     status: 'Active',
+    isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
-    passwordHash: hashPassword('Kairos@$$') // Founder Master Password & Desvanth@2026
+    lastLogin: null,
+    passwordHash: hashPassword('Kairos@$$') // Founder Master Password
   },
   {
     id: 'usr-basha',
@@ -24,7 +30,9 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     email: 'basha@kairosflow.agency',
     role: 'Operations',
     status: 'Active',
+    isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
+    lastLogin: null,
     passwordHash: hashPassword('Basha@2026')
   },
   {
@@ -33,7 +41,9 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     email: 'siddiq@kairosflow.agency',
     role: 'Creative',
     status: 'Active',
+    isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
+    lastLogin: null,
     passwordHash: hashPassword('Siddiq@2026')
   },
   {
@@ -42,7 +52,9 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     email: 'rithesh@kairosflow.agency',
     role: 'Development',
     status: 'Active',
+    isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
+    lastLogin: null,
     passwordHash: hashPassword('Rithesh@2026')
   },
   {
@@ -51,7 +63,9 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     email: 'saideep@kairosflow.agency',
     role: 'Video',
     status: 'Active',
+    isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
+    lastLogin: null,
     passwordHash: hashPassword('SaiDeep@2026')
   }
 ];
@@ -64,10 +78,6 @@ function ensureDataDir(): void {
   } catch (err) {
     console.error('Error creating data directory:', err);
   }
-}
-
-export function hashPassword(password: string): string {
-  return crypto.createHash('sha256').update(password + JWT_SECRET).digest('hex');
 }
 
 export function getUsers(): StoredUser[] {
@@ -85,9 +95,38 @@ export function getUsers(): StoredUser[] {
   }
 }
 
-export function getPublicUsers(): User[] {
+export function saveUsers(users: StoredUser[]): void {
+  try {
+    ensureDataDir();
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Error saving users:', err);
+  }
+}
+
+export function getPublicUsers(currentRequesterId?: string): User[] {
   const users = getUsers();
-  return users.map(({ passwordHash, ...user }) => user);
+  const now = Date.now();
+  const ACTIVE_THRESHOLD_MS = 15 * 60 * 1000; // 15 minutes window
+
+  return users.map(({ passwordHash, ...user }) => {
+    // A user is online if they are currently making the request or their lastActiveAt is fresh
+    let isCurrentlyOnline = false;
+
+    if (currentRequesterId && user.id === currentRequesterId) {
+      isCurrentlyOnline = true;
+    } else if (user.isOnline && user.lastActiveAt) {
+      const lastActiveTime = new Date(user.lastActiveAt).getTime();
+      if (now - lastActiveTime < ACTIVE_THRESHOLD_MS) {
+        isCurrentlyOnline = true;
+      }
+    }
+
+    return {
+      ...user,
+      isOnline: isCurrentlyOnline
+    };
+  });
 }
 
 export function findUserById(id: string): StoredUser | null {
@@ -105,12 +144,41 @@ export function updateUserLastLogin(userId: string): void {
     const users = getUsers();
     const index = users.findIndex((u) => u.id === userId);
     if (index !== -1) {
-      users[index].lastLogin = new Date().toISOString();
-      ensureDataDir();
-      fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), 'utf-8');
+      const now = new Date().toISOString();
+      users[index].lastLogin = now;
+      users[index].lastActiveAt = now;
+      users[index].isOnline = true;
+      saveUsers(users);
     }
   } catch (err) {
     console.error('Failed to update last login:', err);
+  }
+}
+
+export function updateUserHeartbeat(userId: string): void {
+  try {
+    const users = getUsers();
+    const index = users.findIndex((u) => u.id === userId);
+    if (index !== -1) {
+      users[index].lastActiveAt = new Date().toISOString();
+      users[index].isOnline = true;
+      saveUsers(users);
+    }
+  } catch (err) {
+    console.error('Failed to update heartbeat:', err);
+  }
+}
+
+export function updateUserLogout(userId: string): void {
+  try {
+    const users = getUsers();
+    const index = users.findIndex((u) => u.id === userId);
+    if (index !== -1) {
+      users[index].isOnline = false;
+      saveUsers(users);
+    }
+  } catch (err) {
+    console.error('Failed to update logout status:', err);
   }
 }
 
