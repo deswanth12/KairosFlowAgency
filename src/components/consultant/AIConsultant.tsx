@@ -11,7 +11,11 @@ import {
   Loader2, 
   ExternalLink,
   ArrowRight,
-  Terminal
+  Terminal,
+  Sparkles,
+  CheckCircle2,
+  BookOpen,
+  ArrowUpRight
 } from 'lucide-react';
 import { ConsultantResponse } from '@/lib/rag';
 
@@ -24,11 +28,11 @@ interface ChatMessage {
 }
 
 const STARTER_PROMPTS = [
-  'How much does a web app cost?',
-  'I need a website for my business',
-  'How long does a typical sprint take?',
-  'Who is on the leadership team?',
-  'Can you build an iOS or Android app?'
+  'What does a custom Next.js web app cost?',
+  'How does your 6-stage delivery process work?',
+  'Tell me about your AI & automation workflows',
+  'Who is on the founding leadership team?',
+  'Can you build an iOS and Android app?'
 ];
 
 export const AIConsultant: React.FC = () => {
@@ -46,15 +50,20 @@ export const AIConsultant: React.FC = () => {
     {
       id: 'welcome-1',
       sender: 'consultant',
-      text: 'Welcome to Kairos Flow Agency. I am your AI Consultant grounded in our verified technical architectures, pricing frameworks, and team scopes.',
+      text: 'Welcome to Kairos Flow Agency. I am your AI Consultant grounded in our verified technical architectures, pricing frameworks, and founding lead scopes.',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       response: {
-        answer: 'I can help estimate project scope, explain our 6 disciplines, reference verified case studies, or connect you directly with Founder Desvanth on WhatsApp.',
-        recommendation: 'Select an inquiry below or type what you are building to receive an indicative scope.',
+        answer: 'I can help estimate project scope, explain our 6 disciplines, reference verified production case studies, or connect you directly with Founder Desvanth on WhatsApp.',
+        recommendation: 'Select a question below or describe your product idea to receive an immediate architectural scope.',
+        suggestedFollowUps: [
+          'What does a custom Next.js web app cost?',
+          'How does your 6-stage delivery process work?',
+          'Tell me about your AI & automation workflows'
+        ],
         confidence: 'high',
-        sources: [],
+        sources: [{ title: 'Company Overview & Capabilities', section: 'Core Disciplines', file: 'agency/company.md' }],
         actionButtons: [
-          { label: 'Explore Web Capabilities', href: '/services#web-development' },
+          { label: 'Explore Web Capabilities', href: '/services' },
           { label: 'View Case Studies', href: '/work' }
         ]
       }
@@ -119,8 +128,17 @@ export const AIConsultant: React.FC = () => {
         const errorMsg: ChatMessage = {
           id: `consultant-${Date.now()}`,
           sender: 'consultant',
-          text: "I couldn't complete that query. Please connect directly with Founder Desvanth on WhatsApp (+91 77022 56073) or submit a brief.",
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          text: "I couldn't complete that query right now. Feel free to connect directly with Founder Desvanth on WhatsApp.",
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          response: {
+            answer: "Founder Desvanth and our team are available on WhatsApp for direct technical scoping.",
+            confidence: 'low',
+            sources: [],
+            actionButtons: [
+              { label: 'Chat on WhatsApp', href: 'https://wa.me/917702256073', isExternal: true },
+              { label: 'Submit Scoping Brief', href: '/contact' }
+            ]
+          }
         };
         setMessages((prev) => [...prev, errorMsg]);
       }
@@ -128,7 +146,7 @@ export const AIConsultant: React.FC = () => {
       const errorMsg: ChatMessage = {
         id: `consultant-${Date.now()}`,
         sender: 'consultant',
-        text: 'A connection error occurred. Feel free to reach out directly on WhatsApp at +91 77022 56073.',
+        text: 'Network connection issue. Please connect with our team on WhatsApp for an instant response.',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages((prev) => [...prev, errorMsg]);
@@ -139,205 +157,222 @@ export const AIConsultant: React.FC = () => {
 
   return (
     <>
-      {/* Floating Launcher Button */}
-      <div className="fixed bottom-6 right-6 z-50">
-        {!isOpen ? (
+      {/* Floating Toggle Button */}
+      {!isOpen && (
+        <div className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5">
           <button
             onClick={() => setIsOpen(true)}
-            className="group flex items-center gap-3 pl-3 pr-4 py-2.5 bg-[#0B1F33] text-white rounded-full border border-[#0B1F33] shadow-2xl hover:bg-[#132B45] transition-all duration-300 hover:scale-[1.02] backdrop-blur-md"
-            aria-label="Open Kairos Flow AI Consultant"
+            className="group flex items-center gap-3 px-4 py-3 rounded-full bg-[#0B1F33] hover:bg-[#132B45] text-white border border-[#0B1F33] shadow-elevated-card transition-all duration-300 hover:scale-105"
+            aria-label="Open AI Consultant"
           >
-            <div className="relative w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#B8613A] border border-white/20">
+            <div className="relative flex items-center justify-center w-7 h-7 rounded-full bg-[#B8613A] text-white">
               <Bot className="w-4 h-4" />
-              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#B8613A] animate-pulse" />
+              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500" />
             </div>
-            <div className="text-left pr-1">
-              <div className="text-xs font-bold text-white tracking-tight font-display flex items-center gap-1.5">
-                <span>AI Consultant</span>
-                <span className="px-1.5 py-0.2 rounded-full bg-[#B8613A] text-white text-[9px] font-mono font-semibold">
-                  SYS.RAG
-                </span>
+            <div className="text-left font-mono">
+              <div className="text-xs font-bold leading-none tracking-wide text-white">
+                AI Consultant
               </div>
-              <div className="text-[10px] text-slate-300 font-mono">Scope & WhatsApp Sync</div>
+              <div className="text-[10px] text-[#B8613A] font-semibold mt-0.5">
+                Grounded RAG • Online
+              </div>
             </div>
           </button>
-        ) : null}
-      </div>
+        </div>
+      )}
 
-      {/* Floating Chat Drawer Window */}
+      {/* Floating Chat Modal */}
       {isOpen && (
-        <div className="fixed bottom-6 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[440px] h-[600px] max-h-[85vh] bg-white text-[#111827] rounded-2xl border border-[#D9E0E5] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200">
-          {/* Header */}
-          <div className="p-4 bg-[#0B1F33] text-white border-b border-[#0B1F33] flex items-center justify-between">
+        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[460px] h-[640px] max-h-[88vh] bg-white border border-[#D9E0E5] rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200 text-[#111827]">
+          {/* Top Header */}
+          <div className="flex items-center justify-between p-4 bg-[#0B1F33] text-white border-b border-[#0B1F33]">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[#B8613A]">
+              <div className="w-8 h-8 rounded-lg bg-[#B8613A] text-white flex items-center justify-center">
                 <Bot className="w-4 h-4" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h4 className="text-sm font-bold text-white font-display">Kairos Flow AI Consultant</h4>
-                  <span className="px-1.5 py-0.5 rounded bg-[#B8613A] text-white text-[9px] font-mono font-semibold">
-                    SYS.RAG
+                  <h3 className="text-xs font-bold font-mono tracking-wider text-white uppercase">
+                    Kairos Flow AI Consultant
+                  </h3>
+                  <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 text-[9px] font-mono font-bold">
+                    RAG 2.0
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-300 font-mono">Verified agency knowledge graph</p>
+                <p className="text-[11px] text-slate-300 font-mono">
+                  Grounded in Verified Architectures & Pricing
+                </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-1.5 text-slate-400 hover:text-white rounded-lg transition-colors"
+              aria-label="Close chat"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Messages Container */}
+          <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-[#F7F7F4] text-xs">
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex flex-col ${
+                  msg.sender === 'user' ? 'items-end' : 'items-start'
+                }`}
+              >
+                {/* Message Bubble */}
+                <div
+                  className={`max-w-[88%] p-3.5 rounded-2xl shadow-subtle-card leading-relaxed ${
+                    msg.sender === 'user'
+                      ? 'bg-[#0B1F33] text-white rounded-tr-none'
+                      : 'bg-white text-[#111827] border border-[#D9E0E5] rounded-tl-none'
+                  }`}
+                >
+                  <p className="whitespace-pre-wrap">{msg.text}</p>
+
+                  {/* Recommendation Callout */}
+                  {msg.response?.recommendation && (
+                    <div className="mt-3 pt-2.5 border-t border-[#D9E0E5] text-[11px] text-[#5B6875] flex items-start gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-[#B8613A] flex-shrink-0 mt-0.5" />
+                      <span>{msg.response.recommendation}</span>
+                    </div>
+                  )}
+
+                  {/* Grounded Source Citations */}
+                  {msg.response?.sources && msg.response.sources.length > 0 && (
+                    <div className="mt-2.5 pt-2 border-t border-[#D9E0E5]/60 flex flex-wrap items-center gap-1.5 font-mono text-[9px] text-[#5B6875]">
+                      <BookOpen className="w-3 h-3 text-[#B8613A]" />
+                      <span>Grounded source:</span>
+                      {msg.response.sources.map((src, i) => (
+                        <span key={i} className="px-1.5 py-0.5 rounded bg-[#F7F7F4] border border-[#D9E0E5] text-[#0B1F33] font-medium">
+                          {src.section || src.title}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  {msg.response?.actionButtons && msg.response.actionButtons.length > 0 && (
+                    <div className="mt-3 pt-2.5 border-t border-[#D9E0E5] flex flex-wrap gap-1.5 font-mono">
+                      {msg.response.actionButtons.map((btn, idx) => (
+                        btn.isExternal ? (
+                          <a
+                            key={idx}
+                            href={btn.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold text-white bg-[#0B1F33] hover:bg-[#132B45] rounded-md transition-colors shadow-sm"
+                          >
+                            <span>{btn.label}</span>
+                            <ArrowUpRight className="w-3 h-3 text-[#B8613A]" />
+                          </a>
+                        ) : (
+                          <Link
+                            key={idx}
+                            href={btn.href}
+                            onClick={() => setIsOpen(false)}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold text-[#0B1F33] hover:text-[#B8613A] bg-[#F7F7F4] hover:bg-white border border-[#D9E0E5] rounded-md transition-colors"
+                          >
+                            <span>{btn.label}</span>
+                            <ArrowRight className="w-3 h-3 text-[#B8613A]" />
+                          </Link>
+                        )
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Suggested Follow-Up Quick Pills */}
+                {msg.response?.suggestedFollowUps && msg.response.suggestedFollowUps.length > 0 && (
+                  <div className="mt-2 space-y-1.5 max-w-[88%] font-mono">
+                    <span className="text-[10px] text-[#5B6875] font-semibold">Suggested follow-ups:</span>
+                    <div className="flex flex-wrap gap-1">
+                      {msg.response.suggestedFollowUps.map((prompt, pIdx) => (
+                        <button
+                          key={pIdx}
+                          onClick={() => handleSend(prompt)}
+                          className="text-left px-2.5 py-1 rounded-lg bg-white hover:bg-[#FBF4F0] text-[#0B1F33] hover:text-[#B8613A] border border-[#D9E0E5] text-[10px] transition-colors shadow-sm font-medium"
+                        >
+                          {prompt}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <span className="text-[9px] font-mono text-[#5B6875] mt-1 px-1">
+                  {msg.timestamp}
+                </span>
+              </div>
+            ))}
+
+            {isLoading && (
+              <div className="flex items-center gap-2 text-xs text-[#5B6875] font-mono bg-white p-3 rounded-xl border border-[#D9E0E5] w-fit shadow-subtle-card">
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#B8613A]" />
+                <span>Searching knowledge base & synthesizing response...</span>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Quick Starter Prompts */}
+          {messages.length === 1 && (
+            <div className="p-3 bg-white border-t border-[#D9E0E5] overflow-x-auto whitespace-nowrap flex gap-1.5 font-mono">
+              {STARTER_PROMPTS.map((p, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleSend(p)}
+                  className="px-2.5 py-1 text-[10px] bg-[#F7F7F4] hover:bg-[#FBF4F0] text-[#0B1F33] hover:text-[#B8613A] rounded-md border border-[#D9E0E5] transition-colors flex-shrink-0"
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Bottom WhatsApp Handover & Input Bar */}
+          <div className="p-3 bg-white border-t border-[#D9E0E5] space-y-2">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSend();
+              }}
+              className="flex items-center gap-2"
+            >
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Ask about web apps, AI pipelines, pricing, or timelines..."
+                className="flex-1 px-3 py-2 text-xs rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A] placeholder:text-[#5B6875]"
+              />
+              <button
+                type="submit"
+                disabled={isLoading || !query.trim()}
+                className="p-2 rounded-lg bg-[#0B1F33] hover:bg-[#132B45] text-white disabled:opacity-40 transition-colors shadow-sm"
+                aria-label="Send message"
+              >
+                <Send className="w-4 h-4 text-[#B8613A]" />
+              </button>
+            </form>
+
+            <div className="flex items-center justify-between text-[10px] font-mono text-[#5B6875] pt-1">
+              <span>Grounded on 36+ agency knowledge files</span>
               <a
                 href={generateWhatsAppHandoverUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                title="Transfer Conversation to WhatsApp"
-                className="p-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors flex items-center gap-1 text-[10px] font-mono font-semibold"
+                className="inline-flex items-center gap-1 font-bold text-[#0B1F33] hover:text-emerald-600 transition-colors"
               >
-                <MessageCircle className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">WhatsApp</span>
+                <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Handover to WhatsApp</span>
               </a>
-
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-1.5 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-                aria-label="Close Consultant"
-              >
-                <X className="w-4 h-4" />
-              </button>
             </div>
           </div>
-
-          {/* Messages Container */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-4 text-xs font-sans bg-[#F7F7F4]">
-            {messages.map((msg) => {
-              const isUser = msg.sender === 'user';
-
-              return (
-                <div
-                  key={msg.id}
-                  className={`flex flex-col ${isUser ? 'items-end' : 'items-start'}`}
-                >
-                  <div
-                    className={`max-w-[90%] p-3.5 rounded-2xl leading-relaxed shadow-sm ${
-                      isUser
-                        ? 'bg-[#0B1F33] text-white rounded-tr-none font-medium'
-                        : 'bg-white border border-[#D9E0E5] text-[#111827] rounded-tl-none space-y-2.5'
-                    }`}
-                  >
-                    <p className="text-xs leading-relaxed">{msg.text}</p>
-
-                    {/* Consultant Structured Advice */}
-                    {msg.response && (
-                      <div className="space-y-2 pt-2 border-t border-[#D9E0E5]">
-                        {msg.response.recommendation && (
-                          <div className="p-2.5 rounded-lg bg-[#FBF4F0] border-l-2 border-[#B8613A] text-[11px] text-[#111827] leading-relaxed">
-                            <span className="font-semibold text-[#B8613A] font-mono block mb-0.5">/ RECOMMENDATION:</span>
-                            {msg.response.recommendation}
-                          </div>
-                        )}
-
-                        {msg.response.nextActionPrompt && (
-                          <div className="text-[11px] text-[#5B6875] italic">
-                            {msg.response.nextActionPrompt}
-                          </div>
-                        )}
-
-                        {/* Action Buttons & WhatsApp Handover */}
-                        <div className="flex flex-wrap gap-1.5 pt-1">
-                          <a
-                            href={generateWhatsAppHandoverUrl()}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-[10px] font-mono font-semibold transition-colors"
-                          >
-                            <MessageCircle className="w-3 h-3 text-emerald-600" />
-                            <span>Continue on WhatsApp</span>
-                          </a>
-
-                          {msg.response.actionButtons && msg.response.actionButtons.map((btn, bIdx) => {
-                            if (btn.isExternal) {
-                              return (
-                                <a
-                                  key={bIdx}
-                                  href={btn.href}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#FBF4F0] hover:bg-orange-100 text-[#B8613A] border border-orange-200 text-[10px] font-mono font-semibold transition-colors"
-                                >
-                                  <span>{btn.label}</span>
-                                  <ExternalLink className="w-2.5 h-2.5" />
-                                </a>
-                              );
-                            }
-
-                            return (
-                              <Link
-                                key={bIdx}
-                                href={btn.href}
-                                onClick={() => setIsOpen(false)}
-                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#F7F7F4] text-[#111827] text-[10px] font-mono font-semibold transition-colors border border-[#D9E0E5]"
-                              >
-                                <span>{btn.label}</span>
-                                <ArrowRight className="w-2.5 h-2.5" />
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <span className="text-[9px] font-mono text-[#5B6875] mt-1 px-1">{msg.timestamp}</span>
-                </div>
-              );
-            })}
-
-            {isLoading && (
-              <div className="flex items-center gap-2 text-[#5B6875] text-xs p-2 font-mono">
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#B8613A]" />
-                <span>SYS.CONSULTING KNOWLEDGE GRAPH...</span>
-              </div>
-            )}
-
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Quick Starter Chips */}
-          <div className="p-2.5 bg-white border-t border-[#D9E0E5] overflow-x-auto whitespace-nowrap flex gap-1.5 no-scrollbar font-mono">
-            {STARTER_PROMPTS.map((prompt) => (
-              <button
-                key={prompt}
-                onClick={() => handleSend(prompt)}
-                disabled={isLoading}
-                className="px-3 py-1 rounded-full bg-[#F7F7F4] hover:bg-[#FBF4F0] border border-[#D9E0E5] text-[10px] text-[#5B6875] hover:text-[#B8613A] transition-colors flex-shrink-0"
-              >
-                {prompt}
-              </button>
-            ))}
-          </div>
-
-          {/* Input Bar */}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSend();
-            }}
-            className="p-3 bg-white border-t border-[#D9E0E5] flex items-center gap-2"
-          >
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Ask about pricing, tech architecture, team..."
-              className="flex-1 px-3 py-2 text-xs rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A] placeholder:text-slate-400 font-sans"
-            />
-            <button
-              type="submit"
-              disabled={isLoading || !query.trim()}
-              className="p-2 rounded-lg bg-[#0B1F33] text-white hover:bg-[#132B45] transition-colors disabled:opacity-50"
-              aria-label="Send query"
-            >
-              <Send className="w-3.5 h-3.5" />
-            </button>
-          </form>
         </div>
       )}
     </>
