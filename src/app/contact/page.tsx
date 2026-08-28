@@ -19,32 +19,32 @@ export default function ContactPage() {
   const whatsappUrl = generateWhatsAppLink(siteSettingsData.whatsappNumber);
 
   return (
-    <div className="bg-[#F8FAFC] text-[#0F172A] min-h-screen">
+    <div className="bg-[#F7F7F4] text-[#111827] min-h-screen">
       {/* Top Hero Section */}
-      <section className="bg-[#F8FAFC] text-[#0F172A] pt-32 pb-16 px-4 sm:px-6 lg:px-8 border-b border-[#DCE5EF]">
+      <section className="bg-[#F7F7F4] text-[#111827] pt-32 pb-16 px-4 sm:px-6 lg:px-8 border-b border-[#D9E0E5]">
         <div className="max-w-7xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#DCE5EF] text-xs font-mono uppercase tracking-widest text-[#1677FF] mb-4 font-semibold shadow-subtle-card">
-            <Terminal className="w-3.5 h-3.5 text-[#1677FF]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#D9E0E5] text-xs font-mono uppercase tracking-widest text-[#B8613A] mb-4 font-semibold shadow-subtle-card">
+            <Terminal className="w-3.5 h-3.5 text-[#B8613A]" />
             <span>/ PROJECT INTAKE & DISCOVERY</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#071A2F] font-display max-w-3xl mb-6">
-            Start a project with <span className="text-[#1677FF]">Kairos Flow.</span>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#0B1F33] font-display max-w-3xl mb-6">
+            Start a project with <span className="text-[#B8613A]">Kairos Flow.</span>
           </h1>
-          <p className="text-[#64748B] text-base sm:text-lg max-w-2xl font-normal leading-relaxed">
+          <p className="text-[#5B6875] text-base sm:text-lg max-w-2xl font-normal leading-relaxed">
             Fill in the structured brief below or connect directly with our founding leads via WhatsApp, Email, or Phone.
           </p>
         </div>
       </section>
 
       {/* Main Intake Section */}
-      <div className="bg-[#F8FAFC] py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b border-[#DCE5EF]">
+      <div className="bg-[#F7F7F4] py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b border-[#D9E0E5]">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             {/* Left Column: Direct Channels & Guarantee (4 cols) */}
             <div className="lg:col-span-4 space-y-6">
               {/* Quick Contact Cards */}
-              <div className="bg-white border border-[#DCE5EF] rounded-2xl p-6 sm:p-8 shadow-subtle-card space-y-6">
-                <h3 className="text-base font-bold text-[#071A2F] tracking-tight uppercase tracking-wider font-mono text-xs">
+              <div className="bg-white border border-[#D9E0E5] rounded-2xl p-6 sm:p-8 shadow-subtle-card space-y-6">
+                <h3 className="text-base font-bold text-[#0B1F33] tracking-tight uppercase tracking-wider font-mono text-xs">
                   / DIRECT CHANNELS
                 </h3>
 
@@ -53,18 +53,18 @@ export default function ContactPage() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-start gap-4 p-4 rounded-xl bg-[#F8FAFC] hover:bg-[#EFF6FF] border border-[#DCE5EF] hover:border-[#1677FF]/30 transition-all"
+                  className="group flex items-start gap-4 p-4 rounded-xl bg-[#F7F7F4] hover:bg-[#FBF4F0] border border-[#D9E0E5] hover:border-[#B8613A]/30 transition-all"
                 >
                   <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0 border border-emerald-100">
                     <MessageCircle className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
-                    <div className="text-xs font-mono text-[#1677FF] font-semibold flex items-center gap-1">
+                    <div className="text-xs font-mono text-[#B8613A] font-semibold flex items-center gap-1">
                       <span>Fastest Response</span>
                       <ArrowUpRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
                     </div>
-                    <div className="text-sm font-bold text-[#071A2F] font-display">WhatsApp Chat</div>
-                    <div className="text-xs text-[#64748B] mt-0.5">Instant lead coordinator connection</div>
+                    <div className="text-sm font-bold text-[#0B1F33] font-display">WhatsApp Chat</div>
+                    <div className="text-xs text-[#5B6875] mt-0.5">Instant lead coordinator connection</div>
                   </div>
                 </a>
 
@@ -73,41 +73,41 @@ export default function ContactPage() {
                   href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(siteSettingsData.email)}&su=${encodeURIComponent('Project Inquiry | Kairos Flow Agency')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-start gap-4 p-4 rounded-xl bg-[#F8FAFC] hover:bg-[#EFF6FF] border border-[#DCE5EF] hover:border-[#1677FF]/30 transition-all"
+                  className="group flex items-start gap-4 p-4 rounded-xl bg-[#F7F7F4] hover:bg-[#FBF4F0] border border-[#D9E0E5] hover:border-[#B8613A]/30 transition-all"
                   title="Click to compose in Gmail"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-blue-50 text-[#1677FF] flex items-center justify-center flex-shrink-0 border border-blue-100">
-                    <Mail className="w-5 h-5 text-[#1677FF]" />
+                  <div className="w-10 h-10 rounded-lg bg-orange-50 text-[#B8613A] flex items-center justify-center flex-shrink-0 border border-orange-100">
+                    <Mail className="w-5 h-5 text-[#B8613A]" />
                   </div>
                   <div className="flex-1">
-                    <div className="text-xs font-mono text-[#1677FF] font-semibold flex items-center gap-1">
+                    <div className="text-xs font-mono text-[#B8613A] font-semibold flex items-center gap-1">
                       <span>Email Us</span>
                       <ArrowUpRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
                     </div>
-                    <div className="text-sm font-bold text-[#071A2F] break-all font-display">{siteSettingsData.email}</div>
-                    <div className="text-xs text-[#64748B] mt-0.5">&lt; 4 hour SLA reply guarantee</div>
+                    <div className="text-sm font-bold text-[#0B1F33] break-all font-display">{siteSettingsData.email}</div>
+                    <div className="text-xs text-[#5B6875] mt-0.5">&lt; 4 hour SLA reply guarantee</div>
                   </div>
                 </a>
 
                 {/* Phone */}
                 <a
                   href={`tel:${siteSettingsData.phone.replace(/[^0-9+]/g, '')}`}
-                  className="group flex items-start gap-4 p-4 rounded-xl bg-[#F8FAFC] hover:bg-[#EFF6FF] border border-[#DCE5EF] hover:border-[#1677FF]/30 transition-all"
+                  className="group flex items-start gap-4 p-4 rounded-xl bg-[#F7F7F4] hover:bg-[#FBF4F0] border border-[#D9E0E5] hover:border-[#B8613A]/30 transition-all"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-slate-100 text-[#071A2F] flex items-center justify-center flex-shrink-0 border border-slate-200">
-                    <Phone className="w-5 h-5 text-[#1677FF]" />
+                  <div className="w-10 h-10 rounded-lg bg-slate-100 text-[#0B1F33] flex items-center justify-center flex-shrink-0 border border-slate-200">
+                    <Phone className="w-5 h-5 text-[#B8613A]" />
                   </div>
                   <div className="flex-1">
-                    <div className="text-xs font-mono text-[#64748B] font-semibold">Direct Call</div>
-                    <div className="text-sm font-bold text-[#071A2F] font-display">{siteSettingsData.phone}</div>
-                    <div className="text-xs text-[#64748B] mt-0.5">Mon–Sat, 9AM–7PM IST</div>
+                    <div className="text-xs font-mono text-[#5B6875] font-semibold">Direct Call</div>
+                    <div className="text-sm font-bold text-[#0B1F33] font-display">{siteSettingsData.phone}</div>
+                    <div className="text-xs text-[#5B6875] mt-0.5">Mon–Sat, 9AM–7PM IST</div>
                   </div>
                 </a>
               </div>
 
               {/* Response SLA & Security Box */}
-              <div className="bg-[#071A2F] text-white p-6 sm:p-7 rounded-2xl border border-[#071A2F] shadow-elevated-card space-y-4">
-                <div className="flex items-center gap-2 text-xs font-mono text-[#38BDF8] uppercase tracking-wider font-bold">
+              <div className="bg-[#0B1F33] text-white p-6 sm:p-7 rounded-2xl border border-[#0B1F33] shadow-elevated-card space-y-4">
+                <div className="flex items-center gap-2 text-xs font-mono text-[#B8613A] uppercase tracking-wider font-bold">
                   <Clock className="w-4 h-4" />
                   <span>Our Turnaround SLA</span>
                 </div>
@@ -116,7 +116,7 @@ export default function ContactPage() {
                 </p>
 
                 <div className="pt-3 border-t border-white/15 flex items-center gap-2 text-xs text-slate-300 font-mono">
-                  <ShieldCheck className="w-4 h-4 text-[#38BDF8] flex-shrink-0" />
+                  <ShieldCheck className="w-4 h-4 text-[#B8613A] flex-shrink-0" />
                   <span>Standard NDA applied to all submissions.</span>
                 </div>
               </div>
@@ -124,7 +124,7 @@ export default function ContactPage() {
 
             {/* Right Column: Interactive Brief Form (8 cols) */}
             <div className="lg:col-span-8">
-              <Suspense fallback={<div className="p-12 text-center text-[#64748B] text-sm font-mono">Loading intake form...</div>}>
+              <Suspense fallback={<div className="p-12 text-center text-[#5B6875] text-sm font-mono">Loading intake form...</div>}>
                 <ContactForm />
               </Suspense>
             </div>

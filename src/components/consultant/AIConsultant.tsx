@@ -144,17 +144,17 @@ export const AIConsultant: React.FC = () => {
         {!isOpen ? (
           <button
             onClick={() => setIsOpen(true)}
-            className="group flex items-center gap-3 pl-3 pr-4 py-2.5 bg-[#071A2F] text-white rounded-full border border-[#071A2F] shadow-2xl hover:bg-[#0B2544] transition-all duration-300 hover:scale-[1.02] backdrop-blur-md"
+            className="group flex items-center gap-3 pl-3 pr-4 py-2.5 bg-[#0B1F33] text-white rounded-full border border-[#0B1F33] shadow-2xl hover:bg-[#132B45] transition-all duration-300 hover:scale-[1.02] backdrop-blur-md"
             aria-label="Open Kairos Flow AI Consultant"
           >
-            <div className="relative w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#38BDF8] border border-white/20">
+            <div className="relative w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#B8613A] border border-white/20">
               <Bot className="w-4 h-4" />
-              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#1677FF] animate-pulse" />
+              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#B8613A] animate-pulse" />
             </div>
             <div className="text-left pr-1">
               <div className="text-xs font-bold text-white tracking-tight font-display flex items-center gap-1.5">
                 <span>AI Consultant</span>
-                <span className="px-1.5 py-0.2 rounded-full bg-[#1677FF] text-white text-[9px] font-mono font-semibold">
+                <span className="px-1.5 py-0.2 rounded-full bg-[#B8613A] text-white text-[9px] font-mono font-semibold">
                   SYS.RAG
                 </span>
               </div>
@@ -166,21 +166,21 @@ export const AIConsultant: React.FC = () => {
 
       {/* Floating Chat Drawer Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[440px] h-[600px] max-h-[85vh] bg-white text-[#0F172A] rounded-2xl border border-[#DCE5EF] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200">
+        <div className="fixed bottom-6 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[440px] h-[600px] max-h-[85vh] bg-white text-[#111827] rounded-2xl border border-[#D9E0E5] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200">
           {/* Header */}
-          <div className="p-4 bg-[#071A2F] text-white border-b border-[#071A2F] flex items-center justify-between">
+          <div className="p-4 bg-[#0B1F33] text-white border-b border-[#0B1F33] flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[#38BDF8]">
+              <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[#B8613A]">
                 <Bot className="w-4 h-4" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <h4 className="text-sm font-bold text-white font-display">Kairos Flow AI Consultant</h4>
-                  <span className="px-1.5 py-0.5 rounded bg-[#1677FF] text-white text-[9px] font-mono font-semibold">
+                  <span className="px-1.5 py-0.5 rounded bg-[#B8613A] text-white text-[9px] font-mono font-semibold">
                     SYS.RAG
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-300 font-mono">Verified knowledge base</p>
+                <p className="text-[11px] text-slate-300 font-mono">Verified agency knowledge graph</p>
               </div>
             </div>
 
@@ -207,7 +207,7 @@ export const AIConsultant: React.FC = () => {
           </div>
 
           {/* Messages Container */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-4 text-xs font-sans bg-[#F8FAFC]">
+          <div className="flex-1 p-4 overflow-y-auto space-y-4 text-xs font-sans bg-[#F7F7F4]">
             {messages.map((msg) => {
               const isUser = msg.sender === 'user';
 
@@ -219,24 +219,24 @@ export const AIConsultant: React.FC = () => {
                   <div
                     className={`max-w-[90%] p-3.5 rounded-2xl leading-relaxed shadow-sm ${
                       isUser
-                        ? 'bg-[#071A2F] text-white rounded-tr-none font-medium'
-                        : 'bg-white border border-[#DCE5EF] text-[#0F172A] rounded-tl-none space-y-2.5'
+                        ? 'bg-[#0B1F33] text-white rounded-tr-none font-medium'
+                        : 'bg-white border border-[#D9E0E5] text-[#111827] rounded-tl-none space-y-2.5'
                     }`}
                   >
                     <p className="text-xs leading-relaxed">{msg.text}</p>
 
                     {/* Consultant Structured Advice */}
                     {msg.response && (
-                      <div className="space-y-2 pt-2 border-t border-[#DCE5EF]">
+                      <div className="space-y-2 pt-2 border-t border-[#D9E0E5]">
                         {msg.response.recommendation && (
-                          <div className="p-2.5 rounded-lg bg-[#EFF6FF] border-l-2 border-[#1677FF] text-[11px] text-[#0F172A] leading-relaxed">
-                            <span className="font-semibold text-[#1677FF] font-mono block mb-0.5">/ RECOMMENDATION:</span>
+                          <div className="p-2.5 rounded-lg bg-[#FBF4F0] border-l-2 border-[#B8613A] text-[11px] text-[#111827] leading-relaxed">
+                            <span className="font-semibold text-[#B8613A] font-mono block mb-0.5">/ RECOMMENDATION:</span>
                             {msg.response.recommendation}
                           </div>
                         )}
 
                         {msg.response.nextActionPrompt && (
-                          <div className="text-[11px] text-[#64748B] italic">
+                          <div className="text-[11px] text-[#5B6875] italic">
                             {msg.response.nextActionPrompt}
                           </div>
                         )}
@@ -261,7 +261,7 @@ export const AIConsultant: React.FC = () => {
                                   href={btn.href}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#EFF6FF] hover:bg-blue-100 text-[#1677FF] border border-blue-200 text-[10px] font-mono font-semibold transition-colors"
+                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#FBF4F0] hover:bg-orange-100 text-[#B8613A] border border-orange-200 text-[10px] font-mono font-semibold transition-colors"
                                 >
                                   <span>{btn.label}</span>
                                   <ExternalLink className="w-2.5 h-2.5" />
@@ -274,7 +274,7 @@ export const AIConsultant: React.FC = () => {
                                 key={bIdx}
                                 href={btn.href}
                                 onClick={() => setIsOpen(false)}
-                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#F8FAFC] text-[#0F172A] text-[10px] font-mono font-semibold transition-colors border border-[#DCE5EF]"
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#F7F7F4] text-[#111827] text-[10px] font-mono font-semibold transition-colors border border-[#D9E0E5]"
                               >
                                 <span>{btn.label}</span>
                                 <ArrowRight className="w-2.5 h-2.5" />
@@ -285,14 +285,14 @@ export const AIConsultant: React.FC = () => {
                       </div>
                     )}
                   </div>
-                  <span className="text-[9px] font-mono text-[#64748B] mt-1 px-1">{msg.timestamp}</span>
+                  <span className="text-[9px] font-mono text-[#5B6875] mt-1 px-1">{msg.timestamp}</span>
                 </div>
               );
             })}
 
             {isLoading && (
-              <div className="flex items-center gap-2 text-[#64748B] text-xs p-2 font-mono">
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#1677FF]" />
+              <div className="flex items-center gap-2 text-[#5B6875] text-xs p-2 font-mono">
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#B8613A]" />
                 <span>SYS.CONSULTING KNOWLEDGE GRAPH...</span>
               </div>
             )}
@@ -301,13 +301,13 @@ export const AIConsultant: React.FC = () => {
           </div>
 
           {/* Quick Starter Chips */}
-          <div className="p-2.5 bg-white border-t border-[#DCE5EF] overflow-x-auto whitespace-nowrap flex gap-1.5 no-scrollbar font-mono">
+          <div className="p-2.5 bg-white border-t border-[#D9E0E5] overflow-x-auto whitespace-nowrap flex gap-1.5 no-scrollbar font-mono">
             {STARTER_PROMPTS.map((prompt) => (
               <button
                 key={prompt}
                 onClick={() => handleSend(prompt)}
                 disabled={isLoading}
-                className="px-3 py-1 rounded-full bg-[#F8FAFC] hover:bg-[#EFF6FF] border border-[#DCE5EF] text-[10px] text-[#64748B] hover:text-[#1677FF] transition-colors flex-shrink-0"
+                className="px-3 py-1 rounded-full bg-[#F7F7F4] hover:bg-[#FBF4F0] border border-[#D9E0E5] text-[10px] text-[#5B6875] hover:text-[#B8613A] transition-colors flex-shrink-0"
               >
                 {prompt}
               </button>
@@ -320,19 +320,19 @@ export const AIConsultant: React.FC = () => {
               e.preventDefault();
               handleSend();
             }}
-            className="p-3 bg-white border-t border-[#DCE5EF] flex items-center gap-2"
+            className="p-3 bg-white border-t border-[#D9E0E5] flex items-center gap-2"
           >
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Ask about pricing, tech architecture, team..."
-              className="flex-1 px-3 py-2 text-xs rounded-lg bg-[#F8FAFC] text-[#0F172A] border border-[#DCE5EF] focus:outline-none focus:border-[#1677FF] placeholder:text-slate-400 font-sans"
+              className="flex-1 px-3 py-2 text-xs rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A] placeholder:text-slate-400 font-sans"
             />
             <button
               type="submit"
               disabled={isLoading || !query.trim()}
-              className="p-2 rounded-lg bg-[#071A2F] text-white hover:bg-[#0B2544] transition-colors disabled:opacity-50"
+              className="p-2 rounded-lg bg-[#0B1F33] text-white hover:bg-[#132B45] transition-colors disabled:opacity-50"
               aria-label="Send query"
             >
               <Send className="w-3.5 h-3.5" />

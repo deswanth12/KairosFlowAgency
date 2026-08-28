@@ -156,27 +156,27 @@ export const ContactForm: React.FC = () => {
 
   if (isSuccess) {
     return (
-      <div className="p-8 sm:p-12 rounded-2xl bg-white border border-[#DCE5EF] shadow-elevated-card text-center">
-        <div className="w-16 h-16 rounded-full bg-[#EFF6FF] text-[#1677FF] flex items-center justify-center mx-auto mb-6 border border-blue-200">
+      <div className="p-8 sm:p-12 rounded-2xl bg-white border border-[#D9E0E5] shadow-elevated-card text-center">
+        <div className="w-16 h-16 rounded-full bg-[#FBF4F0] text-[#B8613A] flex items-center justify-center mx-auto mb-6 border border-orange-200">
           <CheckCircle2 className="w-8 h-8" />
         </div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EFF6FF] text-xs font-mono text-[#1677FF] mb-3 font-semibold">
-          <Sparkles className="w-3.5 h-3.5 text-[#38BDF8]" />
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FBF4F0] text-xs font-mono text-[#B8613A] mb-3 font-semibold">
+          <Sparkles className="w-3.5 h-3.5 text-[#B8613A]" />
           <span>STATUS: BRIEF TRANSMITTED</span>
         </div>
-        <h3 className="text-2xl sm:text-3xl font-bold text-[#071A2F] tracking-tight mb-3 font-display">
+        <h3 className="text-2xl sm:text-3xl font-bold text-[#0B1F33] tracking-tight mb-3 font-display">
           Thanks, {formData.name}.
         </h3>
-        <p className="text-[#64748B] text-sm sm:text-base max-w-md mx-auto leading-relaxed mb-8">
-          Your project brief has been received. Our founding leads will review it and get back to you within <strong className="text-[#071A2F]">4 business hours</strong>.
+        <p className="text-[#5B6875] text-sm sm:text-base max-w-md mx-auto leading-relaxed mb-8">
+          Your project brief has been received. Our founding leads will review it and get back to you within <strong className="text-[#0B1F33]">4 business hours</strong>.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-6 border-t border-[#DCE5EF] max-w-md mx-auto font-mono">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-6 border-t border-[#D9E0E5] max-w-md mx-auto font-mono">
           <a
             href={whatsappDirectUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-bold text-white bg-[#071A2F] hover:bg-[#0B2544] rounded-lg transition-colors shadow-sm uppercase tracking-wider"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-bold text-white bg-[#0B1F33] hover:bg-[#132B45] rounded-lg transition-colors shadow-sm uppercase tracking-wider"
           >
             <MessageCircle className="w-4 h-4 text-emerald-400" />
             <span>Follow Up on WhatsApp</span>
@@ -199,7 +199,7 @@ export const ContactForm: React.FC = () => {
                 hearAbout: ''
               });
             }}
-            className="w-full sm:w-auto px-6 py-3.5 text-xs font-semibold text-[#64748B] hover:text-[#071A2F] bg-[#F8FAFC] rounded-lg transition-colors border border-[#DCE5EF] uppercase tracking-wider"
+            className="w-full sm:w-auto px-6 py-3.5 text-xs font-semibold text-[#5B6875] hover:text-[#0B1F33] bg-[#F7F7F4] rounded-lg transition-colors border border-[#D9E0E5] uppercase tracking-wider"
           >
             Submit Another Brief
           </button>
@@ -209,13 +209,13 @@ export const ContactForm: React.FC = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="p-8 sm:p-12 rounded-2xl bg-white border border-[#DCE5EF] shadow-elevated-card">
+    <form onSubmit={handleSubmit} className="p-8 sm:p-12 rounded-2xl bg-white border border-[#D9E0E5] shadow-elevated-card">
       {/* Introduction */}
-      <div className="mb-8 pb-6 border-b border-[#DCE5EF]">
-        <h2 className="text-2xl sm:text-3xl font-bold text-[#071A2F] tracking-tight font-display mb-2">
+      <div className="mb-8 pb-6 border-b border-[#D9E0E5]">
+        <h2 className="text-2xl sm:text-3xl font-bold text-[#0B1F33] tracking-tight font-display mb-2">
           Tell us what you&apos;re building.
         </h2>
-        <p className="text-[#64748B] text-xs sm:text-sm leading-relaxed">
+        <p className="text-[#5B6875] text-xs sm:text-sm leading-relaxed">
           Every project is scoped around your technical requirements, architecture, and timeline. Fill in the details below to receive a clear proposal.
         </p>
       </div>
@@ -227,10 +227,10 @@ export const ContactForm: React.FC = () => {
         </div>
       )}
 
-      {/* Step 1: What do you need? */}
+      {/* Step 1: Capabilities */}
       <div className="mb-8">
-        <label className="block text-xs font-mono uppercase tracking-wider text-[#64748B] mb-3 font-semibold">
-          01 // REQUIRED CAPABILITIES <span className="text-[#1677FF]">*</span>
+        <label className="block text-xs font-mono uppercase tracking-wider text-[#5B6875] mb-3 font-semibold">
+          01 // REQUIRED DISCIPLINES <span className="text-[#B8613A]">*</span>
         </label>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 font-mono">
           {AVAILABLE_SERVICES.map((svc) => {
@@ -242,12 +242,12 @@ export const ContactForm: React.FC = () => {
                 onClick={() => toggleService(svc)}
                 className={`p-3 text-left rounded-lg text-xs font-medium transition-all duration-150 border flex items-center justify-between ${
                   isSelected
-                    ? 'bg-[#071A2F] text-white border-[#071A2F] shadow-sm'
-                    : 'bg-[#F8FAFC] hover:bg-[#EFF6FF] text-[#0F172A] border-[#DCE5EF]'
+                    ? 'bg-[#0B1F33] text-white border-[#0B1F33] shadow-sm'
+                    : 'bg-[#F7F7F4] hover:bg-[#FBF4F0] text-[#111827] border-[#D9E0E5]'
                 }`}
               >
                 <span>{svc}</span>
-                {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-[#38BDF8]" />}
+                {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-[#B8613A]" />}
               </button>
             );
           })}
@@ -260,8 +260,8 @@ export const ContactForm: React.FC = () => {
       {/* Step 2: Contact & Company Details */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
         <div>
-          <label className="block text-xs font-mono uppercase tracking-wider text-[#64748B] mb-2 font-semibold">
-            Full Name <span className="text-[#1677FF]">*</span>
+          <label className="block text-xs font-mono uppercase tracking-wider text-[#5B6875] mb-2 font-semibold">
+            Full Name <span className="text-[#B8613A]">*</span>
           </label>
           <input
             type="text"
@@ -271,16 +271,16 @@ export const ContactForm: React.FC = () => {
               if (errors.name) setErrors({ ...errors, name: '' });
             }}
             placeholder="Your name"
-            className={`w-full px-4 py-3 text-sm rounded-lg bg-[#F8FAFC] text-[#0F172A] border focus:outline-none focus:border-[#1677FF] ${
-              errors.name ? 'border-red-400' : 'border-[#DCE5EF]'
+            className={`w-full px-4 py-3 text-sm rounded-lg bg-[#F7F7F4] text-[#111827] border focus:outline-none focus:border-[#B8613A] ${
+              errors.name ? 'border-red-400' : 'border-[#D9E0E5]'
             }`}
           />
           {errors.name && <p className="mt-1.5 text-xs text-red-600 font-mono">{errors.name}</p>}
         </div>
 
         <div>
-          <label className="block text-xs font-mono uppercase tracking-wider text-[#64748B] mb-2 font-semibold">
-            Company / Venture <span className="text-[#1677FF]">*</span>
+          <label className="block text-xs font-mono uppercase tracking-wider text-[#5B6875] mb-2 font-semibold">
+            Company / Venture <span className="text-[#B8613A]">*</span>
           </label>
           <input
             type="text"
@@ -290,16 +290,16 @@ export const ContactForm: React.FC = () => {
               if (errors.company) setErrors({ ...errors, company: '' });
             }}
             placeholder="Company or venture name"
-            className={`w-full px-4 py-3 text-sm rounded-lg bg-[#F8FAFC] text-[#0F172A] border focus:outline-none focus:border-[#1677FF] ${
-              errors.company ? 'border-red-400' : 'border-[#DCE5EF]'
+            className={`w-full px-4 py-3 text-sm rounded-lg bg-[#F7F7F4] text-[#111827] border focus:outline-none focus:border-[#B8613A] ${
+              errors.company ? 'border-red-400' : 'border-[#D9E0E5]'
             }`}
           />
           {errors.company && <p className="mt-1.5 text-xs text-red-600 font-mono">{errors.company}</p>}
         </div>
 
         <div>
-          <label className="block text-xs font-mono uppercase tracking-wider text-[#64748B] mb-2 font-semibold">
-            Work Email <span className="text-[#1677FF]">*</span>
+          <label className="block text-xs font-mono uppercase tracking-wider text-[#5B6875] mb-2 font-semibold">
+            Work Email <span className="text-[#B8613A]">*</span>
           </label>
           <input
             type="email"
@@ -309,16 +309,16 @@ export const ContactForm: React.FC = () => {
               if (errors.email) setErrors({ ...errors, email: '' });
             }}
             placeholder="you@company.com"
-            className={`w-full px-4 py-3 text-sm rounded-lg bg-[#F8FAFC] text-[#0F172A] border focus:outline-none focus:border-[#1677FF] ${
-              errors.email ? 'border-red-400' : 'border-[#DCE5EF]'
+            className={`w-full px-4 py-3 text-sm rounded-lg bg-[#F7F7F4] text-[#111827] border focus:outline-none focus:border-[#B8613A] ${
+              errors.email ? 'border-red-400' : 'border-[#D9E0E5]'
             }`}
           />
           {errors.email && <p className="mt-1.5 text-xs text-red-600 font-mono">{errors.email}</p>}
         </div>
 
         <div>
-          <label className="block text-xs font-mono uppercase tracking-wider text-[#64748B] mb-2 font-semibold">
-            WhatsApp / Phone <span className="text-[#1677FF]">*</span>
+          <label className="block text-xs font-mono uppercase tracking-wider text-[#5B6875] mb-2 font-semibold">
+            WhatsApp / Phone <span className="text-[#B8613A]">*</span>
           </label>
           <input
             type="text"
@@ -328,8 +328,8 @@ export const ContactForm: React.FC = () => {
               if (errors.phone) setErrors({ ...errors, phone: '' });
             }}
             placeholder="+91 77022 56073"
-            className={`w-full px-4 py-3 text-sm rounded-lg bg-[#F8FAFC] text-[#0F172A] border focus:outline-none focus:border-[#1677FF] ${
-              errors.phone ? 'border-red-400' : 'border-[#DCE5EF]'
+            className={`w-full px-4 py-3 text-sm rounded-lg bg-[#F7F7F4] text-[#111827] border focus:outline-none focus:border-[#B8613A] ${
+              errors.phone ? 'border-red-400' : 'border-[#D9E0E5]'
             }`}
           />
           {errors.phone && <p className="mt-1.5 text-xs text-red-600 font-mono">{errors.phone}</p>}
@@ -338,8 +338,8 @@ export const ContactForm: React.FC = () => {
 
       {/* Step 3: Project Details */}
       <div className="mb-8">
-        <label className="block text-xs font-mono uppercase tracking-wider text-[#64748B] mb-2 font-semibold">
-          02 // PROJECT SPECIFICATIONS & SCOPE <span className="text-[#1677FF]">*</span>
+        <label className="block text-xs font-mono uppercase tracking-wider text-[#5B6875] mb-2 font-semibold">
+          02 // PROJECT SPECIFICATIONS & SCOPE <span className="text-[#B8613A]">*</span>
         </label>
         <textarea
           rows={4}
@@ -348,9 +348,9 @@ export const ContactForm: React.FC = () => {
             setFormData({ ...formData, description: e.target.value });
             if (errors.description) setErrors({ ...errors, description: '' });
           }}
-          placeholder="Describe what you want to build, key features, and your target outcomes..."
-          className={`w-full px-4 py-3 text-sm rounded-lg bg-[#F8FAFC] text-[#0F172A] border focus:outline-none focus:border-[#1677FF] resize-y ${
-            errors.description ? 'border-red-400' : 'border-[#DCE5EF]'
+          placeholder="Describe what you want to build, key features, and your target commercial outcomes..."
+          className={`w-full px-4 py-3 text-sm rounded-lg bg-[#F7F7F4] text-[#111827] border focus:outline-none focus:border-[#B8613A] resize-y ${
+            errors.description ? 'border-red-400' : 'border-[#D9E0E5]'
           }`}
         />
         {errors.description && <p className="mt-1.5 text-xs text-red-600 font-mono">{errors.description}</p>}
@@ -359,13 +359,13 @@ export const ContactForm: React.FC = () => {
       {/* Step 4: Budget & Timeline */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8 font-mono">
         <div>
-          <label className="block text-xs uppercase tracking-wider text-[#64748B] mb-2 font-semibold">
+          <label className="block text-xs uppercase tracking-wider text-[#5B6875] mb-2 font-semibold">
             BUDGET RANGE (OPTIONAL)
           </label>
           <select
             value={formData.budget}
             onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-            className="w-full px-4 py-3 text-xs rounded-lg bg-[#F8FAFC] text-[#0F172A] border border-[#DCE5EF] focus:outline-none focus:border-[#1677FF]"
+            className="w-full px-4 py-3 text-xs rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
           >
             <option value="">Select budget range...</option>
             {BUDGET_RANGES.map((b) => (
@@ -375,13 +375,13 @@ export const ContactForm: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-xs uppercase tracking-wider text-[#64748B] mb-2 font-semibold">
+          <label className="block text-xs uppercase tracking-wider text-[#5B6875] mb-2 font-semibold">
             TARGET TIMELINE (OPTIONAL)
           </label>
           <select
             value={formData.timeline}
             onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-            className="w-full px-4 py-3 text-xs rounded-lg bg-[#F8FAFC] text-[#0F172A] border border-[#DCE5EF] focus:outline-none focus:border-[#1677FF]"
+            className="w-full px-4 py-3 text-xs rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
           >
             <option value="">Select target timeline...</option>
             {TIMELINE_OPTIONS.map((t) => (
@@ -392,32 +392,32 @@ export const ContactForm: React.FC = () => {
       </div>
 
       {/* Action Buttons & WhatsApp Alternative */}
-      <div className="pt-6 border-t border-[#DCE5EF] flex flex-col sm:flex-row items-center justify-between gap-4 font-mono">
+      <div className="pt-6 border-t border-[#D9E0E5] flex flex-col sm:flex-row items-center justify-between gap-4 font-mono">
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 px-8 py-3.5 text-xs font-bold text-white bg-[#071A2F] hover:bg-[#0B2544] rounded-lg shadow-sm transition-all duration-200 disabled:opacity-50 uppercase tracking-wider"
+          className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 px-8 py-3.5 text-xs font-bold text-white bg-[#0B1F33] hover:bg-[#132B45] rounded-lg shadow-sm transition-all duration-200 disabled:opacity-50 uppercase tracking-wider"
         >
           {isSubmitting ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin text-[#38BDF8]" />
+              <Loader2 className="w-4 h-4 animate-spin text-[#B8613A]" />
               <span>Transmitting...</span>
             </>
           ) : (
             <>
               <span>/ SUBMIT PROJECT BRIEF</span>
-              <Send className="w-3.5 h-3.5 text-[#38BDF8] transition-transform group-hover:translate-x-0.5" />
+              <Send className="w-3.5 h-3.5 text-[#B8613A] transition-transform group-hover:translate-x-0.5" />
             </>
           )}
         </button>
 
-        <div className="flex items-center gap-2 text-xs text-[#64748B]">
+        <div className="flex items-center gap-2 text-xs text-[#5B6875]">
           <span>Prefer direct chat?</span>
           <a
             href={whatsappDirectUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-bold text-[#071A2F] hover:text-[#1677FF] transition-colors"
+            className="inline-flex items-center gap-1.5 font-bold text-[#0B1F33] hover:text-[#B8613A] transition-colors"
           >
             <MessageCircle className="w-4 h-4 text-emerald-600" />
             <span>Chat on WhatsApp</span>
@@ -426,14 +426,14 @@ export const ContactForm: React.FC = () => {
       </div>
 
       {/* Response Time Expectation & Privacy */}
-      <div className="mt-6 flex items-center justify-center gap-4 text-[11px] font-mono text-[#64748B]">
+      <div className="mt-6 flex items-center justify-center gap-4 text-[11px] font-mono text-[#5B6875]">
         <div className="flex items-center gap-1.5">
-          <Clock className="w-3.5 h-3.5 text-[#1677FF]" />
+          <Clock className="w-3.5 h-3.5 text-[#B8613A]" />
           <span>SLA: Response within 4h</span>
         </div>
         <span>•</span>
         <div className="flex items-center gap-1.5">
-          <ShieldCheck className="w-3.5 h-3.5 text-[#1677FF]" />
+          <ShieldCheck className="w-3.5 h-3.5 text-[#B8613A]" />
           <span>Standard NDA Applied</span>
         </div>
       </div>

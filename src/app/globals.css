@@ -4,56 +4,56 @@
 
 @layer base {
   :root {
-    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-    --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --font-sans: 'Geist', 'Inter', system-ui, -apple-system, sans-serif;
+    --font-display: 'Plus Jakarta Sans', 'Geist', system-ui, sans-serif;
+    --font-mono: 'Geist Mono', 'JetBrains Mono', 'Fira Code', monospace;
   }
 
   html {
     scroll-behavior: smooth;
     color-scheme: light;
-    background-color: #F8FAFC;
+    background-color: #F7F7F4;
   }
 
   body {
-    background-color: #F8FAFC;
-    color: #0F172A;
+    background-color: #F7F7F4;
+    color: #111827;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
 
-  /* Electric blue developer selection */
+  /* Refined Copper & Deep Navy Selection */
   ::selection {
-    background-color: #1677FF;
-    color: #FFFFFF;
+    background-color: #0B1F33;
+    color: #F7F7F4;
   }
 }
 
-/* Custom developer technical scrollbar */
+/* Custom Refined Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F8FAFC;
+  background: #F7F7F4;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
+  background: #D9E0E5;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+  background: #5B6875;
 }
 
-/* Developer technical glass panels */
-.glass-panel-dev {
-  background: rgba(255, 255, 255, 0.9);
+/* Editorial Glass Panels */
+.glass-panel-warm {
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid #DCE5EF;
+  border: 1px solid #D9E0E5;
 }

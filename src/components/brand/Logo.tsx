@@ -14,8 +14,8 @@ export const Logo: React.FC<LogoProps> = ({
   variant = 'full',
   theme = 'light'
 }) => {
-  const textPrimary = theme === 'dark' ? '#FFFFFF' : '#071A2F';
-  const textSecondary = '#1677FF';
+  const textPrimary = theme === 'dark' ? '#F7F7F4' : '#0B1F33';
+  const textSecondary = '#B8613A';
   const logoSrc = theme === 'dark' 
     ? '/images/logo/logo-mark-dark-mode.png' 
     : '/images/logo/logo-mark-transparent.png';

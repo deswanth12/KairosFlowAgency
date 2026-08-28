@@ -32,21 +32,21 @@ export const FinalCTA: React.FC = () => {
   };
 
   return (
-    <section className="bg-[#071A2F] text-white py-24 sm:py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background subtle Electric Blue ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#1677FF]/15 blur-[140px] rounded-full pointer-events-none" />
+    <section className="bg-[#0B1F33] text-white py-24 sm:py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Background Copper ambient glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#B8613A]/15 blur-[140px] rounded-full pointer-events-none" />
 
       <div className="relative max-w-4xl mx-auto text-center z-10 flex flex-col items-center">
-        {/* Availability Badge with Developer Syntax */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-mono text-blue-100 mb-8 backdrop-blur-sm shadow-sm">
-          <span className="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse" />
+        {/* Availability Badge */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-mono text-slate-200 mb-8 backdrop-blur-sm shadow-sm">
+          <span className="w-2 h-2 rounded-full bg-[#B8613A] animate-pulse" />
           <span>STATUS: ACCEPTING SELECTED Q1/Q2 PROJECTS</span>
         </div>
 
         {/* Headline */}
         <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white font-display max-w-2xl mb-6 leading-tight">
           Have an ambitious idea? <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#38BDF8] to-[#1677FF]">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#F7F7F4] to-[#B8613A]">
             Let’s build it right.
           </span>
         </h2>
@@ -60,10 +60,10 @@ export const FinalCTA: React.FC = () => {
           {/* Primary Action: White Button with Deep Navy Text */}
           <Link
             href="/contact"
-            className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 px-8 py-4 text-xs font-bold text-[#071A2F] bg-white hover:bg-slate-100 rounded-xl shadow-lg transition-all duration-200 uppercase tracking-wider"
+            className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 px-8 py-4 text-xs font-bold text-[#0B1F33] bg-white hover:bg-[#F7F7F4] rounded-xl shadow-lg transition-all duration-200 uppercase tracking-wider"
           >
             <span>/ START A PROJECT</span>
-            <ArrowUpRight className="w-4 h-4 text-[#1677FF] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <ArrowUpRight className="w-4 h-4 text-[#B8613A] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
 
           {/* WhatsApp Action */}
@@ -91,7 +91,7 @@ export const FinalCTA: React.FC = () => {
               </>
             ) : (
               <>
-                <Mail className="w-4 h-4 text-[#38BDF8]" />
+                <Mail className="w-4 h-4 text-[#B8613A]" />
                 <span>Email Us</span>
               </>
             )}
@@ -100,7 +100,7 @@ export const FinalCTA: React.FC = () => {
 
         {/* SLA and Direct Contact */}
         <div className="flex items-center gap-2 text-xs text-slate-300 font-mono mb-4">
-          <Clock className="w-3.5 h-3.5 text-[#38BDF8]" />
+          <Clock className="w-3.5 h-3.5 text-[#B8613A]" />
           <span>Average SLA response: &lt; 4 hours during business days</span>
         </div>
 

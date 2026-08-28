@@ -20,9 +20,9 @@ export const Footer: React.FC = () => {
   const whatsappUrl = generateWhatsAppLink(siteSettingsData.whatsappNumber);
 
   return (
-    <footer className="bg-[#071A2F] text-slate-300 border-t border-[#071A2F] relative overflow-hidden">
-      {/* Subtle top ambient glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-[#1677FF]/40 to-transparent" />
+    <footer className="bg-[#0B1F33] text-slate-300 border-t border-[#0B1F33] relative overflow-hidden">
+      {/* Subtle top copper ambient highlight */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-[#B8613A]/40 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-16">
@@ -33,12 +33,12 @@ export const Footer: React.FC = () => {
                 <Logo size={36} variant="full" theme="dark" />
               </Link>
               <p className="text-sm text-slate-300 leading-relaxed max-w-sm mb-6">
-                Kairos represents the right moment. Flow represents continuous execution. We help forward-thinking businesses scale through high-performance digital products, AI systems, and brand craftsmanship.
+                Kairos represents the opportune moment. Flow represents continuous execution. We partner with founders and enterprises to build high-performance digital products, AI systems, and brand authority.
               </p>
 
-              {/* Status Indicator with Developer Mono Syntax */}
+              {/* Status Indicator */}
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs text-white font-mono">
-                <span className="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-[#B8613A] animate-pulse" />
                 <span className="font-semibold">STATUS: Q1/Q2 SPRINTS ACTIVE</span>
               </div>
             </div>
@@ -60,21 +60,21 @@ export const Footer: React.FC = () => {
                 className="p-2.5 bg-white/10 hover:bg-white/20 border border-white/15 rounded-lg text-white transition-colors"
                 aria-label="Email"
               >
-                <Mail className="w-4 h-4 text-[#38BDF8]" />
+                <Mail className="w-4 h-4 text-[#B8613A]" />
               </a>
               <a
                 href={`tel:${siteSettingsData.phone.replace(/[^0-9+]/g, '')}`}
                 className="p-2.5 bg-white/10 hover:bg-white/20 border border-white/15 rounded-lg text-white transition-colors"
                 aria-label="Phone"
               >
-                <Phone className="w-4 h-4 text-[#38BDF8]" />
+                <Phone className="w-4 h-4 text-[#B8613A]" />
               </a>
             </div>
           </div>
 
           {/* Navigation Links */}
           <div>
-            <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-[#38BDF8] mb-4">/ STRUCTURE</h4>
+            <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-[#B8613A] mb-4">/ STRUCTURE</h4>
             <ul className="space-y-2.5 text-xs font-mono">
               {navLinks.map((link) => (
                 <li key={link.name}>
@@ -83,7 +83,7 @@ export const Footer: React.FC = () => {
                     className="text-slate-300 hover:text-white transition-colors inline-flex items-center gap-1 group"
                   >
                     <span>{link.name}</span>
-                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-[#38BDF8]" />
+                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-[#B8613A]" />
                   </Link>
                 </li>
               ))}
@@ -92,7 +92,7 @@ export const Footer: React.FC = () => {
 
           {/* Services Disciplines */}
           <div>
-            <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-[#38BDF8] mb-4">/ DISCIPLINES</h4>
+            <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-[#B8613A] mb-4">/ DISCIPLINES</h4>
             <ul className="space-y-2.5 text-xs font-mono">
               {servicesData.map((svc) => (
                 <li key={svc.id}>
@@ -109,10 +109,10 @@ export const Footer: React.FC = () => {
 
           {/* Direct Office & Direct Contact */}
           <div>
-            <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-[#38BDF8] mb-4">/ DIRECT COMMS</h4>
+            <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-[#B8613A] mb-4">/ DIRECT COMMS</h4>
             <div className="space-y-3 text-xs font-mono text-slate-300">
               <div className="flex items-start gap-2.5">
-                <Mail className="w-4 h-4 text-[#38BDF8] flex-shrink-0 mt-0.5" />
+                <Mail className="w-4 h-4 text-[#B8613A] flex-shrink-0 mt-0.5" />
                 <a 
                   href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(siteSettingsData.email)}&su=${encodeURIComponent('Project Inquiry | Kairos Flow Agency')}`}
                   target="_blank"
@@ -124,13 +124,13 @@ export const Footer: React.FC = () => {
                 </a>
               </div>
               <div className="flex items-start gap-2.5">
-                <Phone className="w-4 h-4 text-[#38BDF8] flex-shrink-0 mt-0.5" />
+                <Phone className="w-4 h-4 text-[#B8613A] flex-shrink-0 mt-0.5" />
                 <a href={`tel:${siteSettingsData.phone.replace(/[^0-9+]/g, '')}`} className="hover:text-white transition-colors">
                   {siteSettingsData.phone}
                 </a>
               </div>
               <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-[#38BDF8] flex-shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-[#B8613A] flex-shrink-0 mt-0.5" />
                 <span>{siteSettingsData.address}</span>
               </div>
               <div className="pt-2 text-[11px] text-slate-400">

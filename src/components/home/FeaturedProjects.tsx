@@ -17,26 +17,26 @@ export const FeaturedProjects: React.FC = () => {
     : projectsData.filter((p) => p.category === activeCategory);
 
   return (
-    <section id="selected-work" className="bg-[#F8FAFC] text-[#0F172A] py-20 sm:py-28 px-4 sm:px-6 lg:px-8 border-b border-[#DCE5EF]">
+    <section id="selected-work" className="bg-[#F7F7F4] text-[#111827] py-20 sm:py-28 px-4 sm:px-6 lg:px-8 border-b border-[#D9E0E5]">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#DCE5EF] text-xs font-mono uppercase tracking-widest text-[#1677FF] mb-3 font-semibold shadow-subtle-card">
-              <Terminal className="w-3.5 h-3.5 text-[#1677FF]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#D9E0E5] text-xs font-mono uppercase tracking-widest text-[#B8613A] mb-3 font-semibold shadow-subtle-card">
+              <Terminal className="w-3.5 h-3.5 text-[#B8613A]" />
               <span>/ SELECTED WORK</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#071A2F] font-display">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#0B1F33] font-display">
               Production Systems & Case Studies
             </h2>
-            <p className="text-[#64748B] text-base sm:text-lg mt-3 max-w-xl">
+            <p className="text-[#5B6875] text-base sm:text-lg mt-3 max-w-xl">
               Real projects delivered across modern web architecture, autonomous AI pipelines, native mobile applications, and brand systems.
             </p>
           </div>
 
           <Link
             href="/work"
-            className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#071A2F] hover:text-[#1677FF] transition-colors pb-1 border-b border-[#071A2F]/30 hover:border-[#1677FF] self-start md:self-auto uppercase tracking-wider"
+            className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#0B1F33] hover:text-[#B8613A] transition-colors pb-1 border-b border-[#0B1F33]/30 hover:border-[#B8613A] self-start md:self-auto uppercase tracking-wider"
           >
             <span>/ VIEW ALL PROJECTS ({projectsData.length})</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -52,8 +52,8 @@ export const FeaturedProjects: React.FC = () => {
               onClick={() => setActiveCategory(cat)}
               className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all duration-200 border ${
                 activeCategory === cat
-                  ? 'bg-[#071A2F] text-white border-[#071A2F] shadow-sm'
-                  : 'bg-white hover:bg-[#EFF6FF] text-[#64748B] hover:text-[#1677FF] border-[#DCE5EF]'
+                  ? 'bg-[#0B1F33] text-white border-[#0B1F33] shadow-sm'
+                  : 'bg-white hover:bg-[#FBF4F0] text-[#5B6875] hover:text-[#B8613A] border-[#D9E0E5]'
               }`}
             >
               {cat === 'All' ? `/ ALL (${projectsData.length})` : `/ ${cat.toUpperCase()}`}
@@ -66,10 +66,10 @@ export const FeaturedProjects: React.FC = () => {
           {filteredProjects.map((project) => (
             <article
               key={project.id}
-              className="group flex flex-col bg-white border border-[#DCE5EF] rounded-2xl overflow-hidden shadow-subtle-card hover:shadow-hover-card transition-all duration-300 hover:border-[#1677FF]/40"
+              className="group flex flex-col bg-white border border-[#D9E0E5] rounded-2xl overflow-hidden shadow-subtle-card hover:shadow-hover-card transition-all duration-300 hover:border-[#B8613A]/40"
             >
               {/* Image Thumbnail Container */}
-              <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#071A2F]">
+              <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#0B1F33]">
                 <Image
                   src={project.heroImage}
                   alt={project.title}
@@ -80,12 +80,12 @@ export const FeaturedProjects: React.FC = () => {
 
                 {/* Top Floating Badges */}
                 <div className="absolute top-4 left-4 flex items-center gap-2 font-mono">
-                  <span className="px-3 py-1 rounded-full bg-[#071A2F]/90 backdrop-blur-md text-white text-xs font-medium border border-white/15">
+                  <span className="px-3 py-1 rounded-full bg-[#0B1F33]/90 backdrop-blur-md text-white text-xs font-medium border border-white/15">
                     {project.category}
                   </span>
                   {project.featured && (
-                    <span className="px-2.5 py-1 rounded-full bg-[#1677FF] text-white text-[11px] font-bold flex items-center gap-1 shadow-sm">
-                      <Sparkles className="w-3 h-3 text-[#38BDF8]" />
+                    <span className="px-2.5 py-1 rounded-full bg-[#B8613A] text-white text-[11px] font-bold flex items-center gap-1 shadow-sm">
+                      <Sparkles className="w-3 h-3 text-[#F7F7F4]" />
                       FEATURED
                     </span>
                   )}
@@ -93,8 +93,8 @@ export const FeaturedProjects: React.FC = () => {
 
                 {/* Metric Badge Overlay */}
                 {project.results?.[0] && (
-                  <div className="absolute bottom-4 right-4 px-3 py-1.5 rounded-xl bg-[#071A2F]/90 backdrop-blur-md border border-white/15 text-right font-mono">
-                    <div className="text-xs font-bold text-[#38BDF8]">
+                  <div className="absolute bottom-4 right-4 px-3 py-1.5 rounded-xl bg-[#0B1F33]/90 backdrop-blur-md border border-white/15 text-right font-mono">
+                    <div className="text-xs font-bold text-[#F7F7F4]">
                       {project.results[0].metric}
                     </div>
                     <div className="text-[10px] text-slate-300">
@@ -107,13 +107,13 @@ export const FeaturedProjects: React.FC = () => {
               {/* Card Content */}
               <div className="flex flex-col flex-1 p-6 sm:p-7 justify-between">
                 <div>
-                  <div className="text-xs font-mono text-[#64748B] mb-2 font-semibold">
+                  <div className="text-xs font-mono text-[#5B6875] mb-2 font-semibold">
                     {project.client} • {project.year}
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-[#071A2F] tracking-tight mb-2 group-hover:text-[#1677FF] transition-colors font-display">
+                  <h3 className="text-xl sm:text-2xl font-bold text-[#0B1F33] tracking-tight mb-2 group-hover:text-[#B8613A] transition-colors font-display">
                     {project.title}
                   </h3>
-                  <p className="text-[#64748B] text-sm leading-relaxed line-clamp-2 mb-4">
+                  <p className="text-[#5B6875] text-sm leading-relaxed line-clamp-2 mb-4">
                     {project.tagline}
                   </p>
 
@@ -122,13 +122,13 @@ export const FeaturedProjects: React.FC = () => {
                     {project.techStack.slice(0, 4).map((tech) => (
                       <span
                         key={tech}
-                        className="px-2.5 py-0.5 text-[11px] bg-[#F8FAFC] text-[#0F172A] rounded-md border border-[#DCE5EF]"
+                        className="px-2.5 py-0.5 text-[11px] bg-[#F7F7F4] text-[#111827] rounded-md border border-[#D9E0E5]"
                       >
                         {tech}
                       </span>
                     ))}
                     {project.techStack.length > 4 && (
-                      <span className="px-2 py-0.5 text-[11px] text-[#64748B]">
+                      <span className="px-2 py-0.5 text-[11px] text-[#5B6875]">
                         +{project.techStack.length - 4} more
                       </span>
                     )}
@@ -136,14 +136,14 @@ export const FeaturedProjects: React.FC = () => {
                 </div>
 
                 {/* Footer Action */}
-                <div className="pt-4 border-t border-[#DCE5EF] flex items-center justify-between font-mono">
-                  <span className="text-xs text-[#64748B]">TIMELINE: {project.duration}</span>
+                <div className="pt-4 border-t border-[#D9E0E5] flex items-center justify-between font-mono">
+                  <span className="text-xs text-[#5B6875]">TIMELINE: {project.duration}</span>
                   <Link
                     href={`/work/${project.slug}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#071A2F] group-hover:text-[#1677FF] transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0B1F33] group-hover:text-[#B8613A] transition-colors"
                   >
                     <span>CASE STUDY</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 text-[#1677FF] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ArrowUpRight className="w-3.5 h-3.5 text-[#B8613A] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </Link>
                 </div>
               </div>
