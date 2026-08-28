@@ -40,16 +40,6 @@ const TIMELINE_OPTIONS = [
   'Flexible / Exploring'
 ];
 
-const HEAR_OPTIONS = [
-  'Referral / Recommendation',
-  'Google Search',
-  'LinkedIn',
-  'Twitter / X',
-  'Instagram',
-  'Previous Client / Partner',
-  'Other'
-];
-
 export const ContactForm: React.FC = () => {
   const searchParams = useSearchParams();
 
@@ -72,31 +62,25 @@ export const ContactForm: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const serviceParam = searchParams.get('service') || searchParams.get('services');
-    const timelineParam = searchParams.get('timeline');
-
+    const serviceParam = searchParams.get('service');
     if (serviceParam) {
-      const parsedServices = serviceParam
-        .split(',')
-        .map((s) => s.trim())
-        .filter((s) => AVAILABLE_SERVICES.includes(s));
-      
-      if (parsedServices.length > 0) {
-        setFormData((prev) => ({ ...prev, services: parsedServices }));
+      const matched = AVAILABLE_SERVICES.find(
+        (s) => s.toLowerCase() === serviceParam.toLowerCase() || s.toLowerCase().includes(serviceParam.toLowerCase())
+      );
+      if (matched && !formData.services.includes(matched)) {
+        setFormData((prev) => ({ ...prev, services: [...prev.services, matched] }));
       }
-    }
-
-    if (timelineParam) {
-      setFormData((prev) => ({ ...prev, timeline: timelineParam }));
     }
   }, [searchParams]);
 
-  const toggleService = (svc: string) => {
+  const toggleService = (service: string) => {
     setFormData((prev) => {
-      const exists = prev.services.includes(svc);
+      const exists = prev.services.includes(service);
       return {
         ...prev,
-        services: exists ? prev.services.filter((s) => s !== svc) : [...prev.services, svc]
+        services: exists
+          ? prev.services.filter((s) => s !== service)
+          : [...prev.services, service]
       };
     });
     if (errors.services) {
@@ -106,17 +90,28 @@ export const ContactForm: React.FC = () => {
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.name.trim()) newErrors.name = 'Full Name is required';
-    if (!formData.company.trim()) newErrors.company = 'Company / Business is required';
+
+    if (!formData.name.trim()) newErrors.name = 'Full name is required';
+    if (!formData.company.trim()) newErrors.company = 'Company or business name is required';
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email address is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-    if (!formData.phone.trim()) newErrors.phone = 'Phone / WhatsApp number is required';
-    if (formData.services.length === 0) newErrors.services = 'Please select at least one required capability';
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone / WhatsApp number is required';
+    } else if (formData.phone.replace(/[^0-9]/g, '').length < 8) {
+      newErrors.phone = 'Please provide a valid phone number with country code';
+    }
+
+    if (formData.services.length === 0) {
+      newErrors.services = 'Please select at least one capability';
+    }
+
     if (!formData.description.trim()) {
-      newErrors.description = 'Please provide details on what you are building';
+      newErrors.description = 'Please outline your project goals and scope';
     } else if (formData.description.trim().length < 15) {
       newErrors.description = 'Please provide at least 15 characters describing your project';
     }
@@ -149,7 +144,7 @@ export const ContactForm: React.FC = () => {
       } else {
         setErrorMessage(data.message || 'Failed to submit enquiry. Please reach out via WhatsApp.');
       }
-    } catch (err) {
+    } catch {
       setErrorMessage('Network error occurred. Please check your connection or contact us via WhatsApp.');
     } finally {
       setIsSubmitting(false);
@@ -160,29 +155,29 @@ export const ContactForm: React.FC = () => {
 
   if (isSuccess) {
     return (
-      <div className="p-8 sm:p-12 rounded-2xl bg-ivory-card border border-ivory-border shadow-elevated-ivory text-center">
-        <div className="w-16 h-16 rounded-full bg-teal-subtle text-teal flex items-center justify-center mx-auto mb-6">
+      <div className="p-8 sm:p-12 rounded-2xl bg-white border border-corporate-border shadow-elevated-card text-center">
+        <div className="w-16 h-16 rounded-full bg-corporate-softBlue text-corporate-blue flex items-center justify-center mx-auto mb-6 border border-blue-200">
           <CheckCircle2 className="w-8 h-8" />
         </div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ivory-muted text-xs font-mono text-champagne mb-3">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-corporate-softBlue text-xs font-mono text-corporate-blue mb-3 font-semibold">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Brief Received</span>
         </div>
-        <h3 className="text-2xl sm:text-3xl font-bold text-softblack tracking-tight mb-3 font-display">
+        <h3 className="text-2xl sm:text-3xl font-bold text-corporate-dark tracking-tight mb-3 font-display">
           Thanks, {formData.name}.
         </h3>
-        <p className="text-slate text-sm sm:text-base max-w-md mx-auto leading-relaxed mb-8">
-          Your project brief has been received. We&apos;ll review it and get back to you within <strong className="text-softblack">24 hours</strong>.
+        <p className="text-corporate-mutedText text-sm sm:text-base max-w-md mx-auto leading-relaxed mb-8">
+          Your project brief has been received. We&apos;ll review it and get back to you within <strong className="text-corporate-dark">4 business hours</strong>.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-6 border-t border-ivory-border max-w-md mx-auto">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-6 border-t border-corporate-border max-w-md mx-auto">
           <a
             href={whatsappDirectUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 text-xs font-semibold text-ivory bg-teal hover:bg-teal-hover rounded-lg transition-colors"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-semibold text-white bg-corporate-dark hover:bg-corporate-darkHover rounded-lg transition-colors shadow-sm"
           >
-            <MessageCircle className="w-4 h-4" />
+            <MessageCircle className="w-4 h-4 text-emerald-400" />
             <span>Follow Up on WhatsApp</span>
           </a>
 
@@ -203,7 +198,7 @@ export const ContactForm: React.FC = () => {
                 hearAbout: ''
               });
             }}
-            className="w-full sm:w-auto px-6 py-3 text-xs font-medium text-slate hover:text-softblack bg-ivory-muted rounded-lg transition-colors"
+            className="w-full sm:w-auto px-6 py-3.5 text-xs font-medium text-corporate-mutedText hover:text-corporate-dark bg-corporate-offwhite rounded-lg transition-colors border border-corporate-border"
           >
             Submit Another Brief
           </button>
@@ -213,13 +208,13 @@ export const ContactForm: React.FC = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="p-8 sm:p-12 rounded-2xl bg-ivory-card border border-ivory-border shadow-elevated-ivory">
-      {/* Safe & Transparent Introduction */}
-      <div className="mb-8 pb-6 border-b border-ivory-border">
-        <h2 className="text-2xl sm:text-3xl font-bold text-softblack tracking-tight font-display mb-2">
+    <form onSubmit={handleSubmit} className="p-8 sm:p-12 rounded-2xl bg-white border border-corporate-border shadow-elevated-card">
+      {/* Introduction */}
+      <div className="mb-8 pb-6 border-b border-corporate-border">
+        <h2 className="text-2xl sm:text-3xl font-bold text-corporate-dark tracking-tight font-display mb-2">
           Tell us what you&apos;re building.
         </h2>
-        <p className="text-slate text-xs sm:text-sm leading-relaxed">
+        <p className="text-corporate-mutedText text-xs sm:text-sm leading-relaxed">
           Every project is scoped around your goals, requirements and timeline. Fill in the details below to receive a clear proposal.
         </p>
       </div>
@@ -233,8 +228,8 @@ export const ContactForm: React.FC = () => {
 
       {/* Step 1: What do you need? */}
       <div className="mb-8">
-        <label className="block text-xs font-mono uppercase tracking-wider text-slate mb-3 font-semibold">
-          What do you need? (Select all that apply) <span className="text-teal">*</span>
+        <label className="block text-xs font-mono uppercase tracking-wider text-corporate-mutedText mb-3 font-semibold">
+          What do you need? (Select all that apply) <span className="text-corporate-blue">*</span>
         </label>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
           {AVAILABLE_SERVICES.map((svc) => {
@@ -246,12 +241,12 @@ export const ContactForm: React.FC = () => {
                 onClick={() => toggleService(svc)}
                 className={`p-3 text-left rounded-lg text-xs font-medium transition-all duration-150 border flex items-center justify-between ${
                   isSelected
-                    ? 'bg-ink text-ivory border-ink shadow-sm'
-                    : 'bg-ivory hover:bg-ivory-muted text-softblack border-ivory-border'
+                    ? 'bg-corporate-dark text-white border-corporate-dark shadow-sm'
+                    : 'bg-corporate-offwhite hover:bg-corporate-softBlue text-corporate-text border-corporate-border'
                 }`}
               >
                 <span>{svc}</span>
-                {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-teal" />}
+                {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-corporate-sky" />}
               </button>
             );
           })}
@@ -264,8 +259,8 @@ export const ContactForm: React.FC = () => {
       {/* Step 2: Contact & Company Details */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
         <div>
-          <label className="block text-xs font-mono uppercase tracking-wider text-slate mb-2 font-semibold">
-            Name <span className="text-teal">*</span>
+          <label className="block text-xs font-mono uppercase tracking-wider text-corporate-mutedText mb-2 font-semibold">
+            Name <span className="text-corporate-blue">*</span>
           </label>
           <input
             type="text"
@@ -275,16 +270,16 @@ export const ContactForm: React.FC = () => {
               if (errors.name) setErrors({ ...errors, name: '' });
             }}
             placeholder="Your name"
-            className={`w-full px-4 py-3 text-sm rounded-lg bg-ivory text-softblack border focus:outline-none focus:ring-2 focus:ring-teal/30 ${
-              errors.name ? 'border-red-400' : 'border-ivory-border'
+            className={`w-full px-4 py-3 text-sm rounded-lg bg-corporate-offwhite text-corporate-dark border focus:outline-none focus:border-corporate-blue ${
+              errors.name ? 'border-red-400' : 'border-corporate-border'
             }`}
           />
           {errors.name && <p className="mt-1.5 text-xs text-red-600">{errors.name}</p>}
         </div>
 
         <div>
-          <label className="block text-xs font-mono uppercase tracking-wider text-slate mb-2 font-semibold">
-            Business / Company <span className="text-teal">*</span>
+          <label className="block text-xs font-mono uppercase tracking-wider text-corporate-mutedText mb-2 font-semibold">
+            Business / Company <span className="text-corporate-blue">*</span>
           </label>
           <input
             type="text"
@@ -294,16 +289,16 @@ export const ContactForm: React.FC = () => {
               if (errors.company) setErrors({ ...errors, company: '' });
             }}
             placeholder="Company or venture name"
-            className={`w-full px-4 py-3 text-sm rounded-lg bg-ivory text-softblack border focus:outline-none focus:ring-2 focus:ring-teal/30 ${
-              errors.company ? 'border-red-400' : 'border-ivory-border'
+            className={`w-full px-4 py-3 text-sm rounded-lg bg-corporate-offwhite text-corporate-dark border focus:outline-none focus:border-corporate-blue ${
+              errors.company ? 'border-red-400' : 'border-corporate-border'
             }`}
           />
           {errors.company && <p className="mt-1.5 text-xs text-red-600">{errors.company}</p>}
         </div>
 
         <div>
-          <label className="block text-xs font-mono uppercase tracking-wider text-slate mb-2 font-semibold">
-            Email <span className="text-teal">*</span>
+          <label className="block text-xs font-mono uppercase tracking-wider text-corporate-mutedText mb-2 font-semibold">
+            Email <span className="text-corporate-blue">*</span>
           </label>
           <input
             type="email"
@@ -313,16 +308,16 @@ export const ContactForm: React.FC = () => {
               if (errors.email) setErrors({ ...errors, email: '' });
             }}
             placeholder="you@company.com"
-            className={`w-full px-4 py-3 text-sm rounded-lg bg-ivory text-softblack border focus:outline-none focus:ring-2 focus:ring-teal/30 ${
-              errors.email ? 'border-red-400' : 'border-ivory-border'
+            className={`w-full px-4 py-3 text-sm rounded-lg bg-corporate-offwhite text-corporate-dark border focus:outline-none focus:border-corporate-blue ${
+              errors.email ? 'border-red-400' : 'border-corporate-border'
             }`}
           />
           {errors.email && <p className="mt-1.5 text-xs text-red-600">{errors.email}</p>}
         </div>
 
         <div>
-          <label className="block text-xs font-mono uppercase tracking-wider text-slate mb-2 font-semibold">
-            WhatsApp / Phone <span className="text-teal">*</span>
+          <label className="block text-xs font-mono uppercase tracking-wider text-corporate-mutedText mb-2 font-semibold">
+            WhatsApp / Phone <span className="text-corporate-blue">*</span>
           </label>
           <input
             type="text"
@@ -332,8 +327,8 @@ export const ContactForm: React.FC = () => {
               if (errors.phone) setErrors({ ...errors, phone: '' });
             }}
             placeholder="+91 77022 56073"
-            className={`w-full px-4 py-3 text-sm rounded-lg bg-ivory text-softblack border focus:outline-none focus:ring-2 focus:ring-teal/30 ${
-              errors.phone ? 'border-red-400' : 'border-ivory-border'
+            className={`w-full px-4 py-3 text-sm rounded-lg bg-corporate-offwhite text-corporate-dark border focus:outline-none focus:border-corporate-blue ${
+              errors.phone ? 'border-red-400' : 'border-corporate-border'
             }`}
           />
           {errors.phone && <p className="mt-1.5 text-xs text-red-600">{errors.phone}</p>}
@@ -342,8 +337,8 @@ export const ContactForm: React.FC = () => {
 
       {/* Step 3: Project Details */}
       <div className="mb-8">
-        <label className="block text-xs font-mono uppercase tracking-wider text-slate mb-2 font-semibold">
-          Project Details <span className="text-teal">*</span>
+        <label className="block text-xs font-mono uppercase tracking-wider text-corporate-mutedText mb-2 font-semibold">
+          Project Details <span className="text-corporate-blue">*</span>
         </label>
         <textarea
           rows={4}
@@ -353,8 +348,8 @@ export const ContactForm: React.FC = () => {
             if (errors.description) setErrors({ ...errors, description: '' });
           }}
           placeholder="Describe what you want to build, key features, and your target outcomes..."
-          className={`w-full px-4 py-3 text-sm rounded-lg bg-ivory text-softblack border focus:outline-none focus:ring-2 focus:ring-teal/30 resize-y ${
-            errors.description ? 'border-red-400' : 'border-ivory-border'
+          className={`w-full px-4 py-3 text-sm rounded-lg bg-corporate-offwhite text-corporate-dark border focus:outline-none focus:border-corporate-blue resize-y ${
+            errors.description ? 'border-red-400' : 'border-corporate-border'
           }`}
         />
         {errors.description && <p className="mt-1.5 text-xs text-red-600">{errors.description}</p>}
@@ -363,13 +358,13 @@ export const ContactForm: React.FC = () => {
       {/* Step 4: Budget & Timeline */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
         <div>
-          <label className="block text-xs font-mono uppercase tracking-wider text-slate mb-2 font-semibold">
+          <label className="block text-xs font-mono uppercase tracking-wider text-corporate-mutedText mb-2 font-semibold">
             Budget Range (Optional)
           </label>
           <select
             value={formData.budget}
             onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-            className="w-full px-4 py-3 text-sm rounded-lg bg-ivory text-softblack border border-ivory-border focus:outline-none focus:ring-2 focus:ring-teal/30"
+            className="w-full px-4 py-3 text-sm rounded-lg bg-corporate-offwhite text-corporate-dark border border-corporate-border focus:outline-none focus:border-corporate-blue"
           >
             <option value="">Select budget range...</option>
             {BUDGET_RANGES.map((b) => (
@@ -379,13 +374,13 @@ export const ContactForm: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-xs font-mono uppercase tracking-wider text-slate mb-2 font-semibold">
+          <label className="block text-xs font-mono uppercase tracking-wider text-corporate-mutedText mb-2 font-semibold">
             Target Timeline (Optional)
           </label>
           <select
             value={formData.timeline}
             onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-            className="w-full px-4 py-3 text-sm rounded-lg bg-ivory text-softblack border border-ivory-border focus:outline-none focus:ring-2 focus:ring-teal/30"
+            className="w-full px-4 py-3 text-sm rounded-lg bg-corporate-offwhite text-corporate-dark border border-corporate-border focus:outline-none focus:border-corporate-blue"
           >
             <option value="">Select target timeline...</option>
             {TIMELINE_OPTIONS.map((t) => (
@@ -396,11 +391,11 @@ export const ContactForm: React.FC = () => {
       </div>
 
       {/* Action Buttons & WhatsApp Alternative */}
-      <div className="pt-6 border-t border-ivory-border flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="pt-6 border-t border-corporate-border flex flex-col sm:flex-row items-center justify-between gap-4">
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 px-8 py-3.5 text-xs font-semibold text-ivory bg-teal hover:bg-teal-hover border border-teal-border rounded-lg shadow-sm transition-all duration-200 disabled:opacity-50"
+          className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 px-8 py-3.5 text-xs font-semibold text-white bg-corporate-dark hover:bg-corporate-darkHover rounded-lg shadow-sm transition-all duration-200 disabled:opacity-50"
         >
           {isSubmitting ? (
             <>
@@ -415,29 +410,29 @@ export const ContactForm: React.FC = () => {
           )}
         </button>
 
-        <div className="flex items-center gap-2 text-xs text-slate">
+        <div className="flex items-center gap-2 text-xs text-corporate-mutedText">
           <span>Prefer direct chat?</span>
           <a
             href={whatsappDirectUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-semibold text-softblack hover:text-teal transition-colors"
+            className="inline-flex items-center gap-1.5 font-semibold text-corporate-dark hover:text-corporate-blue transition-colors"
           >
-            <MessageCircle className="w-4 h-4 text-teal" />
+            <MessageCircle className="w-4 h-4 text-emerald-600" />
             <span>Chat on WhatsApp</span>
           </a>
         </div>
       </div>
 
       {/* Response Time Expectation & Privacy */}
-      <div className="mt-6 flex items-center justify-center gap-4 text-[11px] text-slate-muted">
+      <div className="mt-6 flex items-center justify-center gap-4 text-[11px] text-corporate-mutedText">
         <div className="flex items-center gap-1.5">
-          <Clock className="w-3.5 h-3.5 text-champagne" />
-          <span>Response within 24 hours</span>
+          <Clock className="w-3.5 h-3.5 text-corporate-blue" />
+          <span>Response within 4 hours</span>
         </div>
         <span>•</span>
         <div className="flex items-center gap-1.5">
-          <ShieldCheck className="w-3.5 h-3.5 text-teal" />
+          <ShieldCheck className="w-3.5 h-3.5 text-corporate-blue" />
           <span>Strict NDA Protection</span>
         </div>
       </div>

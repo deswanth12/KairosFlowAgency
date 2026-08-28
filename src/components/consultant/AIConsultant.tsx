@@ -4,21 +4,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
-  Sparkles, 
   Send, 
   X, 
   MessageCircle, 
   Bot, 
-  ShieldCheck, 
-  ChevronRight, 
   Loader2, 
-  CornerDownRight,
   ExternalLink,
-  ArrowRight,
-  HelpCircle,
-  Clock,
-  CheckCircle2,
-  Share2
+  ArrowRight
 } from 'lucide-react';
 import { ConsultantResponse } from '@/lib/rag';
 
@@ -48,6 +40,7 @@ export const AIConsultant: React.FC = () => {
   if (pathname && pathname.startsWith('/admin')) {
     return null;
   }
+
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome-1',
@@ -58,10 +51,10 @@ export const AIConsultant: React.FC = () => {
         answer: 'I can help estimate project scope, explain our 6 disciplines, reference verified case studies, or connect you directly with Founder Desvanth on WhatsApp.',
         recommendation: 'Select an inquiry below or type what you are building to receive an indicative scope.',
         confidence: 'high',
-        sources: ['agency/company.md', 'services/web.md'],
+        sources: [],
         actionButtons: [
-          { label: 'Start a Project Brief', href: '/contact' },
-          { label: 'WhatsApp Founder Directly', href: 'https://wa.me/917702256073', isExternal: true }
+          { label: 'Explore Web Capabilities', href: '/services#web-development' },
+          { label: 'View Case Studies', href: '/work' }
         ]
       }
     }
@@ -79,27 +72,17 @@ export const AIConsultant: React.FC = () => {
     }
   }, [messages, isOpen]);
 
-  // Generate seamless WhatsApp Handover link containing the entire conversation summary
+  // Generate WhatsApp Handover URL containing the recent chat context
   const generateWhatsAppHandoverUrl = () => {
-    const userInquiries = messages
-      .filter((m) => m.sender === 'user')
-      .map((m) => `• ${m.text}`)
-      .join('\n');
-
-    const lines = [
-      `*Kairos Flow AI Consultant — Chat Handover*`,
-      `----------------------------------------`,
-      userInquiries ? `*Topics Discussed with AI Consultant:*\n${userInquiries}` : `*Inquiry:* Discussing custom project with Kairos Flow`,
-      `----------------------------------------`,
-      `_Hi Desvanth, I was chatting with the Kairos Flow AI Consultant on your website and would like to continue our project discussion directly with you here._`
-    ];
-
-    const encoded = encodeURIComponent(lines.join('\n'));
-    return `https://wa.me/917702256073?text=${encoded}`;
+    const lastUserMsg = [...messages].reverse().find((m) => m.sender === 'user')?.text || 'Inquiry on digital agency services';
+    const text = encodeURIComponent(
+      `Hi Desvanth & Kairos Flow Team,\n\nI was just chatting with your AI Consultant regarding:\n"${lastUserMsg}"\n\nI would like to discuss next steps and pricing with your team.`
+    );
+    return `https://wa.me/917702256073?text=${text}`;
   };
 
-  const handleSend = async (customQuery?: string) => {
-    const textToSend = customQuery || query;
+  const handleSend = async (overrideText?: string) => {
+    const textToSend = overrideText || query;
     if (!textToSend.trim() || isLoading) return;
 
     const userMsg: ChatMessage = {
@@ -110,7 +93,7 @@ export const AIConsultant: React.FC = () => {
     };
 
     setMessages((prev) => [...prev, userMsg]);
-    setQuery('');
+    if (!overrideText) setQuery('');
     setIsLoading(true);
 
     try {
@@ -155,26 +138,26 @@ export const AIConsultant: React.FC = () => {
 
   return (
     <>
-      {/* Floating Launcher Button with Kairos Flow Brand Integration */}
+      {/* Floating Launcher Button */}
       <div className="fixed bottom-6 right-6 z-50">
         {!isOpen ? (
           <button
             onClick={() => setIsOpen(true)}
-            className="group flex items-center gap-3 pl-3 pr-4 py-2.5 bg-ink text-ivory rounded-full border border-navy-border shadow-2xl hover:border-champagne/60 transition-all duration-300 hover:scale-[1.02] backdrop-blur-md"
+            className="group flex items-center gap-3 pl-3 pr-4 py-2.5 bg-corporate-dark text-white rounded-full border border-corporate-dark/80 shadow-2xl hover:bg-corporate-darkHover transition-all duration-300 hover:scale-[1.02] backdrop-blur-md"
             aria-label="Open Kairos Flow AI Consultant"
           >
-            <div className="relative w-8 h-8 rounded-full bg-navy flex items-center justify-center text-champagne border border-navy-border group-hover:border-champagne/50 transition-colors">
+            <div className="relative w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-corporate-sky border border-white/20">
               <Bot className="w-4 h-4" />
-              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-teal animate-pulse" />
+              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-corporate-blue animate-pulse" />
             </div>
             <div className="text-left pr-1">
-              <div className="text-xs font-bold text-ivory tracking-tight font-display flex items-center gap-1.5">
+              <div className="text-xs font-bold text-white tracking-tight font-display flex items-center gap-1.5">
                 <span>AI Consultant</span>
-                <span className="px-1.5 py-0.2 rounded bg-champagne/15 text-champagne text-[9px] font-mono font-semibold">
+                <span className="px-1.5 py-0.2 rounded-full bg-corporate-blue text-white text-[9px] font-mono font-semibold">
                   KAIROS OS
                 </span>
               </div>
-              <div className="text-[10px] text-slate font-mono">Scope & WhatsApp Sync</div>
+              <div className="text-[10px] text-slate-300 font-mono">Scope & WhatsApp Sync</div>
             </div>
           </button>
         ) : null}
@@ -182,21 +165,21 @@ export const AIConsultant: React.FC = () => {
 
       {/* Floating Chat Drawer Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[440px] h-[600px] max-h-[85vh] bg-ink text-ivory rounded-2xl border border-navy-border shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200">
-          {/* Header with Direct WhatsApp Transfer Button */}
-          <div className="p-4 bg-navy/90 border-b border-navy-border flex items-center justify-between">
+        <div className="fixed bottom-6 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[440px] h-[600px] max-h-[85vh] bg-white text-corporate-text rounded-2xl border border-corporate-border shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200">
+          {/* Header */}
+          <div className="p-4 bg-corporate-dark text-white border-b border-corporate-dark flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-ink border border-champagne/40 flex items-center justify-center text-champagne">
+              <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-corporate-sky">
                 <Bot className="w-4 h-4" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h4 className="text-sm font-bold text-ivory font-display">Kairos Flow AI Consultant</h4>
-                  <span className="px-1.5 py-0.5 rounded bg-teal/20 text-teal text-[9px] font-mono font-semibold">
+                  <h4 className="text-sm font-bold text-white font-display">Kairos Flow AI Consultant</h4>
+                  <span className="px-1.5 py-0.5 rounded bg-corporate-blue text-white text-[9px] font-mono font-semibold">
                     RAG + WhatsApp
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-light font-mono">Grounded strictly in agency knowledge</p>
+                <p className="text-[11px] text-slate-300 font-mono">Grounded strictly in agency knowledge</p>
               </div>
             </div>
 
@@ -206,7 +189,7 @@ export const AIConsultant: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Transfer Conversation to WhatsApp"
-                className="p-1.5 bg-teal/20 hover:bg-teal text-teal hover:text-ivory border border-teal/40 rounded-lg transition-colors flex items-center gap-1 text-[10px] font-mono font-semibold"
+                className="p-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors flex items-center gap-1 text-[10px] font-mono font-semibold"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">WhatsApp</span>
@@ -214,7 +197,7 @@ export const AIConsultant: React.FC = () => {
 
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 text-slate-light hover:text-ivory hover:bg-navy rounded-lg transition-colors"
+                className="p-1.5 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
                 aria-label="Close Consultant"
               >
                 <X className="w-4 h-4" />
@@ -223,7 +206,7 @@ export const AIConsultant: React.FC = () => {
           </div>
 
           {/* Messages Container */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-4 text-xs font-sans">
+          <div className="flex-1 p-4 overflow-y-auto space-y-4 text-xs font-sans bg-corporate-offwhite">
             {messages.map((msg) => {
               const isUser = msg.sender === 'user';
 
@@ -233,40 +216,39 @@ export const AIConsultant: React.FC = () => {
                   className={`flex flex-col ${isUser ? 'items-end' : 'items-start'}`}
                 >
                   <div
-                    className={`max-w-[90%] p-3.5 rounded-xl leading-relaxed ${
+                    className={`max-w-[90%] p-3.5 rounded-2xl leading-relaxed shadow-sm ${
                       isUser
-                        ? 'bg-teal text-ivory rounded-tr-none font-medium'
-                        : 'bg-navy border border-navy-border text-ivory-muted rounded-tl-none space-y-2.5'
+                        ? 'bg-corporate-dark text-white rounded-tr-none font-medium'
+                        : 'bg-white border border-corporate-border text-corporate-text rounded-tl-none space-y-2.5'
                     }`}
                   >
                     <p className="text-xs leading-relaxed">{msg.text}</p>
 
                     {/* Consultant Structured Advice */}
                     {msg.response && (
-                      <div className="space-y-2 pt-2 border-t border-navy-border/60">
+                      <div className="space-y-2 pt-2 border-t border-corporate-border">
                         {msg.response.recommendation && (
-                          <div className="p-2.5 rounded bg-ink/70 border-l-2 border-champagne text-[11px] text-slate-light leading-relaxed">
-                            <span className="font-semibold text-champagne font-mono block mb-0.5">Recommendation:</span>
+                          <div className="p-2.5 rounded-lg bg-corporate-softBlue border-l-2 border-corporate-blue text-[11px] text-corporate-dark leading-relaxed">
+                            <span className="font-semibold text-corporate-blue font-mono block mb-0.5">Recommendation:</span>
                             {msg.response.recommendation}
                           </div>
                         )}
 
                         {msg.response.nextActionPrompt && (
-                          <div className="text-[11px] text-slate-light italic">
+                          <div className="text-[11px] text-corporate-mutedText italic">
                             {msg.response.nextActionPrompt}
                           </div>
                         )}
 
                         {/* Action Buttons & WhatsApp Handover */}
                         <div className="flex flex-wrap gap-1.5 pt-1">
-                          {/* Dedicated WhatsApp Transfer Button */}
                           <a
                             href={generateWhatsAppHandoverUrl()}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded bg-[#25D366]/20 hover:bg-[#25D366] text-[#25D366] hover:text-ink border border-[#25D366]/40 text-[10px] font-semibold transition-colors"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-[10px] font-semibold transition-colors"
                           >
-                            <MessageCircle className="w-3 h-3" />
+                            <MessageCircle className="w-3 h-3 text-emerald-600" />
                             <span>Continue on WhatsApp</span>
                           </a>
 
@@ -278,7 +260,7 @@ export const AIConsultant: React.FC = () => {
                                   href={btn.href}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded bg-teal/20 hover:bg-teal text-teal hover:text-ivory border border-teal/40 text-[10px] font-semibold transition-colors"
+                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-corporate-softBlue hover:bg-blue-100 text-corporate-blue border border-blue-200 text-[10px] font-semibold transition-colors"
                                 >
                                   <span>{btn.label}</span>
                                   <ExternalLink className="w-2.5 h-2.5" />
@@ -291,7 +273,7 @@ export const AIConsultant: React.FC = () => {
                                 key={bIdx}
                                 href={btn.href}
                                 onClick={() => setIsOpen(false)}
-                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded bg-ivory-muted hover:bg-ivory text-softblack text-[10px] font-semibold transition-colors"
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-corporate-offwhite hover:bg-slate-200 text-corporate-dark text-[10px] font-semibold transition-colors border border-corporate-border"
                               >
                                 <span>{btn.label}</span>
                                 <ArrowRight className="w-2.5 h-2.5" />
@@ -302,14 +284,14 @@ export const AIConsultant: React.FC = () => {
                       </div>
                     )}
                   </div>
-                  <span className="text-[9px] font-mono text-slate-muted mt-1 px-1">{msg.timestamp}</span>
+                  <span className="text-[9px] font-mono text-corporate-mutedText mt-1 px-1">{msg.timestamp}</span>
                 </div>
               );
             })}
 
             {isLoading && (
-              <div className="flex items-center gap-2 text-slate-light text-xs p-2">
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-teal" />
+              <div className="flex items-center gap-2 text-corporate-mutedText text-xs p-2">
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-corporate-blue" />
                 <span>Consulting verified knowledge base...</span>
               </div>
             )}
@@ -318,13 +300,13 @@ export const AIConsultant: React.FC = () => {
           </div>
 
           {/* Quick Starter Chips */}
-          <div className="p-2.5 bg-navy/40 border-t border-navy-border overflow-x-auto whitespace-nowrap flex gap-1.5 no-scrollbar">
+          <div className="p-2.5 bg-white border-t border-corporate-border overflow-x-auto whitespace-nowrap flex gap-1.5 no-scrollbar">
             {STARTER_PROMPTS.map((prompt) => (
               <button
                 key={prompt}
                 onClick={() => handleSend(prompt)}
                 disabled={isLoading}
-                className="px-2.5 py-1 rounded-full bg-navy hover:bg-ink border border-navy-border text-[10px] text-slate-light hover:text-ivory transition-colors flex-shrink-0"
+                className="px-3 py-1 rounded-full bg-corporate-offwhite hover:bg-corporate-softBlue border border-corporate-border text-[10px] text-corporate-mutedText hover:text-corporate-blue transition-colors flex-shrink-0"
               >
                 {prompt}
               </button>
@@ -337,19 +319,19 @@ export const AIConsultant: React.FC = () => {
               e.preventDefault();
               handleSend();
             }}
-            className="p-3 bg-navy/80 border-t border-navy-border flex items-center gap-2"
+            className="p-3 bg-white border-t border-corporate-border flex items-center gap-2"
           >
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Ask about pricing, scope, tech stack, or team..."
-              className="flex-1 px-3 py-2 text-xs rounded-lg bg-ink text-ivory border border-navy-border focus:outline-none focus:border-teal placeholder:text-slate-muted"
+              className="flex-1 px-3 py-2 text-xs rounded-lg bg-corporate-offwhite text-corporate-dark border border-corporate-border focus:outline-none focus:border-corporate-blue placeholder:text-slate-400 font-sans"
             />
             <button
               type="submit"
               disabled={isLoading || !query.trim()}
-              className="p-2 rounded-lg bg-teal text-ivory hover:bg-teal-hover transition-colors disabled:opacity-50"
+              className="p-2 rounded-lg bg-corporate-dark text-white hover:bg-corporate-darkHover transition-colors disabled:opacity-50"
               aria-label="Send query"
             >
               <Send className="w-3.5 h-3.5" />

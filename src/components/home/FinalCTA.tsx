@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { generateWhatsAppLink } from '@/lib/utils';
 import { siteSettingsData } from '@/data/settings';
-import { ArrowUpRight, MessageCircle, Mail, Clock, Check, Copy } from 'lucide-react';
+import { ArrowUpRight, MessageCircle, Mail, Clock, Check } from 'lucide-react';
 
 export const FinalCTA: React.FC = () => {
   const [copied, setCopied] = useState(false);
@@ -32,77 +32,80 @@ export const FinalCTA: React.FC = () => {
   };
 
   return (
-    <section className="bg-ink text-ivory py-24 sm:py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-teal/10 blur-[140px] rounded-full pointer-events-none" />
+    <section className="bg-corporate-dark text-white py-24 sm:py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Background subtle light blue ambient glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-corporate-blue/15 blur-[140px] rounded-full pointer-events-none" />
 
       <div className="relative max-w-4xl mx-auto text-center z-10 flex flex-col items-center">
-        {/* Availability Badge with soft Champagne accent */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-navy/80 border border-navy-border text-xs font-mono text-slate-light mb-8">
-          <span className="w-2 h-2 rounded-full bg-champagne animate-pulse" />
-          <span className="text-ivory">Currently Accepting Selected Projects</span>
+        {/* Availability Badge */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-mono text-blue-100 mb-8 backdrop-blur-sm shadow-sm">
+          <span className="w-2 h-2 rounded-full bg-corporate-sky animate-pulse" />
+          <span>Currently Accepting Selected Q1/Q2 Projects</span>
         </div>
 
-        {/* Recommended Copy from Spec */}
-        <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-ivory font-display max-w-2xl mb-6">
+        {/* Headline */}
+        <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white font-display max-w-2xl mb-6 leading-tight">
           Have an idea? <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-ivory via-teal-subtle to-teal">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-corporate-sky">
             Let’s build it.
           </span>
         </h2>
 
-        <p className="text-base sm:text-lg text-slate-light max-w-xl font-normal leading-relaxed mb-10">
+        <p className="text-base sm:text-lg text-slate-300 max-w-xl font-normal leading-relaxed mb-10">
           Whether you need a full-scale web application, an autonomous AI pipeline, a mobile app, or a complete brand overhaul, we are ready to execute.
         </p>
 
-        {/* Triple Action CTA Buttons: Start a Project, WhatsApp Us, Email Us */}
+        {/* Triple Action CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto justify-center mb-6">
+          {/* Primary Action: White Button with Dark Blue Text */}
           <Link
             href="/contact"
-            className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold text-ivory bg-teal hover:bg-teal-hover border border-teal-border rounded-lg shadow-elevated-ivory transition-all duration-200 hover:shadow-glow-teal"
+            className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-bold text-corporate-dark bg-white hover:bg-slate-100 rounded-xl shadow-lg transition-all duration-200"
           >
             <span>Start a Project</span>
             <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
 
+          {/* WhatsApp Action */}
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 text-sm font-medium text-slate-light hover:text-ivory bg-navy/80 hover:bg-navy border border-navy-border rounded-lg transition-colors"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 text-sm font-medium text-white hover:text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl backdrop-blur-sm transition-colors"
           >
-            <MessageCircle className="w-4 h-4 text-teal" />
+            <MessageCircle className="w-4 h-4 text-emerald-400" />
             <span>WhatsApp Us</span>
           </a>
 
+          {/* Email Us Button */}
           <button
             type="button"
             onClick={handleEmailClick}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 text-sm font-medium text-slate-light hover:text-ivory bg-ink-surface hover:bg-navy border border-ink-border hover:border-teal/40 rounded-lg transition-all"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 text-sm font-medium text-white hover:text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl backdrop-blur-sm transition-all"
             title="Click to compose in Gmail or copy address"
           >
             {copied ? (
               <>
-                <Check className="w-4 h-4 text-teal" />
-                <span className="text-teal font-semibold">Copied {siteSettingsData.email}!</span>
+                <Check className="w-4 h-4 text-emerald-400" />
+                <span className="text-emerald-400 font-semibold">Copied Address!</span>
               </>
             ) : (
               <>
-                <Mail className="w-4 h-4 text-teal" />
+                <Mail className="w-4 h-4 text-corporate-sky" />
                 <span>Email Us</span>
               </>
             )}
           </button>
         </div>
 
-        {/* Copied notification / helper text */}
-        <div className="flex items-center gap-2 text-xs text-slate font-mono mb-4">
-          <Clock className="w-3.5 h-3.5 text-champagne" />
+        {/* Notification / helper text */}
+        <div className="flex items-center gap-2 text-xs text-slate-300 font-mono mb-4">
+          <Clock className="w-3.5 h-3.5 text-corporate-sky" />
           <span>Average response time: &lt; 4 hours during business days</span>
         </div>
 
-        <div className="text-[11px] font-mono text-slate-muted">
-          Direct inbox: <span className="text-slate-light">{siteSettingsData.email}</span>
+        <div className="text-[11px] font-mono text-slate-400">
+          Direct inbox: <span className="text-white">{siteSettingsData.email}</span>
         </div>
       </div>
     </section>

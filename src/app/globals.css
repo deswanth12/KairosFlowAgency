@@ -10,49 +10,49 @@
 
   html {
     scroll-behavior: smooth;
-    color-scheme: light dark;
-    background-color: #0D1117;
+    color-scheme: light;
+    background-color: #FFFFFF;
   }
 
   body {
-    background-color: #0D1117;
-    color: #F4F1EA;
+    background-color: #FFFFFF;
+    color: #172033;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
 
-  /* Custom selection */
+  /* Custom corporate blue selection */
   ::selection {
-    background-color: #2F7C78;
-    color: #F4F1EA;
+    background-color: #2563EB;
+    color: #FFFFFF;
   }
 }
 
-/* Custom scrollbar */
+/* Custom corporate scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0D1117;
+  background: #F6F9FC;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #182B3A;
+  background: #CBD5E1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2F7C78;
+  background: #94A3B8;
 }
 
 /* Glassmorphic subtle utilities */
-.glass-panel {
-  background: rgba(24, 43, 58, 0.6);
+.glass-panel-light {
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid #E5EAF0;
 }

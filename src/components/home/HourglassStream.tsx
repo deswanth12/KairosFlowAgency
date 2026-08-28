@@ -51,11 +51,11 @@ export const HourglassStream: React.FC<HourglassStreamProps> = ({ className = ''
     }> = [];
 
     const colors = [
-      'rgba(47, 124, 120, ', // Muted Teal (majority)
-      'rgba(47, 124, 120, ',
-      'rgba(72, 158, 154, ', // Teal Light
-      'rgba(24, 43, 58, ',   // Deep Navy
-      'rgba(185, 154, 98, '  // Soft Champagne (rare ~5%)
+      'rgba(37, 99, 235, ',   // Core Blue (#2563EB)
+      'rgba(59, 130, 246, ',  // Light Blue (#3B82F6)
+      'rgba(96, 165, 250, ',  // Soft Blue (#60A5FA)
+      'rgba(11, 31, 58, ',    // Dark Blue (#0B1F3A)
+      'rgba(37, 99, 235, '
     ];
 
     const initParticle = (p: (typeof particles)[0]) => {

@@ -12,10 +12,10 @@ export const Logo: React.FC<LogoProps> = ({
   className = '',
   size = 38,
   variant = 'full',
-  theme = 'dark'
+  theme = 'light'
 }) => {
-  const textPrimary = theme === 'dark' ? '#F4F1EA' : '#0D1117';
-  const textSecondary = '#2F7C78';
+  const textPrimary = theme === 'dark' ? '#FFFFFF' : '#0B1F3A';
+  const textSecondary = '#2563EB';
   const logoSrc = theme === 'dark' 
     ? '/images/logo/logo-mark-dark-mode.png' 
     : '/images/logo/logo-mark-transparent.png';
@@ -46,13 +46,13 @@ export const Logo: React.FC<LogoProps> = ({
       {markImg}
       <div className="flex flex-col">
         <span
-          className="text-base sm:text-lg font-bold tracking-wider uppercase transition-colors"
-          style={{ color: textPrimary, letterSpacing: '0.12em', fontFamily: 'inherit' }}
+          className="text-base sm:text-lg font-extrabold tracking-wider uppercase transition-colors font-display"
+          style={{ color: textPrimary, letterSpacing: '0.12em' }}
         >
           Kairos Flow
         </span>
         <span
-          className="text-[10px] sm:text-[11px] font-semibold tracking-[0.32em] uppercase transition-colors"
+          className="text-[10px] sm:text-[11px] font-bold tracking-[0.32em] uppercase transition-colors font-mono"
           style={{ color: textSecondary }}
         >
           Agency

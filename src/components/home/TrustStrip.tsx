@@ -6,7 +6,6 @@ import {
   Palette, 
   TrendingUp, 
   Video,
-  ShieldCheck,
   CheckCircle2,
   Users
 } from 'lucide-react';
@@ -22,37 +21,37 @@ const DISCIPLINES = [
 
 export const TrustStrip: React.FC = () => {
   return (
-    <div className="bg-ink border-b border-navy-border py-8 px-4 sm:px-6 lg:px-8">
+    <div className="bg-corporate-offwhite border-b border-corporate-border py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Early Multidisciplinary Trust Banner */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-navy-border/60">
+        {/* Multidisciplinary Trust Banner */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-corporate-border/80">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-navy flex items-center justify-center text-champagne border border-navy-border">
+            <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-corporate-blue border border-corporate-border shadow-sm">
               <Users className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-xs font-mono uppercase tracking-widest text-slate-light font-semibold">
+              <div className="text-xs font-mono uppercase tracking-widest text-corporate-mutedText font-semibold">
                 Built by a multidisciplinary team
               </div>
-              <div className="text-sm font-bold text-ivory font-display">
+              <div className="text-sm font-bold text-corporate-dark font-display">
                 Web • Apps • AI • Design • Content
               </div>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-mono text-slate-light">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-mono text-corporate-mutedText">
             <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-teal" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-corporate-blue" />
               <span>Founder-Led Sprints</span>
             </div>
-            <span>•</span>
+            <span className="text-slate-300">•</span>
             <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-teal" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-corporate-blue" />
               <span>Fixed Milestone Pricing</span>
             </div>
-            <span>•</span>
+            <span className="text-slate-300">•</span>
             <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-teal" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-corporate-blue" />
               <span>100% IP Handover</span>
             </div>
           </div>
@@ -65,9 +64,9 @@ export const TrustStrip: React.FC = () => {
             return (
               <div
                 key={item.name}
-                className="flex items-center justify-center gap-2 p-2.5 rounded-lg bg-navy/40 border border-navy-border/70 text-ivory-muted hover:text-ivory hover:border-teal/50 transition-colors"
+                className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white border border-corporate-border text-corporate-text hover:text-corporate-blue hover:border-corporate-blue/40 shadow-subtle-card transition-all"
               >
-                <Icon className="w-3.5 h-3.5 text-teal flex-shrink-0" />
+                <Icon className="w-3.5 h-3.5 text-corporate-blue flex-shrink-0" />
                 <span className="text-xs font-medium tracking-tight whitespace-nowrap">{item.name}</span>
               </div>
             );
