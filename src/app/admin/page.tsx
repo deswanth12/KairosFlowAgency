@@ -37,7 +37,8 @@ import {
   ArrowRight,
   UserCheck,
   Layers,
-  Key
+  Key,
+  Terminal
 } from 'lucide-react';
 import { Logo } from '@/components/brand/Logo';
 import { 
@@ -66,23 +67,23 @@ const PIPELINE_STAGES: LeadStatus[] = [
 ];
 
 const STAGE_COLORS: Record<LeadStatus, { bg: string; text: string; border: string }> = {
-  'New Lead': { bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/30' },
-  'Contacted': { bg: 'bg-purple-500/10', text: 'text-purple-400', border: 'border-purple-500/30' },
-  'Discovery Call': { bg: 'bg-yellow-500/10', text: 'text-yellow-400', border: 'border-yellow-500/30' },
-  'Proposal Sent': { bg: 'bg-orange-500/10', text: 'text-orange-400', border: 'border-orange-500/30' },
-  'Negotiation': { bg: 'bg-indigo-500/10', text: 'text-indigo-400', border: 'border-indigo-500/30' },
-  'Won': { bg: 'bg-teal/15', text: 'text-teal', border: 'border-teal/40' },
-  'In Progress': { bg: 'bg-champagne/15', text: 'text-champagne', border: 'border-champagne/40' },
-  'Completed': { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30' },
-  'Lost / Closed': { bg: 'bg-red-500/10', text: 'text-red-400', border: 'border-red-500/30' }
+  'New Lead': { bg: 'bg-blue-50 text-blue-700 border-blue-200', text: 'text-blue-700', border: 'border-blue-200' },
+  'Contacted': { bg: 'bg-purple-50 text-purple-700 border-purple-200', text: 'text-purple-700', border: 'border-purple-200' },
+  'Discovery Call': { bg: 'bg-amber-50 text-amber-800 border-amber-200', text: 'text-amber-800', border: 'border-amber-200' },
+  'Proposal Sent': { bg: 'bg-orange-50 text-[#B8613A] border-orange-200', text: 'text-[#B8613A]', border: 'border-orange-200' },
+  'Negotiation': { bg: 'bg-indigo-50 text-indigo-700 border-indigo-200', text: 'text-indigo-700', border: 'border-indigo-200' },
+  'Won': { bg: 'bg-emerald-50 text-emerald-700 border-emerald-200', text: 'text-emerald-700', border: 'border-emerald-200' },
+  'In Progress': { bg: 'bg-[#FBF4F0] text-[#0B1F33] border-orange-200', text: 'text-[#0B1F33]', border: 'border-orange-200' },
+  'Completed': { bg: 'bg-teal-50 text-teal-700 border-teal-200', text: 'text-teal-700', border: 'border-teal-200' },
+  'Lost / Closed': { bg: 'bg-red-50 text-red-700 border-red-200', text: 'text-red-700', border: 'border-red-200' }
 };
 
 const ROLE_BADGES: Record<UserRole, { bg: string; text: string; border: string }> = {
-  'Owner/Admin': { bg: 'bg-champagne/15', text: 'text-champagne', border: 'border-champagne/40' },
-  'Operations': { bg: 'bg-teal/15', text: 'text-teal', border: 'border-teal/40' },
-  'Development': { bg: 'bg-blue-500/15', text: 'text-blue-400', border: 'border-blue-500/40' },
-  'Creative': { bg: 'bg-purple-500/15', text: 'text-purple-400', border: 'border-purple-500/40' },
-  'Video': { bg: 'bg-orange-500/15', text: 'text-orange-400', border: 'border-orange-500/40' }
+  'Owner/Admin': { bg: 'bg-[#0B1F33]', text: 'text-white', border: 'border-[#0B1F33]' },
+  'Operations': { bg: 'bg-[#FBF4F0]', text: 'text-[#B8613A]', border: 'border-[#B8613A]/30' },
+  'Development': { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
+  'Creative': { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
+  'Video': { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200' }
 };
 
 export default function AdminPage() {
@@ -317,6 +318,19 @@ export default function AdminPage() {
       const data = await res.json();
       if (data.success) {
         setIsManualModalOpen(false);
+        setManualFormData({
+          name: '',
+          company: '',
+          email: '',
+          phone: '',
+          services: ['Web Development'],
+          description: '',
+          budget: '$5,000 – $10,000',
+          timeline: '1 – 2 Months',
+          priority: 'Medium',
+          assignedTo: 'Desvanth',
+          estimatedValue: '₹50,000'
+        });
         fetchLeads();
         fetchActivityLogs();
       }
@@ -408,29 +422,29 @@ export default function AdminPage() {
   // ==========================================
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-ink text-ivory flex items-center justify-center p-4 sm:p-6">
-        <div className="w-full max-w-lg p-8 sm:p-10 rounded-2xl bg-navy/60 border border-navy-border shadow-2xl backdrop-blur-md">
+      <div className="min-h-screen bg-[#F7F7F4] text-[#111827] flex items-center justify-center p-4 sm:p-6">
+        <div className="w-full max-w-lg p-8 sm:p-10 rounded-2xl bg-white border border-[#D9E0E5] shadow-elevated-card">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center mb-4">
-              <Logo size={44} variant="mark" theme="dark" />
+              <Logo size={42} variant="mark" theme="light" />
             </div>
 
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ink border border-navy-border text-[11px] font-mono text-champagne uppercase tracking-widest mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FBF4F0] border border-[#B8613A]/20 text-[11px] font-mono text-[#B8613A] uppercase tracking-widest mb-3 font-semibold">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Founder Identity & Audit OS</span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight font-display text-ivory">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight font-display text-[#0B1F33]">
               Kairos Flow Operations OS
             </h1>
-            <p className="text-slate-light text-xs sm:text-sm mt-1">
-              Select your team account to authenticate and sign audit records.
+            <p className="text-[#5B6875] text-xs sm:text-sm mt-1">
+              Select your founder account to authenticate and sign audit records.
             </p>
           </div>
 
           {authError && (
-            <div className="mb-6 p-3.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2 text-left">
+            <div className="mb-6 p-3.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2 text-left font-mono">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{authError}</span>
             </div>
@@ -439,8 +453,8 @@ export default function AdminPage() {
           <form onSubmit={handleLogin} className="space-y-5">
             {/* Account Selector Cards */}
             <div>
-              <label className="block text-xs font-mono uppercase text-slate tracking-wider mb-2 font-semibold">
-                Select Team Account
+              <label className="block text-xs font-mono uppercase text-[#5B6875] tracking-wider mb-2 font-semibold">
+                Select Founder Account
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {availableUsers.map((u) => {
@@ -453,17 +467,17 @@ export default function AdminPage() {
                       onClick={() => setSelectedLoginUserId(u.id)}
                       className={`p-3 rounded-xl border cursor-pointer transition-all ${
                         isSelected
-                          ? 'bg-navy border-teal ring-1 ring-teal/50 shadow-sm'
-                          : 'bg-ink/60 border-navy-border hover:bg-navy/40'
+                          ? 'bg-[#FBF4F0] border-[#B8613A] ring-1 ring-[#B8613A]/40 shadow-sm'
+                          : 'bg-[#F7F7F4] border-[#D9E0E5] hover:border-[#B8613A]/40'
                       }`}
                     >
                       <div className="flex items-center justify-between gap-1 mb-1">
-                        <span className="text-xs font-bold text-ivory">{u.name}</span>
+                        <span className="text-xs font-bold text-[#0B1F33]">{u.name}</span>
                         <span className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-semibold border ${roleStyle.bg} ${roleStyle.text} ${roleStyle.border}`}>
                           {u.role}
                         </span>
                       </div>
-                      <div className="text-[10px] font-mono text-slate truncate">{u.email}</div>
+                      <div className="text-[10px] font-mono text-[#5B6875] truncate">{u.email}</div>
                     </div>
                   );
                 })}
@@ -473,8 +487,8 @@ export default function AdminPage() {
             {/* Password Input */}
             <div>
               <div className="flex items-center justify-between text-xs font-mono mb-1.5">
-                <span className="text-slate uppercase tracking-wider font-semibold">Security Key / Password</span>
-                <span className="text-slate-muted text-[10px]">Master: Kairos@$$</span>
+                <span className="text-[#5B6875] uppercase tracking-wider font-semibold">Security Key / Password</span>
+                <span className="text-[#B8613A] font-semibold text-[10px]">Master: Kairos@$$</span>
               </div>
               <div className="relative">
                 <input
@@ -482,13 +496,13 @@ export default function AdminPage() {
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
                   placeholder="Enter your account password..."
-                  className="w-full px-4 py-3 text-sm rounded-lg bg-ink text-ivory border border-navy-border focus:outline-none focus:border-teal placeholder:text-slate-muted pr-11 font-mono"
+                  className="w-full px-4 py-3 text-sm rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A] placeholder:text-[#5B6875] pr-11 font-mono"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate hover:text-ivory transition-colors p-1"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5B6875] hover:text-[#0B1F33] transition-colors p-1"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -499,20 +513,20 @@ export default function AdminPage() {
             <button
               type="submit"
               disabled={isAuthLoading}
-              className="w-full py-3.5 text-xs font-semibold uppercase tracking-wider text-ivory bg-teal hover:bg-teal-hover border border-teal-border rounded-lg shadow-sm transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full py-3.5 text-xs font-mono font-bold uppercase tracking-wider text-white bg-[#0B1F33] hover:bg-[#132B45] rounded-lg shadow-sm transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isAuthLoading ? (
                 <span>Authenticating Identity...</span>
               ) : (
                 <>
-                  <Key className="w-4 h-4" />
+                  <Key className="w-4 h-4 text-[#B8613A]" />
                   <span>Authenticate as {availableUsers.find(u => u.id === selectedLoginUserId)?.name || 'Founder'}</span>
                 </>
               )}
             </button>
           </form>
 
-          <p className="mt-8 text-center text-[11px] font-mono text-slate-muted">
+          <p className="mt-8 text-center text-[11px] font-mono text-[#5B6875]">
             Kairos Flow Agency • Server-Signed Immutable Audit Trail
           </p>
         </div>
@@ -524,22 +538,24 @@ export default function AdminPage() {
   // 2. AUTHENTICATED EXECUTIVE DASHBOARD
   // ==========================================
   return (
-    <div className="min-h-screen bg-ink text-ivory flex flex-col font-sans">
+    <div className="min-h-screen bg-[#F7F7F4] text-[#111827] flex flex-col font-sans">
       {/* Top Operations Header Bar */}
-      <header className="sticky top-0 z-30 bg-ink/95 backdrop-blur-md border-b border-navy-border px-4 sm:px-8 py-3">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#D9E0E5] px-4 sm:px-8 py-3.5 shadow-subtle-card">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           {/* Left Brand & Active User Identity */}
-          <div className="flex items-center gap-3">
-            <Logo size={32} variant="mark" theme="dark" />
+          <div className="flex items-center gap-3.5">
+            <Logo size={32} variant="mark" theme="light" />
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-sm font-bold text-ivory font-display tracking-tight">Kairos Flow Operations OS</h1>
-                <span className="px-2 py-0.5 rounded bg-teal/20 text-teal text-[10px] font-mono font-semibold">
+                <h1 className="text-sm font-bold text-[#0B1F33] font-display tracking-tight">
+                  Kairos Flow Operations OS
+                </h1>
+                <span className="px-2 py-0.5 rounded bg-[#FBF4F0] text-[#B8613A] text-[10px] font-mono font-bold border border-[#B8613A]/20">
                   AUDIT ACTIVE
                 </span>
               </div>
-              <div className="flex items-center gap-2 text-[11px] text-slate font-mono">
-                <span>Signed in as <strong className="text-ivory font-semibold">{currentUser.name}</strong></span>
+              <div className="flex items-center gap-2 text-[11px] text-[#5B6875] font-mono mt-0.5">
+                <span>Signed in as <strong className="text-[#0B1F33] font-semibold">{currentUser.name}</strong></span>
                 <span className={`px-1.5 py-0.2 rounded text-[9px] font-semibold border ${ROLE_BADGES[currentUser.role]?.bg} ${ROLE_BADGES[currentUser.role]?.text} ${ROLE_BADGES[currentUser.role]?.border}`}>
                   {currentUser.role}
                 </span>
@@ -548,13 +564,13 @@ export default function AdminPage() {
           </div>
 
           {/* Center Tabs Navigation */}
-          <div className="flex items-center bg-navy/60 border border-navy-border rounded-lg p-1">
+          <div className="flex items-center bg-[#F7F7F4] border border-[#D9E0E5] rounded-xl p-1 font-mono">
             <button
               onClick={() => setActiveTab('pipeline')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                 activeTab === 'pipeline'
-                  ? 'bg-ink text-teal shadow-sm border border-navy-border'
-                  : 'text-slate-light hover:text-ivory'
+                  ? 'bg-[#0B1F33] text-white shadow-sm'
+                  : 'text-[#5B6875] hover:text-[#0B1F33]'
               }`}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
@@ -566,16 +582,16 @@ export default function AdminPage() {
                 setActiveTab('activity');
                 fetchActivityLogs();
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                 activeTab === 'activity'
-                  ? 'bg-ink text-teal shadow-sm border border-navy-border'
-                  : 'text-slate-light hover:text-ivory'
+                  ? 'bg-[#0B1F33] text-white shadow-sm'
+                  : 'text-[#5B6875] hover:text-[#0B1F33]'
               }`}
             >
               <Activity className="w-3.5 h-3.5" />
               <span>Activity Log</span>
               {activityLogs.length > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full bg-teal/20 text-teal text-[10px] font-mono">
+                <span className="px-1.5 py-0.2 rounded-full bg-[#B8613A] text-white text-[10px] font-mono">
                   {activityLogs.length}
                 </span>
               )}
@@ -583,10 +599,10 @@ export default function AdminPage() {
 
             <button
               onClick={() => setActiveTab('team')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                 activeTab === 'team'
-                  ? 'bg-ink text-teal shadow-sm border border-navy-border'
-                  : 'text-slate-light hover:text-ivory'
+                  ? 'bg-[#0B1F33] text-white shadow-sm'
+                  : 'text-[#5B6875] hover:text-[#0B1F33]'
               }`}
             >
               <Users className="w-3.5 h-3.5" />
@@ -595,31 +611,31 @@ export default function AdminPage() {
           </div>
 
           {/* Right Action Buttons */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 font-mono">
             {activeTab === 'pipeline' && (
               <>
                 <button
                   onClick={() => setIsManualModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-ivory bg-teal hover:bg-teal-hover border border-teal-border rounded-lg transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-[#0B1F33] hover:bg-[#132B45] rounded-lg transition-colors shadow-sm"
                 >
-                  <Plus className="w-3.5 h-3.5" />
+                  <Plus className="w-3.5 h-3.5 text-[#B8613A]" />
                   <span>Add Lead</span>
                 </button>
 
                 <button
                   onClick={exportCSV}
                   disabled={leads.length === 0}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-light hover:text-ivory bg-navy/60 hover:bg-navy border border-navy-border rounded-lg transition-colors disabled:opacity-40"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#0B1F33] hover:text-[#B8613A] bg-white hover:bg-[#FBF4F0] border border-[#D9E0E5] rounded-lg transition-colors disabled:opacity-40"
                 >
-                  <Download className="w-3.5 h-3.5 text-champagne" />
-                  <span>Export CSV</span>
+                  <Download className="w-3.5 h-3.5 text-[#B8613A]" />
+                  <span>CSV</span>
                 </button>
 
-                <div className="flex items-center bg-navy/60 border border-navy-border rounded-lg p-0.5">
+                <div className="flex items-center bg-[#F7F7F4] border border-[#D9E0E5] rounded-lg p-0.5">
                   <button
                     onClick={() => setViewMode('kanban')}
                     className={`p-1.5 rounded text-xs transition-colors ${
-                      viewMode === 'kanban' ? 'bg-ink text-teal font-semibold' : 'text-slate-light hover:text-ivory'
+                      viewMode === 'kanban' ? 'bg-white text-[#0B1F33] shadow-sm font-semibold' : 'text-[#5B6875] hover:text-[#0B1F33]'
                     }`}
                     title="Kanban View"
                   >
@@ -628,7 +644,7 @@ export default function AdminPage() {
                   <button
                     onClick={() => setViewMode('table')}
                     className={`p-1.5 rounded text-xs transition-colors ${
-                      viewMode === 'table' ? 'bg-ink text-teal font-semibold' : 'text-slate-light hover:text-ivory'
+                      viewMode === 'table' ? 'bg-white text-[#0B1F33] shadow-sm font-semibold' : 'text-[#5B6875] hover:text-[#0B1F33]'
                     }`}
                     title="Table View"
                   >
@@ -640,7 +656,7 @@ export default function AdminPage() {
 
             <button
               onClick={handleLogout}
-              className="px-3 py-2 text-xs font-mono text-slate hover:text-red-400 transition-colors"
+              className="px-3 py-2 text-xs font-mono text-[#5B6875] hover:text-red-600 transition-colors"
               title="Sign out and switch founder"
             >
               Sign Out
@@ -650,7 +666,7 @@ export default function AdminPage() {
       </header>
 
       {/* MAIN BODY AREA */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 space-y-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-8 space-y-8">
 
         {/* ==================================================== */}
         {/* TAB 1: PIPELINE & CLIENT CRM                         */}
@@ -659,45 +675,45 @@ export default function AdminPage() {
           <>
             {/* Telemetry Strip */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div className="p-4 rounded-xl bg-navy/40 border border-navy-border">
-                <div className="text-[11px] font-mono text-slate-light uppercase tracking-wider mb-1">Total Inquiries</div>
-                <div className="text-2xl font-bold font-display text-ivory">{stats.total}</div>
+              <div className="p-5 rounded-2xl bg-white border border-[#D9E0E5] shadow-subtle-card">
+                <div className="text-[11px] font-mono text-[#5B6875] uppercase tracking-wider mb-1 font-semibold">Total Inquiries</div>
+                <div className="text-3xl font-bold font-display text-[#0B1F33]">{stats.total}</div>
               </div>
 
-              <div className="p-4 rounded-xl bg-navy/40 border border-navy-border">
-                <div className="text-[11px] font-mono text-blue-400 uppercase tracking-wider mb-1">New Intake</div>
-                <div className="text-2xl font-bold font-display text-blue-400">{stats.newCount}</div>
+              <div className="p-5 rounded-2xl bg-white border border-[#D9E0E5] shadow-subtle-card">
+                <div className="text-[11px] font-mono text-blue-600 uppercase tracking-wider mb-1 font-semibold">New Intake</div>
+                <div className="text-3xl font-bold font-display text-blue-600">{stats.newCount}</div>
               </div>
 
-              <div className="p-4 rounded-xl bg-navy/40 border border-navy-border">
-                <div className="text-[11px] font-mono text-yellow-400 uppercase tracking-wider mb-1">Active Pipeline</div>
-                <div className="text-2xl font-bold font-display text-yellow-400">{stats.activePipeline}</div>
+              <div className="p-5 rounded-2xl bg-white border border-[#D9E0E5] shadow-subtle-card">
+                <div className="text-[11px] font-mono text-[#B8613A] uppercase tracking-wider mb-1 font-semibold">Active Pipeline</div>
+                <div className="text-3xl font-bold font-display text-[#B8613A]">{stats.activePipeline}</div>
               </div>
 
-              <div className="p-4 rounded-xl bg-navy/40 border border-navy-border">
-                <div className="text-[11px] font-mono text-teal uppercase tracking-wider mb-1">Won Projects</div>
-                <div className="text-2xl font-bold font-display text-teal">{stats.wonCount}</div>
+              <div className="p-5 rounded-2xl bg-white border border-[#D9E0E5] shadow-subtle-card">
+                <div className="text-[11px] font-mono text-emerald-600 uppercase tracking-wider mb-1 font-semibold">Won Projects</div>
+                <div className="text-3xl font-bold font-display text-emerald-600">{stats.wonCount}</div>
               </div>
             </div>
 
             {/* Filter & Search Bar */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 bg-navy/30 border border-navy-border rounded-xl">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 bg-white border border-[#D9E0E5] rounded-2xl shadow-subtle-card">
               <div className="relative flex-1">
-                <Search className="w-4 h-4 text-slate absolute left-3 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-[#5B6875] absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by client name, company, email, or phone..."
-                  className="w-full pl-9 pr-4 py-2 text-xs rounded-lg bg-ink text-ivory border border-navy-border focus:outline-none focus:border-teal placeholder:text-slate-muted"
+                  className="w-full pl-9 pr-4 py-2 text-xs rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A] placeholder:text-[#5B6875]"
                 />
               </div>
 
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2 font-mono">
                 <select
                   value={selectedStageFilter}
                   onChange={(e) => setSelectedStageFilter(e.target.value)}
-                  className="px-2.5 py-2 text-xs rounded-lg bg-ink text-ivory border border-navy-border focus:outline-none focus:border-teal"
+                  className="px-2.5 py-2 text-xs rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
                 >
                   <option value="all">All Stages</option>
                   {PIPELINE_STAGES.map((s) => (
@@ -708,7 +724,7 @@ export default function AdminPage() {
                 <select
                   value={selectedPriorityFilter}
                   onChange={(e) => setSelectedPriorityFilter(e.target.value)}
-                  className="px-2.5 py-2 text-xs rounded-lg bg-ink text-ivory border border-navy-border focus:outline-none focus:border-teal"
+                  className="px-2.5 py-2 text-xs rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
                 >
                   <option value="all">All Priorities</option>
                   <option value="High">High Priority</option>
@@ -719,7 +735,7 @@ export default function AdminPage() {
                 <select
                   value={selectedFounderFilter}
                   onChange={(e) => setSelectedFounderFilter(e.target.value)}
-                  className="px-2.5 py-2 text-xs rounded-lg bg-ink text-ivory border border-navy-border focus:outline-none focus:border-teal"
+                  className="px-2.5 py-2 text-xs rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
                 >
                   <option value="all">All Assigned Founders</option>
                   {availableUsers.map((u) => (
@@ -731,19 +747,19 @@ export default function AdminPage() {
 
             {/* Empty State */}
             {filteredLeads.length === 0 && (
-              <div className="p-12 text-center rounded-2xl bg-navy/20 border border-navy-border my-8">
-                <div className="w-12 h-12 rounded-xl bg-ink border border-navy-border flex items-center justify-center text-champagne mx-auto mb-4">
-                  <Briefcase className="w-5 h-5" />
+              <div className="p-12 sm:p-16 text-center rounded-2xl bg-white border border-[#D9E0E5] shadow-subtle-card my-6">
+                <div className="w-14 h-14 rounded-2xl bg-[#FBF4F0] border border-orange-200 flex items-center justify-center text-[#B8613A] mx-auto mb-4">
+                  <Briefcase className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-ivory font-display mb-1">No Client Leads Found</h3>
-                <p className="text-slate-light text-xs max-w-md mx-auto mb-6 leading-relaxed">
+                <h3 className="text-xl font-bold text-[#0B1F33] font-display mb-2">No Client Leads Found</h3>
+                <p className="text-[#5B6875] text-xs sm:text-sm max-w-md mx-auto mb-6 leading-relaxed">
                   Inquiries submitted through the website contact form, AI Consultant, or logged manually will appear here with full audit history.
                 </p>
                 <button
                   onClick={() => setIsManualModalOpen(true)}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-ivory bg-teal hover:bg-teal-hover rounded-lg transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 text-xs font-mono font-bold uppercase tracking-wider text-white bg-[#0B1F33] hover:bg-[#132B45] rounded-lg transition-colors shadow-sm"
                 >
-                  <Plus className="w-3.5 h-3.5" />
+                  <Plus className="w-3.5 h-3.5 text-[#B8613A]" />
                   <span>Log First Client Lead</span>
                 </button>
               </div>
@@ -757,13 +773,13 @@ export default function AdminPage() {
                   const color = STAGE_COLORS[stage];
 
                   return (
-                    <div key={stage} className="flex flex-col rounded-xl bg-navy/20 border border-navy-border/80 p-3 min-w-[250px]">
+                    <div key={stage} className="flex flex-col rounded-2xl bg-white border border-[#D9E0E5] p-3.5 min-w-[260px] shadow-subtle-card">
                       {/* Column Header */}
-                      <div className="flex items-center justify-between pb-3 border-b border-navy-border/60 mb-3">
+                      <div className="flex items-center justify-between pb-3 border-b border-[#D9E0E5] mb-3">
                         <span className={`text-xs font-mono font-bold ${color.text} uppercase tracking-wider`}>
                           {stage}
                         </span>
-                        <span className="px-2 py-0.5 rounded-full bg-ink text-[10px] font-mono text-slate-light border border-navy-border">
+                        <span className="px-2 py-0.5 rounded-full bg-[#F7F7F4] text-[10px] font-mono text-[#5B6875] border border-[#D9E0E5] font-semibold">
                           {stageLeads.length}
                         </span>
                       </div>
@@ -774,14 +790,14 @@ export default function AdminPage() {
                           <div
                             key={lead.id}
                             onClick={() => setActiveLead(lead)}
-                            className="group p-3.5 rounded-lg bg-navy/60 hover:bg-navy border border-navy-border hover:border-teal/50 transition-all cursor-pointer shadow-sm space-y-2.5"
+                            className="group p-4 rounded-xl bg-[#F7F7F4] hover:bg-white border border-[#D9E0E5] hover:border-[#B8613A]/50 transition-all cursor-pointer shadow-sm hover:shadow-hover-card space-y-3"
                           >
                             <div className="flex items-start justify-between gap-2">
                               <div>
-                                <h4 className="text-xs font-bold text-ivory group-hover:text-teal transition-colors">
+                                <h4 className="text-xs font-bold text-[#0B1F33] group-hover:text-[#B8613A] transition-colors font-display">
                                   {lead.name}
                                 </h4>
-                                <p className="text-[11px] text-slate-light font-mono truncate max-w-[140px]">
+                                <p className="text-[11px] text-[#5B6875] font-mono truncate max-w-[150px]">
                                   {lead.company}
                                 </p>
                               </div>
@@ -789,10 +805,10 @@ export default function AdminPage() {
                                 <span
                                   className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-semibold uppercase ${
                                     lead.priority === 'High'
-                                      ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                                      ? 'bg-red-50 text-red-700 border border-red-200'
                                       : lead.priority === 'Medium'
-                                      ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
-                                      : 'bg-slate/20 text-slate-light border border-slate/30'
+                                      ? 'bg-yellow-50 text-yellow-800 border border-yellow-200'
+                                      : 'bg-slate-100 text-slate-700 border border-slate-200'
                                   }`}
                                 >
                                   {lead.priority}
@@ -802,34 +818,34 @@ export default function AdminPage() {
 
                             <div className="flex flex-wrap gap-1">
                               {lead.services.slice(0, 2).map((s) => (
-                                <span key={s} className="px-1.5 py-0.5 rounded bg-ink text-[9px] font-mono text-slate-light">
+                                <span key={s} className="px-1.5 py-0.5 rounded bg-white text-[9px] font-mono text-[#111827] border border-[#D9E0E5]">
                                   {s}
                                 </span>
                               ))}
                             </div>
 
                             {/* Accountability & Audit Pill */}
-                            <div className="pt-2 border-t border-navy-border/60 text-[9px] font-mono space-y-1 text-slate">
+                            <div className="pt-2.5 border-t border-[#D9E0E5] text-[9px] font-mono space-y-1 text-[#5B6875]">
                               <div className="flex items-center justify-between">
-                                <span>Assigned: <strong className="text-ivory">{lead.assignedTo || 'Unassigned'}</strong></span>
-                                <span className="text-champagne font-semibold">{lead.estimatedValue || lead.budget || 'TBD'}</span>
+                                <span>Assigned: <strong className="text-[#0B1F33]">{lead.assignedTo || 'Unassigned'}</strong></span>
+                                <span className="text-[#B8613A] font-semibold">{lead.estimatedValue || lead.budget || 'TBD'}</span>
                               </div>
 
-                              <div className="text-[9px] text-slate-muted flex items-center justify-between">
-                                <span>Updated by <span className="text-slate-light">{lead.updatedBy?.name || 'Desvanth'}</span></span>
+                              <div className="text-[9px] text-[#5B6875] flex items-center justify-between">
+                                <span>Updated by <span className="text-[#0B1F33] font-medium">{lead.updatedBy?.name || 'Desvanth'}</span></span>
                                 <span>{formatTimeAgo(lead.updatedAt)}</span>
                               </div>
                             </div>
 
                             {/* Quick Actions */}
-                            <div className="flex items-center justify-between pt-1 text-[10px] font-mono">
+                            <div className="flex items-center justify-between pt-1 text-[10px] font-mono border-t border-[#D9E0E5]/60">
                               <button
                                 type="button"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setLeadHistoryModalId(lead.id);
                                 }}
-                                className="inline-flex items-center gap-1 text-[10px] text-slate hover:text-teal transition-colors"
+                                className="inline-flex items-center gap-1 text-[10px] text-[#5B6875] hover:text-[#B8613A] transition-colors"
                               >
                                 <History className="w-3 h-3" />
                                 <span>History</span>
@@ -840,10 +856,10 @@ export default function AdminPage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => e.stopPropagation()}
-                                className="p-1 text-slate hover:text-teal transition-colors"
+                                className="p-1 text-[#5B6875] hover:text-emerald-600 transition-colors"
                                 title="Chat on WhatsApp"
                               >
-                                <MessageCircle className="w-3.5 h-3.5 text-teal" />
+                                <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
                               </a>
                             </div>
                           </div>
@@ -857,66 +873,66 @@ export default function AdminPage() {
 
             {/* DATA TABLE VIEW */}
             {viewMode === 'table' && filteredLeads.length > 0 && (
-              <div className="rounded-xl bg-navy/20 border border-navy-border overflow-hidden">
+              <div className="rounded-2xl bg-white border border-[#D9E0E5] shadow-subtle-card overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs font-sans">
-                    <thead className="bg-navy/80 border-b border-navy-border font-mono uppercase text-[10px] text-slate-light">
+                    <thead className="bg-[#F7F7F4] border-b border-[#D9E0E5] font-mono uppercase text-[10px] text-[#5B6875]">
                       <tr>
-                        <th className="p-3.5">Client & Company</th>
-                        <th className="p-3.5">Services</th>
-                        <th className="p-3.5">Stage</th>
-                        <th className="p-3.5">Priority</th>
-                        <th className="p-3.5">Assigned Lead</th>
-                        <th className="p-3.5">Value / Budget</th>
-                        <th className="p-3.5">Accountability</th>
-                        <th className="p-3.5 text-right">Actions</th>
+                        <th className="p-4">Client & Company</th>
+                        <th className="p-4">Services</th>
+                        <th className="p-4">Stage</th>
+                        <th className="p-4">Priority</th>
+                        <th className="p-4">Assigned Lead</th>
+                        <th className="p-4">Value / Budget</th>
+                        <th className="p-4">Accountability</th>
+                        <th className="p-4 text-right">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-navy-border/60">
+                    <tbody className="divide-y divide-[#D9E0E5]">
                       {filteredLeads.map((lead) => (
                         <tr
                           key={lead.id}
                           onClick={() => setActiveLead(lead)}
-                          className="hover:bg-navy/40 transition-colors cursor-pointer"
+                          className="hover:bg-[#FBF4F0] transition-colors cursor-pointer"
                         >
-                          <td className="p-3.5">
-                            <div className="font-bold text-ivory">{lead.name}</div>
-                            <div className="text-[11px] text-slate-light font-mono">{lead.company} • {lead.email}</div>
+                          <td className="p-4">
+                            <div className="font-bold text-[#0B1F33]">{lead.name}</div>
+                            <div className="text-[11px] text-[#5B6875] font-mono">{lead.company} • {lead.email}</div>
                           </td>
-                          <td className="p-3.5">
+                          <td className="p-4">
                             <div className="flex flex-wrap gap-1 max-w-xs">
                               {lead.services.map((s) => (
-                                <span key={s} className="px-1.5 py-0.5 rounded bg-ink text-[9px] font-mono text-slate-light">
+                                <span key={s} className="px-1.5 py-0.5 rounded bg-[#F7F7F4] text-[9px] font-mono text-[#111827] border border-[#D9E0E5]">
                                   {s}
                                 </span>
                               ))}
                             </div>
                           </td>
-                          <td className="p-3.5">
+                          <td className="p-4">
                             <span className={`px-2 py-1 rounded text-[10px] font-mono font-semibold border ${STAGE_COLORS[lead.status].bg} ${STAGE_COLORS[lead.status].text} ${STAGE_COLORS[lead.status].border}`}>
                               {lead.status}
                             </span>
                           </td>
-                          <td className="p-3.5">
+                          <td className="p-4">
                             <span className="font-mono text-[11px]">{lead.priority || 'Medium'}</span>
                           </td>
-                          <td className="p-3.5 font-mono text-[11px] text-slate-light">
+                          <td className="p-4 font-mono text-[11px] text-[#5B6875]">
                             {lead.assignedTo || 'Desvanth'}
                           </td>
-                          <td className="p-3.5 font-mono text-[11px] text-champagne font-semibold">
+                          <td className="p-4 font-mono text-[11px] text-[#B8613A] font-semibold">
                             {lead.estimatedValue || lead.budget || 'TBD'}
                           </td>
-                          <td className="p-3.5 font-mono text-[10px] text-slate">
-                            <div>Created: <span className="text-slate-light">{lead.createdBy?.name || 'Desvanth'}</span></div>
-                            <div>Updated: <span className="text-teal">{lead.updatedBy?.name || 'Desvanth'}</span> ({formatTimeAgo(lead.updatedAt)})</div>
+                          <td className="p-4 font-mono text-[10px] text-[#5B6875]">
+                            <div>Created: <span className="text-[#0B1F33] font-medium">{lead.createdBy?.name || 'Desvanth'}</span></div>
+                            <div>Updated: <span className="text-[#B8613A] font-medium">{lead.updatedBy?.name || 'Desvanth'}</span> ({formatTimeAgo(lead.updatedAt)})</div>
                           </td>
-                          <td className="p-3.5 text-right space-x-1.5" onClick={(e) => e.stopPropagation()}>
+                          <td className="p-4 text-right space-x-2 font-mono" onClick={(e) => e.stopPropagation()}>
                             <button
                               type="button"
                               onClick={() => setLeadHistoryModalId(lead.id)}
-                              className="inline-flex items-center gap-1 px-2 py-1 rounded bg-ink hover:bg-navy border border-navy-border text-[10px] font-mono text-slate hover:text-ivory"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#F7F7F4] hover:bg-white border border-[#D9E0E5] text-[10px] font-mono text-[#5B6875] hover:text-[#0B1F33]"
                             >
-                              <History className="w-3 h-3" />
+                              <History className="w-3 h-3 text-[#B8613A]" />
                               <span>Diff</span>
                             </button>
 
@@ -924,9 +940,9 @@ export default function AdminPage() {
                               href={generateWhatsAppLink(lead.phone.replace(/[^0-9]/g, ''))}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-teal/20 text-teal hover:bg-teal hover:text-ivory border border-teal/40 text-[10px] font-semibold transition-colors"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 text-[10px] font-semibold transition-colors"
                             >
-                              <MessageCircle className="w-3 h-3" />
+                              <MessageCircle className="w-3 h-3 text-emerald-600" />
                               <span>Chat</span>
                             </a>
                           </td>
@@ -946,28 +962,28 @@ export default function AdminPage() {
         {activeTab === 'activity' && (
           <div className="space-y-6">
             {/* Filter Bar */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 bg-navy/30 border border-navy-border rounded-xl">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 bg-white border border-[#D9E0E5] rounded-2xl shadow-subtle-card">
               <div className="relative flex-1">
-                <Search className="w-4 h-4 text-slate absolute left-3 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-[#5B6875] absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={activitySearchQuery}
                   onChange={(e) => setActivitySearchQuery(e.target.value)}
                   placeholder="Search audit trail by user, action, client, or details..."
-                  className="w-full pl-9 pr-4 py-2 text-xs rounded-lg bg-ink text-ivory border border-navy-border focus:outline-none focus:border-teal placeholder:text-slate-muted"
+                  className="w-full pl-9 pr-4 py-2 text-xs rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A] placeholder:text-[#5B6875]"
                 />
               </div>
 
               {/* Category Pills */}
-              <div className="flex flex-wrap items-center gap-1.5">
+              <div className="flex flex-wrap items-center gap-1.5 font-mono">
                 {(['all', 'leads', 'projects', 'payments', 'users', 'auth'] as const).map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setActivityCategoryFilter(cat)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-mono capitalize transition-colors ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-mono capitalize transition-all ${
                       activityCategoryFilter === cat
-                        ? 'bg-teal text-ivory font-semibold shadow-sm'
-                        : 'bg-ink text-slate hover:text-ivory border border-navy-border'
+                        ? 'bg-[#0B1F33] text-white font-semibold shadow-sm'
+                        : 'bg-[#F7F7F4] text-[#5B6875] hover:text-[#0B1F33] border border-[#D9E0E5]'
                     }`}
                   >
                     {cat}
@@ -978,74 +994,72 @@ export default function AdminPage() {
 
             {/* Logs Timeline Feed */}
             {filteredLogs.length === 0 ? (
-              <div className="p-12 text-center rounded-2xl bg-navy/20 border border-navy-border my-6">
-                <Activity className="w-8 h-8 text-slate mx-auto mb-2 opacity-50" />
-                <h3 className="text-sm font-bold text-ivory font-mono">No Audit Records Found</h3>
-                <p className="text-xs text-slate mt-1">Actions performed by team founders will be recorded here in real time.</p>
+              <div className="p-12 sm:p-16 text-center rounded-2xl bg-white border border-[#D9E0E5] shadow-subtle-card my-6">
+                <Activity className="w-8 h-8 text-[#5B6875] mx-auto mb-2 opacity-50" />
+                <h3 className="text-base font-bold text-[#0B1F33] font-mono">No Audit Records Found</h3>
+                <p className="text-xs text-[#5B6875] mt-1">Actions performed by team founders will be recorded here in real time.</p>
               </div>
             ) : (
-              <div className="rounded-xl bg-navy/20 border border-navy-border overflow-hidden">
-                <div className="divide-y divide-navy-border/60">
-                  {filteredLogs.map((log) => {
-                    const roleBadge = ROLE_BADGES[log.userRole] || ROLE_BADGES['Development'];
+              <div className="rounded-2xl bg-white border border-[#D9E0E5] shadow-subtle-card overflow-hidden divide-y divide-[#D9E0E5]">
+                {filteredLogs.map((log) => {
+                  const roleBadge = ROLE_BADGES[log.userRole] || ROLE_BADGES['Development'];
 
-                    return (
-                      <div key={log.id} className="p-4 sm:p-5 hover:bg-navy/30 transition-colors space-y-3">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                          {/* User & Action */}
-                          <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-lg bg-ink border border-navy-border flex items-center justify-center font-mono font-bold text-xs text-teal">
-                              {log.userName.charAt(0)}
-                            </div>
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="font-bold text-sm text-ivory">{log.userName}</span>
-                                <span className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-semibold border ${roleBadge.bg} ${roleBadge.text} ${roleBadge.border}`}>
-                                  {log.userRole}
-                                </span>
-                                <span className="px-2 py-0.5 rounded bg-ink text-teal text-[10px] font-mono font-semibold border border-navy-border">
-                                  {log.action}
-                                </span>
-                              </div>
-                              <div className="text-xs text-slate-light font-mono mt-0.5">
-                                Target: <strong className="text-ivory">{log.entityTitle}</strong>
-                              </div>
-                            </div>
+                  return (
+                    <div key={log.id} className="p-5 sm:p-6 hover:bg-[#FBF4F0]/50 transition-colors space-y-3">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        {/* User & Action */}
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-xl bg-[#0B1F33] text-white flex items-center justify-center font-mono font-bold text-xs shadow-sm">
+                            {log.userName.charAt(0)}
                           </div>
-
-                          {/* Timestamp */}
-                          <div className="text-right text-xs font-mono text-slate">
-                            <div>{formatDate(log.timestamp)}</div>
-                            <div className="text-[10px] text-slate-muted">{formatTimeAgo(log.timestamp)}</div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-sm text-[#0B1F33] font-display">{log.userName}</span>
+                              <span className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-semibold border ${roleBadge.bg} ${roleBadge.text} ${roleBadge.border}`}>
+                                {log.userRole}
+                              </span>
+                              <span className="px-2 py-0.5 rounded bg-[#F7F7F4] text-[#0B1F33] text-[10px] font-mono font-semibold border border-[#D9E0E5]">
+                                {log.action}
+                              </span>
+                            </div>
+                            <div className="text-xs text-[#5B6875] font-mono mt-0.5">
+                              Target: <strong className="text-[#0B1F33]">{log.entityTitle}</strong>
+                            </div>
                           </div>
                         </div>
 
-                        {/* Summary & Changes Diff Box */}
-                        <div className="p-3 rounded-lg bg-ink/70 border border-navy-border/80 space-y-2">
-                          <p className="text-xs text-slate-light leading-relaxed">{log.details.summary}</p>
-
-                          {/* Field Diff Badges (Before -> After) */}
-                          {log.details.changes && log.details.changes.length > 0 && (
-                            <div className="space-y-1.5 pt-2 border-t border-navy-border/60">
-                              {log.details.changes.map((ch, idx) => (
-                                <div key={idx} className="flex flex-wrap items-center gap-2 text-[11px] font-mono">
-                                  <span className="text-slate font-semibold">{ch.label}:</span>
-                                  <span className="px-2 py-0.5 rounded bg-red-500/10 text-red-400 border border-red-500/20 line-through">
-                                    {String(ch.before)}
-                                  </span>
-                                  <ArrowRight className="w-3 h-3 text-teal" />
-                                  <span className="px-2 py-0.5 rounded bg-teal/15 text-teal border border-teal/30 font-semibold">
-                                    {String(ch.after)}
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                          )}
+                        {/* Timestamp */}
+                        <div className="text-right text-xs font-mono text-[#5B6875]">
+                          <div>{formatDate(log.timestamp)}</div>
+                          <div className="text-[10px] text-[#5B6875]">{formatTimeAgo(log.timestamp)}</div>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
+
+                      {/* Summary & Changes Diff Box */}
+                      <div className="p-3.5 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5] space-y-2">
+                        <p className="text-xs text-[#111827] leading-relaxed">{log.details.summary}</p>
+
+                        {/* Field Diff Badges (Before -> After) */}
+                        {log.details.changes && log.details.changes.length > 0 && (
+                          <div className="space-y-1.5 pt-2 border-t border-[#D9E0E5]">
+                            {log.details.changes.map((ch, idx) => (
+                              <div key={idx} className="flex flex-wrap items-center gap-2 text-[11px] font-mono">
+                                <span className="text-[#5B6875] font-semibold">{ch.label}:</span>
+                                <span className="px-2 py-0.5 rounded bg-red-50 text-red-600 border border-red-200 line-through">
+                                  {String(ch.before)}
+                                </span>
+                                <ArrowRight className="w-3 h-3 text-[#B8613A]" />
+                                <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
+                                  {String(ch.after)}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -1056,59 +1070,63 @@ export default function AdminPage() {
         {/* ==================================================== */}
         {activeTab === 'team' && (
           <div className="space-y-6">
-            <div className="p-6 rounded-2xl bg-navy/30 border border-navy-border space-y-4">
+            <div className="p-6 sm:p-8 rounded-2xl bg-white border border-[#D9E0E5] shadow-subtle-card space-y-6">
               <div>
-                <h3 className="text-base font-bold font-display text-ivory">Founder Accounts & Role Permissions</h3>
-                <p className="text-xs text-slate-light mt-1">
-                  Individual accounts for each of the 5 founding leads with server-enforced role access.
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FBF4F0] border border-[#B8613A]/20 text-[11px] font-mono text-[#B8613A] uppercase tracking-widest mb-2 font-semibold">
+                  <Shield className="w-3.5 h-3.5 text-[#B8613A]" />
+                  <span>FOUNDER IDENTITIES & RBAC</span>
+                </div>
+                <h3 className="text-xl font-bold font-display text-[#0B1F33]">Founder Accounts & Role Permissions</h3>
+                <p className="text-xs sm:text-sm text-[#5B6875] mt-1">
+                  Individual accounts for each of the 5 founding leads with server-enforced role access and immutable audit logging.
                 </p>
               </div>
 
-              <div className="overflow-x-auto rounded-xl border border-navy-border">
+              <div className="overflow-x-auto rounded-xl border border-[#D9E0E5]">
                 <table className="w-full text-left text-xs font-sans">
-                  <thead className="bg-navy/80 border-b border-navy-border font-mono uppercase text-[10px] text-slate-light">
+                  <thead className="bg-[#F7F7F4] border-b border-[#D9E0E5] font-mono uppercase text-[10px] text-[#5B6875]">
                     <tr>
-                      <th className="p-3.5">Founder / Lead</th>
-                      <th className="p-3.5">Role</th>
-                      <th className="p-3.5">Permissions Scope</th>
-                      <th className="p-3.5">Account Status</th>
-                      <th className="p-3.5">Last Authenticated</th>
+                      <th className="p-4">Founder / Lead</th>
+                      <th className="p-4">Role</th>
+                      <th className="p-4">Permissions Scope</th>
+                      <th className="p-4">Account Status</th>
+                      <th className="p-4">Last Authenticated</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-navy-border/60 bg-ink/40">
+                  <tbody className="divide-y divide-[#D9E0E5] bg-white">
                     {availableUsers.map((user) => {
                       const roleBadge = ROLE_BADGES[user.role] || ROLE_BADGES['Development'];
 
                       return (
-                        <tr key={user.id} className="hover:bg-navy/20 transition-colors">
-                          <td className="p-3.5">
-                            <div className="font-bold text-ivory flex items-center gap-2">
+                        <tr key={user.id} className="hover:bg-[#FBF4F0]/50 transition-colors">
+                          <td className="p-4">
+                            <div className="font-bold text-[#0B1F33] flex items-center gap-2 font-display">
                               <span>{user.name}</span>
                               {user.id === currentUser.id && (
-                                <span className="px-1.5 py-0.2 rounded bg-teal text-ivory text-[9px] font-mono">YOU</span>
+                                <span className="px-1.5 py-0.2 rounded bg-[#0B1F33] text-white text-[9px] font-mono">YOU</span>
                               )}
                             </div>
-                            <div className="text-[11px] text-slate font-mono">{user.email}</div>
+                            <div className="text-[11px] text-[#5B6875] font-mono">{user.email}</div>
                           </td>
-                          <td className="p-3.5">
+                          <td className="p-4">
                             <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold border ${roleBadge.bg} ${roleBadge.text} ${roleBadge.border}`}>
                               {user.role}
                             </span>
                           </td>
-                          <td className="p-3.5 font-mono text-[11px] text-slate-light">
+                          <td className="p-4 font-mono text-[11px] text-[#5B6875]">
                             {user.role === 'Owner/Admin' && 'Everything • User Mgmt • Audit Logs • Delete Records • Finance'}
                             {user.role === 'Operations' && 'Leads • Clients • Finance • Invoices • Projects'}
                             {user.role === 'Development' && 'Projects • Technical Architecture • Assigned Leads'}
                             {user.role === 'Creative' && 'Projects • Design Systems • Content • Portfolio'}
                             {user.role === 'Video' && 'Video Projects • Media Assets • Production Shoots'}
                           </td>
-                          <td className="p-3.5 font-mono text-[11px]">
-                            <span className="inline-flex items-center gap-1.5 text-teal font-semibold">
-                              <span className="w-1.5 h-1.5 rounded-full bg-teal" />
+                          <td className="p-4 font-mono text-[11px]">
+                            <span className="inline-flex items-center gap-1.5 text-emerald-700 font-semibold">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
                               <span>{user.status}</span>
                             </span>
                           </td>
-                          <td className="p-3.5 font-mono text-[10px] text-slate">
+                          <td className="p-4 font-mono text-[10px] text-[#5B6875]">
                             {user.lastLogin ? formatDate(user.lastLogin) : 'Pending first sign-in'}
                           </td>
                         </tr>
@@ -1124,32 +1142,32 @@ export default function AdminPage() {
 
       {/* LEAD OPERATIONS DRAWER / MODAL */}
       {activeLead && (
-        <div className="fixed inset-0 z-50 bg-ink/80 backdrop-blur-sm flex justify-end animate-in fade-in duration-200">
-          <div className="w-full max-w-xl h-full bg-navy/95 border-l border-navy-border p-6 sm:p-8 overflow-y-auto flex flex-col justify-between shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-[#0B1F33]/60 backdrop-blur-sm flex justify-end animate-in fade-in duration-200">
+          <div className="w-full max-w-xl h-full bg-white border-l border-[#D9E0E5] p-6 sm:p-8 overflow-y-auto flex flex-col justify-between shadow-2xl">
             <div className="space-y-6">
               {/* Drawer Header */}
-              <div className="flex items-start justify-between pb-4 border-b border-navy-border">
+              <div className="flex items-start justify-between pb-4 border-b border-[#D9E0E5]">
                 <div>
                   <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold border ${STAGE_COLORS[activeLead.status].bg} ${STAGE_COLORS[activeLead.status].text} ${STAGE_COLORS[activeLead.status].border}`}>
                     {activeLead.status}
                   </span>
-                  <h2 className="text-xl font-bold font-display text-ivory mt-2">{activeLead.name}</h2>
-                  <p className="text-xs text-slate-light font-mono">{activeLead.company} • {activeLead.email} • {activeLead.phone}</p>
+                  <h2 className="text-2xl font-bold font-display text-[#0B1F33] mt-2">{activeLead.name}</h2>
+                  <p className="text-xs text-[#5B6875] font-mono">{activeLead.company} • {activeLead.email} • {activeLead.phone}</p>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setLeadHistoryModalId(activeLead.id)}
-                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-ink border border-navy-border text-xs font-mono text-slate-light hover:text-ivory"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#F7F7F4] border border-[#D9E0E5] text-xs font-mono text-[#0B1F33] hover:border-[#B8613A]"
                     title="View Change History"
                   >
-                    <History className="w-3.5 h-3.5 text-champagne" />
+                    <History className="w-3.5 h-3.5 text-[#B8613A]" />
                     <span>Audit Trail</span>
                   </button>
 
                   <button
                     onClick={() => setActiveLead(null)}
-                    className="p-1.5 text-slate hover:text-ivory hover:bg-ink rounded-lg transition-colors"
+                    className="p-1.5 text-[#5B6875] hover:text-[#0B1F33] hover:bg-[#F7F7F4] rounded-lg transition-colors"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -1157,45 +1175,45 @@ export default function AdminPage() {
               </div>
 
               {/* Accountability Strip */}
-              <div className="p-3 rounded-xl bg-ink/80 border border-navy-border text-[10px] font-mono text-slate flex items-center justify-between">
+              <div className="p-3 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5] text-[10px] font-mono text-[#5B6875] flex items-center justify-between">
                 <div>
-                  Created by: <strong className="text-ivory">{activeLead.createdBy?.name || 'Desvanth'}</strong> ({formatDate(activeLead.createdAt)})
+                  Created by: <strong className="text-[#0B1F33]">{activeLead.createdBy?.name || 'Desvanth'}</strong> ({formatDate(activeLead.createdAt)})
                 </div>
                 <div>
-                  Last edited by: <strong className="text-teal">{activeLead.updatedBy?.name || 'Desvanth'}</strong>
+                  Last edited by: <strong className="text-[#B8613A]">{activeLead.updatedBy?.name || 'Desvanth'}</strong>
                 </div>
               </div>
 
               {/* Direct Quick WhatsApp / Call */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 font-mono">
                 <a
                   href={generateWhatsAppLink(activeLead.phone.replace(/[^0-9]/g, ''))}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-semibold text-ivory bg-teal hover:bg-teal-hover rounded-lg transition-colors"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-[#0B1F33] hover:bg-[#132B45] rounded-lg transition-colors"
                 >
-                  <MessageCircle className="w-4 h-4" />
+                  <MessageCircle className="w-4 h-4 text-emerald-400" />
                   <span>Chat on WhatsApp</span>
                 </a>
                 <a
                   href={`mailto:${activeLead.email}`}
-                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-medium text-slate-light hover:text-ivory bg-ink border border-navy-border rounded-lg transition-colors"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-semibold text-[#0B1F33] hover:text-[#B8613A] bg-[#F7F7F4] border border-[#D9E0E5] rounded-lg transition-colors"
                 >
-                  <Mail className="w-4 h-4" />
+                  <Mail className="w-4 h-4 text-[#B8613A]" />
                   <span>Send Email</span>
                 </a>
               </div>
 
               {/* Operations Stage & Business Controls */}
-              <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-ink/60 border border-navy-border">
+              <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5]">
                 <div>
-                  <label className="block text-[10px] font-mono uppercase text-slate tracking-wider mb-1 font-semibold">
+                  <label className="block text-[10px] font-mono uppercase text-[#5B6875] tracking-wider mb-1 font-semibold">
                     Pipeline Stage
                   </label>
                   <select
                     value={activeLead.status}
                     onChange={(e) => handleUpdateLead(activeLead.id, { status: e.target.value as LeadStatus })}
-                    className="w-full px-3 py-2 text-xs rounded-lg bg-navy text-ivory border border-navy-border focus:outline-none focus:border-teal"
+                    className="w-full px-3 py-2 text-xs rounded-lg bg-white text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
                   >
                     {PIPELINE_STAGES.map((s) => (
                       <option key={s} value={s}>{s}</option>
@@ -1204,13 +1222,13 @@ export default function AdminPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-mono uppercase text-slate tracking-wider mb-1 font-semibold">
+                  <label className="block text-[10px] font-mono uppercase text-[#5B6875] tracking-wider mb-1 font-semibold">
                     Lead Priority
                   </label>
                   <select
                     value={activeLead.priority || 'Medium'}
                     onChange={(e) => handleUpdateLead(activeLead.id, { priority: e.target.value as LeadPriority })}
-                    className="w-full px-3 py-2 text-xs rounded-lg bg-navy text-ivory border border-navy-border focus:outline-none focus:border-teal"
+                    className="w-full px-3 py-2 text-xs rounded-lg bg-white text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
                   >
                     <option value="High">High</option>
                     <option value="Medium">Medium</option>
@@ -1219,13 +1237,13 @@ export default function AdminPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-mono uppercase text-slate tracking-wider mb-1 font-semibold">
+                  <label className="block text-[10px] font-mono uppercase text-[#5B6875] tracking-wider mb-1 font-semibold">
                     Assigned Founder
                   </label>
                   <select
                     value={activeLead.assignedTo || 'Desvanth'}
                     onChange={(e) => handleUpdateLead(activeLead.id, { assignedTo: e.target.value })}
-                    className="w-full px-3 py-2 text-xs rounded-lg bg-navy text-ivory border border-navy-border focus:outline-none focus:border-teal"
+                    className="w-full px-3 py-2 text-xs rounded-lg bg-white text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
                   >
                     {availableUsers.map((f) => (
                       <option key={f.id} value={f.name}>{f.name} ({f.role})</option>
@@ -1234,7 +1252,7 @@ export default function AdminPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-mono uppercase text-slate tracking-wider mb-1 font-semibold">
+                  <label className="block text-[10px] font-mono uppercase text-[#5B6875] tracking-wider mb-1 font-semibold">
                     Expected Deal Value
                   </label>
                   <input
@@ -1242,18 +1260,18 @@ export default function AdminPage() {
                     value={activeLead.estimatedValue || ''}
                     onChange={(e) => handleUpdateLead(activeLead.id, { estimatedValue: e.target.value })}
                     placeholder="e.g. ₹85,000 / $2,000"
-                    className="w-full px-3 py-2 text-xs rounded-lg bg-navy text-ivory border border-navy-border focus:outline-none focus:border-teal"
+                    className="w-full px-3 py-2 text-xs rounded-lg bg-white text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
                   />
                 </div>
               </div>
 
               {/* Project Brief */}
-              <div className="p-4 rounded-xl bg-ink/60 border border-navy-border space-y-3">
-                <div className="text-xs font-mono uppercase text-slate tracking-wider font-semibold">Project Brief</div>
-                <p className="text-xs text-slate-light leading-relaxed whitespace-pre-wrap">{activeLead.description}</p>
-                <div className="flex flex-wrap gap-1.5 pt-2 border-t border-navy-border/60">
+              <div className="p-4 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5] space-y-3">
+                <div className="text-xs font-mono uppercase text-[#5B6875] tracking-wider font-semibold">Project Brief</div>
+                <p className="text-xs text-[#111827] leading-relaxed whitespace-pre-wrap">{activeLead.description}</p>
+                <div className="flex flex-wrap gap-1.5 pt-2 border-t border-[#D9E0E5]">
                   {activeLead.services.map((s) => (
-                    <span key={s} className="px-2 py-0.5 rounded bg-navy text-[10px] font-mono text-teal border border-navy-border">
+                    <span key={s} className="px-2 py-0.5 rounded bg-white text-[10px] font-mono text-[#0B1F33] border border-[#D9E0E5]">
                       {s}
                     </span>
                   ))}
@@ -1263,39 +1281,39 @@ export default function AdminPage() {
               {/* Internal Notes */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono uppercase text-slate tracking-wider font-semibold">
+                  <span className="text-xs font-mono uppercase text-[#5B6875] tracking-wider font-semibold">
                     Internal Operations Thread
                   </span>
-                  <span className="text-[10px] font-mono text-slate-muted">{activeLead.notes?.length || 0} entries</span>
+                  <span className="text-[10px] font-mono text-[#5B6875]">{activeLead.notes?.length || 0} entries</span>
                 </div>
 
                 <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
                   {activeLead.notes && activeLead.notes.length > 0 ? (
                     activeLead.notes.map((note) => (
-                      <div key={note.id} className="p-3 rounded-lg bg-ink border border-navy-border text-xs space-y-1">
-                        <div className="flex items-center justify-between text-[10px] font-mono text-slate">
-                          <span className="font-bold text-champagne">{note.author}</span>
+                      <div key={note.id} className="p-3 rounded-lg bg-[#F7F7F4] border border-[#D9E0E5] text-xs space-y-1">
+                        <div className="flex items-center justify-between text-[10px] font-mono text-[#5B6875]">
+                          <span className="font-bold text-[#0B1F33]">{note.author}</span>
                           <span>{formatTimeAgo(note.createdAt)}</span>
                         </div>
-                        <p className="text-slate-light text-xs leading-relaxed">{note.content}</p>
+                        <p className="text-[#111827] text-xs leading-relaxed">{note.content}</p>
                       </div>
                     ))
                   ) : (
-                    <p className="text-xs text-slate-muted italic p-2">No internal notes yet.</p>
+                    <p className="text-xs text-[#5B6875] italic p-2">No internal notes yet.</p>
                   )}
                 </div>
 
-                <form onSubmit={handleAddNote} className="flex gap-2">
+                <form onSubmit={handleAddNote} className="flex gap-2 font-mono">
                   <input
                     type="text"
                     value={newNoteContent}
                     onChange={(e) => setNewNoteContent(e.target.value)}
                     placeholder={`Log note as ${currentUser.name}...`}
-                    className="flex-1 px-3 py-2 text-xs rounded-lg bg-ink text-ivory border border-navy-border focus:outline-none focus:border-teal placeholder:text-slate-muted"
+                    className="flex-1 px-3 py-2 text-xs rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A] placeholder:text-[#5B6875]"
                   />
                   <button
                     type="submit"
-                    className="px-3 py-2 text-xs font-semibold text-ivory bg-teal hover:bg-teal-hover rounded-lg transition-colors"
+                    className="px-4 py-2 text-xs font-bold text-white bg-[#0B1F33] hover:bg-[#132B45] rounded-lg transition-colors"
                   >
                     Add
                   </button>
@@ -1304,24 +1322,24 @@ export default function AdminPage() {
             </div>
 
             {/* Footer Delete Action (Only for Owner/Admin) */}
-            <div className="pt-6 border-t border-navy-border flex items-center justify-between mt-6">
+            <div className="pt-6 border-t border-[#D9E0E5] flex items-center justify-between mt-6">
               {currentUser.role === 'Owner/Admin' ? (
                 <button
                   type="button"
                   onClick={() => handleDeleteLead(activeLead.id)}
-                  className="inline-flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 font-mono transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs text-red-600 hover:text-red-700 font-mono transition-colors"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Delete Record</span>
                 </button>
               ) : (
-                <span className="text-[10px] font-mono text-slate-muted">Deletion restricted to Owner</span>
+                <span className="text-[10px] font-mono text-[#5B6875]">Deletion restricted to Owner</span>
               )}
 
               <button
                 type="button"
                 onClick={() => setActiveLead(null)}
-                className="px-4 py-2 text-xs font-medium text-slate hover:text-ivory bg-ink rounded-lg transition-colors"
+                className="px-4 py-2 text-xs font-mono font-semibold text-[#5B6875] hover:text-[#0B1F33] bg-[#F7F7F4] rounded-lg transition-colors border border-[#D9E0E5]"
               >
                 Close Drawer
               </button>
@@ -1332,41 +1350,41 @@ export default function AdminPage() {
 
       {/* SPECIFIC RECORD AUDIT HISTORY MODAL */}
       {leadHistoryModalId && (
-        <div className="fixed inset-0 z-50 bg-ink/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-navy/95 border border-navy-border rounded-2xl p-6 sm:p-8 shadow-2xl space-y-5 max-h-[85vh] flex flex-col justify-between">
+        <div className="fixed inset-0 z-50 bg-[#0B1F33]/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl bg-white border border-[#D9E0E5] rounded-2xl p-6 sm:p-8 shadow-2xl space-y-5 max-h-[85vh] flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between pb-4 border-b border-navy-border">
+              <div className="flex items-center justify-between pb-4 border-b border-[#D9E0E5]">
                 <div className="flex items-center gap-2">
-                  <History className="w-5 h-5 text-champagne" />
-                  <h3 className="text-lg font-bold font-display text-ivory">Record Change History</h3>
+                  <History className="w-5 h-5 text-[#B8613A]" />
+                  <h3 className="text-lg font-bold font-display text-[#0B1F33]">Record Change History</h3>
                 </div>
-                <button onClick={() => setLeadHistoryModalId(null)} className="text-slate hover:text-ivory">
+                <button onClick={() => setLeadHistoryModalId(null)} className="text-[#5B6875] hover:text-[#0B1F33]">
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               <div className="mt-4 space-y-3 overflow-y-auto max-h-[55vh] pr-1">
                 {activeLeadHistoryLogs.length === 0 ? (
-                  <p className="text-xs text-slate-muted italic text-center p-8">No recorded change history for this record.</p>
+                  <p className="text-xs text-[#5B6875] italic text-center p-8">No recorded change history for this record.</p>
                 ) : (
                   activeLeadHistoryLogs.map((log) => (
-                    <div key={log.id} className="p-3.5 rounded-lg bg-ink border border-navy-border text-xs space-y-2">
-                      <div className="flex items-center justify-between font-mono text-[10px] text-slate">
+                    <div key={log.id} className="p-3.5 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5] text-xs space-y-2">
+                      <div className="flex items-center justify-between font-mono text-[10px] text-[#5B6875]">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-ivory">{log.userName}</span>
-                          <span className="px-1.5 py-0.2 rounded bg-navy text-teal">{log.action}</span>
+                          <span className="font-bold text-[#0B1F33]">{log.userName}</span>
+                          <span className="px-1.5 py-0.2 rounded bg-white text-[#B8613A] border border-[#D9E0E5]">{log.action}</span>
                         </div>
                         <span>{formatDate(log.timestamp)} ({formatTimeAgo(log.timestamp)})</span>
                       </div>
-                      <p className="text-slate-light text-xs">{log.details.summary}</p>
+                      <p className="text-[#111827] text-xs">{log.details.summary}</p>
                       {log.details.changes && log.details.changes.length > 0 && (
-                        <div className="space-y-1 pt-1.5 border-t border-navy-border/60">
+                        <div className="space-y-1 pt-1.5 border-t border-[#D9E0E5]">
                           {log.details.changes.map((c, i) => (
                             <div key={i} className="flex items-center gap-2 text-[11px] font-mono">
-                              <span className="text-slate">{c.label}:</span>
-                              <span className="text-red-400 line-through">{String(c.before)}</span>
-                              <ArrowRight className="w-3 h-3 text-teal" />
-                              <span className="text-teal font-semibold">{String(c.after)}</span>
+                              <span className="text-[#5B6875]">{c.label}:</span>
+                              <span className="text-red-600 line-through">{String(c.before)}</span>
+                              <ArrowRight className="w-3 h-3 text-[#B8613A]" />
+                              <span className="text-emerald-700 font-semibold">{String(c.after)}</span>
                             </div>
                           ))}
                         </div>
@@ -1377,11 +1395,11 @@ export default function AdminPage() {
               </div>
             </div>
 
-            <div className="pt-4 border-t border-navy-border flex justify-end">
+            <div className="pt-4 border-t border-[#D9E0E5] flex justify-end font-mono">
               <button
                 type="button"
                 onClick={() => setLeadHistoryModalId(null)}
-                className="px-4 py-2 text-xs font-semibold text-ivory bg-teal rounded-lg"
+                className="px-5 py-2.5 text-xs font-bold text-white bg-[#0B1F33] hover:bg-[#132B45] rounded-lg transition-colors"
               >
                 Close History
               </button>
@@ -1392,85 +1410,85 @@ export default function AdminPage() {
 
       {/* MANUAL LEAD CREATION MODAL */}
       {isManualModalOpen && (
-        <div className="fixed inset-0 z-50 bg-ink/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-lg bg-navy/95 border border-navy-border rounded-2xl p-6 sm:p-8 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between pb-4 border-b border-navy-border">
-              <h3 className="text-lg font-bold font-display text-ivory">Log New Client Lead</h3>
-              <button onClick={() => setIsManualModalOpen(false)} className="text-slate hover:text-ivory">
+        <div className="fixed inset-0 z-50 bg-[#0B1F33]/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-lg bg-white border border-[#D9E0E5] rounded-2xl p-6 sm:p-8 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between pb-4 border-b border-[#D9E0E5]">
+              <h3 className="text-lg font-bold font-display text-[#0B1F33]">Log New Client Lead</h3>
+              <button onClick={() => setIsManualModalOpen(false)} className="text-[#5B6875] hover:text-[#0B1F33]">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleCreateManualLead} className="space-y-4 text-xs font-sans">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 font-mono">
                 <div>
-                  <label className="block font-mono text-slate mb-1">Client Name *</label>
+                  <label className="block text-[#5B6875] mb-1 font-semibold">Client Name *</label>
                   <input
                     type="text"
                     required
                     value={manualFormData.name}
                     onChange={(e) => setManualFormData({ ...manualFormData, name: e.target.value })}
                     placeholder="e.g. Ramesh Varma"
-                    className="w-full px-3 py-2 rounded-lg bg-ink text-ivory border border-navy-border focus:outline-none focus:border-teal"
+                    className="w-full px-3 py-2 rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
                   />
                 </div>
                 <div>
-                  <label className="block font-mono text-slate mb-1">Company / Venture *</label>
+                  <label className="block text-[#5B6875] mb-1 font-semibold">Company / Venture *</label>
                   <input
                     type="text"
                     required
                     value={manualFormData.company}
                     onChange={(e) => setManualFormData({ ...manualFormData, company: e.target.value })}
                     placeholder="e.g. Varma Logistics"
-                    className="w-full px-3 py-2 rounded-lg bg-ink text-ivory border border-navy-border focus:outline-none focus:border-teal"
+                    className="w-full px-3 py-2 rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 font-mono">
                 <div>
-                  <label className="block font-mono text-slate mb-1">Email *</label>
+                  <label className="block text-[#5B6875] mb-1 font-semibold">Email *</label>
                   <input
                     type="email"
                     required
                     value={manualFormData.email}
                     onChange={(e) => setManualFormData({ ...manualFormData, email: e.target.value })}
                     placeholder="client@company.com"
-                    className="w-full px-3 py-2 rounded-lg bg-ink text-ivory border border-navy-border focus:outline-none focus:border-teal"
+                    className="w-full px-3 py-2 rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
                   />
                 </div>
                 <div>
-                  <label className="block font-mono text-slate mb-1">Phone / WhatsApp *</label>
+                  <label className="block text-[#5B6875] mb-1 font-semibold">Phone / WhatsApp *</label>
                   <input
                     type="text"
                     required
                     value={manualFormData.phone}
                     onChange={(e) => setManualFormData({ ...manualFormData, phone: e.target.value })}
                     placeholder="+91 98765 43210"
-                    className="w-full px-3 py-2 rounded-lg bg-ink text-ivory border border-navy-border focus:outline-none focus:border-teal"
+                    className="w-full px-3 py-2 rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block font-mono text-slate mb-1">Project Requirements *</label>
+                <label className="block font-mono text-[#5B6875] mb-1 font-semibold">Project Requirements *</label>
                 <textarea
                   rows={3}
                   required
                   value={manualFormData.description}
                   onChange={(e) => setManualFormData({ ...manualFormData, description: e.target.value })}
                   placeholder="Describe scope, features, and target outcomes..."
-                  className="w-full px-3 py-2 rounded-lg bg-ink text-ivory border border-navy-border focus:outline-none focus:border-teal"
+                  className="w-full px-3 py-2 rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 font-mono">
                 <div>
-                  <label className="block font-mono text-slate mb-1">Assigned Founder</label>
+                  <label className="block text-[#5B6875] mb-1 font-semibold">Assigned Founder</label>
                   <select
                     value={manualFormData.assignedTo}
                     onChange={(e) => setManualFormData({ ...manualFormData, assignedTo: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-ink text-ivory border border-navy-border"
+                    className="w-full px-3 py-2 rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5]"
                   >
                     {availableUsers.map((u) => (
                       <option key={u.id} value={u.name}>{u.name} ({u.role})</option>
@@ -1478,28 +1496,28 @@ export default function AdminPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block font-mono text-slate mb-1">Estimated Value</label>
+                  <label className="block text-[#5B6875] mb-1 font-semibold">Estimated Value</label>
                   <input
                     type="text"
                     value={manualFormData.estimatedValue}
                     onChange={(e) => setManualFormData({ ...manualFormData, estimatedValue: e.target.value })}
                     placeholder="e.g. ₹75,000"
-                    className="w-full px-3 py-2 rounded-lg bg-ink text-ivory border border-navy-border"
+                    className="w-full px-3 py-2 rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5]"
                   />
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-navy-border flex justify-end gap-2">
+              <div className="pt-4 border-t border-[#D9E0E5] flex justify-end gap-2 font-mono">
                 <button
                   type="button"
                   onClick={() => setIsManualModalOpen(false)}
-                  className="px-4 py-2 text-xs font-medium text-slate hover:text-ivory bg-ink rounded-lg"
+                  className="px-4 py-2 text-xs font-semibold text-[#5B6875] hover:text-[#0B1F33] bg-[#F7F7F4] rounded-lg border border-[#D9E0E5]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-semibold text-ivory bg-teal hover:bg-teal-hover rounded-lg"
+                  className="px-5 py-2 text-xs font-bold text-white bg-[#0B1F33] hover:bg-[#132B45] rounded-lg shadow-sm"
                 >
                   Save Lead & Log Audit
                 </button>
