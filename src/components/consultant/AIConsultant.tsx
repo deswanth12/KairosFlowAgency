@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { 
   Sparkles, 
   Send, 
@@ -38,9 +39,15 @@ const STARTER_PROMPTS = [
 ];
 
 export const AIConsultant: React.FC = () => {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // Hide AI Consultant inside the private admin CRM
+  if (pathname && pathname.startsWith('/admin')) {
+    return null;
+  }
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome-1',

@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Logo } from '@/components/brand/Logo';
 import { navLinks, siteSettingsData } from '@/data/settings';
 import { servicesData } from '@/data/services';
@@ -7,6 +10,13 @@ import { generateWhatsAppLink } from '@/lib/utils';
 import { ArrowUpRight, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
 
 export const Footer: React.FC = () => {
+  const pathname = usePathname();
+
+  // Hide public footer completely inside the private Admin CRM
+  if (pathname && pathname.startsWith('/admin')) {
+    return null;
+  }
+
   const whatsappUrl = generateWhatsAppLink(siteSettingsData.whatsappNumber);
 
   return (

@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Logo } from '@/components/brand/Logo';
 import { navLinks, siteSettingsData } from '@/data/settings';
 import { generateWhatsAppLink } from '@/lib/utils';
-import { MessageCircle, Menu, X, ArrowUpRight, Shield } from 'lucide-react';
+import { MessageCircle, Menu, X, ArrowUpRight } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
@@ -25,6 +25,11 @@ export const Navbar: React.FC = () => {
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
+
+  // Hide public navbar completely inside the private Admin CRM
+  if (pathname && pathname.startsWith('/admin')) {
+    return null;
+  }
 
   const whatsappUrl = generateWhatsAppLink(siteSettingsData.whatsappNumber);
 
@@ -158,12 +163,8 @@ export const Navbar: React.FC = () => {
             <ArrowUpRight className="w-4 h-4" />
           </Link>
 
-          <div className="flex items-center justify-between text-xs text-slate pt-3">
+          <div className="text-center text-xs text-slate pt-3">
             <span>{siteSettingsData.agencyName}</span>
-            <Link href="/admin" className="inline-flex items-center gap-1 hover:text-ivory transition-colors">
-              <Shield className="w-3 h-3" />
-              <span>Admin Portal</span>
-            </Link>
           </div>
         </div>
       </div>
