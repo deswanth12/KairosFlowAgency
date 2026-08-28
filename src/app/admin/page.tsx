@@ -32,6 +32,7 @@ import {
   TrendingUp,
   Briefcase
 } from 'lucide-react';
+import { Logo } from '@/components/brand/Logo';
 import { Lead, LeadStatus, LeadPriority, ProposalStatus, PaymentStatus } from '@/types';
 import { formatDate, formatTimeAgo, generateWhatsAppLink } from '@/lib/utils';
 
@@ -365,9 +366,7 @@ export default function AdminPage() {
       <header className="sticky top-0 z-30 bg-ink/95 backdrop-blur-md border-b border-navy-border px-4 sm:px-8 py-3.5">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-navy border border-champagne/40 flex items-center justify-center text-champagne font-mono font-bold text-sm">
-              KF
-            </div>
+            <Logo size={32} variant="mark" theme="dark" />
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-sm font-bold text-ivory font-display tracking-tight">Kairos Flow Operations OS</h1>
