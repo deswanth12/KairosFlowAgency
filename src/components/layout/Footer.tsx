@@ -4,7 +4,7 @@ import { Logo } from '@/components/brand/Logo';
 import { navLinks, siteSettingsData } from '@/data/settings';
 import { servicesData } from '@/data/services';
 import { generateWhatsAppLink } from '@/lib/utils';
-import { ArrowUpRight, MessageCircle, Mail, Phone, MapPin, Shield } from 'lucide-react';
+import { ArrowUpRight, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const whatsappUrl = generateWhatsAppLink(siteSettingsData.whatsappNumber);
@@ -29,7 +29,7 @@ export const Footer: React.FC = () => {
               {/* Status Indicator with Soft Champagne accent */}
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-navy/60 border border-navy-border text-xs">
                 <span className="w-2 h-2 rounded-full bg-champagne animate-pulse" />
-                <span className="text-ivory/90 font-medium">Accepting Selected Q3/Q4 Projects</span>
+                <span className="text-ivory/90 font-medium">Accepting Selected Q1/Q2 Projects</span>
               </div>
             </div>
 
@@ -75,15 +75,6 @@ export const Footer: React.FC = () => {
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link
-                  href="/admin"
-                  className="text-slate hover:text-champagne transition-colors inline-flex items-center gap-1 group"
-                >
-                  <Shield className="w-3 h-3 text-champagne" />
-                  <span>Admin CRM</span>
-                </Link>
-              </li>
             </ul>
           </div>
 
