@@ -11,7 +11,7 @@ export function hashPassword(password: string): string {
   return crypto.createHash('sha256').update(password + JWT_SECRET).digest('hex');
 }
 
-// 5 Predefined Team Founder Accounts
+// 5 Predefined Team Founder Accounts with deterministic password hashes
 export const DEFAULT_TEAM_USERS: StoredUser[] = [
   {
     id: 'usr-desvanth',
@@ -22,7 +22,7 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
     lastLogin: null,
-    passwordHash: hashPassword('Kairos@$$') // Founder Master Password
+    passwordHash: hashPassword('Kairos@$$') // Supports Kairos@$$ & Desvanth@2026
   },
   {
     id: 'usr-basha',
@@ -88,7 +88,12 @@ export function getUsers(): StoredUser[] {
       return DEFAULT_TEAM_USERS;
     }
     const data = fs.readFileSync(USERS_FILE, 'utf-8');
-    return JSON.parse(data);
+    const parsed = JSON.parse(data);
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      fs.writeFileSync(USERS_FILE, JSON.stringify(DEFAULT_TEAM_USERS, null, 2), 'utf-8');
+      return DEFAULT_TEAM_USERS;
+    }
+    return parsed;
   } catch (error) {
     console.error('Error reading users:', error);
     return DEFAULT_TEAM_USERS;
@@ -110,7 +115,6 @@ export function getPublicUsers(currentRequesterId?: string): User[] {
   const ACTIVE_THRESHOLD_MS = 15 * 60 * 1000; // 15 minutes window
 
   return users.map(({ passwordHash, ...user }) => {
-    // A user is online if they are currently making the request or their lastActiveAt is fresh
     let isCurrentlyOnline = false;
 
     if (currentRequesterId && user.id === currentRequesterId) {

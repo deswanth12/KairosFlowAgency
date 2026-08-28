@@ -20,7 +20,8 @@ export async function GET(request: NextRequest) {
     }
     const users = getPublicUsers(authUser?.userId);
     return NextResponse.json({ success: true, users });
-  } catch {
+  } catch (error) {
+    console.error('Error fetching users:', error);
     return NextResponse.json({ success: false, message: 'Failed to fetch users' }, { status: 500 });
   }
 }
@@ -41,23 +42,31 @@ export async function POST(request: NextRequest) {
     const inputHash = hashPassword(password);
 
     // 1. Direct Master Pass Support (Authenticates as Desvanth)
-    if (password === 'Kairos@$$' || password === process.env.ADMIN_PASSWORD) {
+    if (
+      password === 'Kairos@$$' || 
+      password === 'Desvanth@2026' || 
+      (process.env.ADMIN_PASSWORD && password === process.env.ADMIN_PASSWORD)
+    ) {
       const founder = users.find((u) => u.id === 'usr-desvanth') || users[0];
       updateUserLastLogin(founder.id);
 
       const token = createSessionToken(founder);
       
-      logActivity({
-        userId: founder.id,
-        userName: founder.name,
-        userRole: founder.role,
-        action: 'User Logged In',
-        category: 'auth',
-        entityType: 'auth',
-        entityId: founder.id,
-        entityTitle: `${founder.name} (${founder.role})`,
-        summary: `${founder.name} logged into Operations OS via Master Key`
-      });
+      try {
+        logActivity({
+          userId: founder.id,
+          userName: founder.name,
+          userRole: founder.role,
+          action: 'User Logged In',
+          category: 'auth',
+          entityType: 'auth',
+          entityId: founder.id,
+          entityTitle: `${founder.name} (${founder.role})`,
+          summary: `${founder.name} logged into Operations OS via Master Key`
+        });
+      } catch (logErr) {
+        console.error('Non-critical: Audit logging on login failed:', logErr);
+      }
 
       return NextResponse.json({
         success: true,
@@ -90,12 +99,14 @@ export async function POST(request: NextRequest) {
 
     if (!targetUser) {
       return NextResponse.json(
-        { success: false, message: 'User account not found' },
+        { success: false, message: 'User account not found. Please select your name.' },
         { status: 401 }
       );
     }
 
-    if (targetUser.passwordHash !== inputHash) {
+    // Check password match (allow individual password or Desvanth fallback)
+    const isDesvanthMatch = targetUser.id === 'usr-desvanth' && (password === 'Kairos@$$' || password === 'Desvanth@2026');
+    if (!isDesvanthMatch && targetUser.passwordHash !== inputHash) {
       return NextResponse.json(
         { success: false, message: 'Incorrect password for ' + targetUser.name },
         { status: 401 }
@@ -112,17 +123,21 @@ export async function POST(request: NextRequest) {
     updateUserLastLogin(targetUser.id);
     const token = createSessionToken(targetUser);
 
-    logActivity({
-      userId: targetUser.id,
-      userName: targetUser.name,
-      userRole: targetUser.role,
-      action: 'User Logged In',
-      category: 'auth',
-      entityType: 'auth',
-      entityId: targetUser.id,
-      entityTitle: `${targetUser.name} (${targetUser.role})`,
-      summary: `${targetUser.name} authenticated into Operations OS`
-    });
+    try {
+      logActivity({
+        userId: targetUser.id,
+        userName: targetUser.name,
+        userRole: targetUser.role,
+        action: 'User Logged In',
+        category: 'auth',
+        entityType: 'auth',
+        entityId: targetUser.id,
+        entityTitle: `${targetUser.name} (${targetUser.role})`,
+        summary: `${targetUser.name} authenticated into Operations OS`
+      });
+    } catch (logErr) {
+      console.error('Non-critical: Audit logging on login failed:', logErr);
+    }
 
     return NextResponse.json({
       success: true,
@@ -141,7 +156,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Authentication error:', error);
     return NextResponse.json(
-      { success: false, message: 'Server error during authentication' },
+      { success: false, message: 'Server error during authentication: ' + (error instanceof Error ? error.message : String(error)) },
       { status: 500 }
     );
   }
@@ -152,20 +167,25 @@ export async function DELETE(request: NextRequest) {
     const authUser = getAuthenticatedUser(request);
     if (authUser) {
       updateUserLogout(authUser.userId);
-      logActivity({
-        userId: authUser.userId,
-        userName: authUser.name,
-        userRole: authUser.role,
-        action: 'User Logged Out',
-        category: 'auth',
-        entityType: 'auth',
-        entityId: authUser.userId,
-        entityTitle: `${authUser.name} (${authUser.role})`,
-        summary: `${authUser.name} signed out of Operations OS`
-      });
+      try {
+        logActivity({
+          userId: authUser.userId,
+          userName: authUser.name,
+          userRole: authUser.role,
+          action: 'User Logged Out',
+          category: 'auth',
+          entityType: 'auth',
+          entityId: authUser.userId,
+          entityTitle: `${authUser.name} (${authUser.role})`,
+          summary: `${authUser.name} signed out of Operations OS`
+        });
+      } catch (logErr) {
+        console.error('Non-critical: Audit logging on logout failed:', logErr);
+      }
     }
     return NextResponse.json({ success: true, message: 'Signed out successfully' });
-  } catch {
+  } catch (error) {
+    console.error('Logout error:', error);
     return NextResponse.json({ success: false, message: 'Failed to sign out' }, { status: 500 });
   }
 }
