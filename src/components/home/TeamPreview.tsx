@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { foundersData } from '@/data/team';
-import { Users, Mail, ArrowRight } from 'lucide-react';
+import { Users, Mail, ArrowRight, Crown } from 'lucide-react';
 import { LinkedInIcon, GitHubIcon } from '@/components/ui/SocialIcons';
 
 export const TeamPreview: React.FC = () => {
@@ -13,13 +13,13 @@ export const TeamPreview: React.FC = () => {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-ivory-muted border border-ivory-border text-xs font-mono uppercase tracking-widest text-slate mb-3">
               <Users className="w-3.5 h-3.5 text-teal" />
-              <span>Founding Team</span>
+              <span>Agency Leadership</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-softblack font-display">
               Led by specialists, not middlemen.
             </h2>
             <p className="text-slate text-base sm:text-lg mt-3 max-w-xl">
-              Meet the five founders steering technical architecture, marketing, creative direction, core engineering, and video production.
+              Meet the leadership team steering technical architecture, marketing, creative direction, development, and video production.
             </p>
           </div>
 
@@ -32,9 +32,10 @@ export const TeamPreview: React.FC = () => {
           </Link>
         </div>
 
-        {/* 5 Founders Typographic Cards (No Photos) */}
+        {/* 5 Founders Typographic Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
           {foundersData.map((founder, idx) => {
+            const isFounder = founder.id === 'desvanth';
             const initials = founder.name
               .split(' ')
               .map((n) => n[0])
@@ -43,17 +44,33 @@ export const TeamPreview: React.FC = () => {
             return (
               <div
                 key={founder.id}
-                className="group flex flex-col justify-between p-6 bg-ivory-card border border-ivory-border rounded-xl shadow-subtle-ivory hover:shadow-elevated-ivory transition-all duration-300 hover:border-teal/50"
+                className={`group flex flex-col justify-between p-6 bg-ivory-card border rounded-xl shadow-subtle-ivory hover:shadow-elevated-ivory transition-all duration-300 ${
+                  isFounder
+                    ? 'border-champagne/70 bg-gradient-to-b from-ivory-card to-champagne-subtle/30 ring-1 ring-champagne/30'
+                    : 'border-ivory-border hover:border-teal/50'
+                }`}
               >
                 <div>
                   {/* Top Bar: Monogram + Number */}
                   <div className="flex items-center justify-between mb-5">
-                    <div className="w-11 h-11 rounded-lg bg-ink text-ivory font-mono font-bold text-sm flex items-center justify-center border border-navy-border group-hover:border-teal transition-colors">
+                    <div
+                      className={`w-11 h-11 rounded-lg font-mono font-bold text-sm flex items-center justify-center border ${
+                        isFounder
+                          ? 'bg-ink text-champagne border-champagne'
+                          : 'bg-ink text-ivory border-navy-border group-hover:border-teal'
+                      } transition-colors`}
+                    >
                       {initials}
                     </div>
-                    <span className="font-mono text-xs font-bold text-champagne">
-                      0{idx + 1}
-                    </span>
+                    {isFounder ? (
+                      <span className="px-2 py-0.5 rounded bg-champagne text-ink text-[10px] font-bold uppercase font-mono tracking-wider flex items-center gap-1">
+                        Founder
+                      </span>
+                    ) : (
+                      <span className="font-mono text-xs font-bold text-slate-muted">
+                        0{idx + 1}
+                      </span>
+                    )}
                   </div>
 
                   {/* Name & Role */}
@@ -83,7 +100,9 @@ export const TeamPreview: React.FC = () => {
 
                 {/* Footer Social Actions */}
                 <div className="pt-4 border-t border-ivory-border flex items-center justify-between text-slate">
-                  <span className="text-[11px] font-mono text-slate-muted">Co-Founder</span>
+                  <span className="text-[11px] font-mono text-slate-muted">
+                    {isFounder ? 'Founder' : 'Founding Lead'}
+                  </span>
                   <div className="flex items-center gap-2">
                     {founder.socialLinks.email && (
                       <a

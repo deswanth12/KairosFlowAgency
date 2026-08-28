@@ -33,15 +33,15 @@ We eliminate generic agency fluff and deliver production-ready software, verifia
 
 ---
 
-## 👥 The Founding Team
+## 👥 Leadership Team
 
 We operate with **direct founder ownership**—zero junior handoffs or disconnected account managers:
 
-- **Desvanth** — *Technology & Client Lead* (Technical Architecture, Client Strategy, Cloud Infrastructure)
-- **Bhasha** — *Marketing & Operations* (Growth Strategy, Agency Operations, Conversion Funnels)
-- **Siddiq** — *Creative & Content* (UI/UX Design, Visual Strategy, Brand Systems)
-- **Rithesh** — *Development* (Frontend Engineering, TypeScript, Component Libraries, Performance QA)
-- **Sai Deep** — *Video Production* (Cinematography, Post-Production, Sound Design, Content Engine)
+- **Desvanth** — **Founder & Technology Lead** (Technical Architecture, Client Strategy, Cloud Infrastructure)
+- **Bhasha** — *Marketing & Operations Lead* (Growth Strategy, Agency Operations, Conversion Funnels)
+- **Siddiq** — *Creative & Content Lead* (UI/UX Design, Visual Strategy, Brand Systems)
+- **Rithesh** — *Development Lead* (Frontend Engineering, TypeScript, Component Libraries, Performance QA)
+- **Sai Deep** — *Video Production Lead* (Cinematography, Post-Production, Sound Design, Content Engine)
 
 ---
 

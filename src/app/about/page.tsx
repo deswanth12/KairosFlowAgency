@@ -6,13 +6,14 @@ import {
   Mail, 
   ArrowUpRight,
   ShieldCheck,
-  CheckCircle2
+  CheckCircle2,
+  Crown
 } from 'lucide-react';
 import { LinkedInIcon, GitHubIcon } from '@/components/ui/SocialIcons';
 
 export const metadata = {
-  title: 'About & Founding Team | Kairos Flow Agency',
-  description: 'Learn about the Kairos Flow philosophy and meet the five co-founders behind our technology, marketing, design, engineering, and cinematography.'
+  title: 'About & Leadership | Kairos Flow Agency',
+  description: 'Learn about the Kairos Flow philosophy and meet Founder Desvanth and the leadership team behind our technology, marketing, design, engineering, and cinematography.'
 };
 
 export default function AboutPage() {
@@ -52,7 +53,7 @@ export default function AboutPage() {
                 <strong className="text-softblack">Flow</strong> represents uninterrupted kinetic movement—taking that critical window of opportunity and turning it into relentless, high-speed engineering momentum.
               </p>
               <p>
-                As an agency, we exist to help founders and companies seize their <em>Kairos moment</em> with the digital products, AI systems, and visual authority needed to win.
+                Founded by <strong className="text-softblack">Desvanth</strong> alongside a dedicated multidisciplinary team, Kairos Flow exists to help founders and companies seize their <em>Kairos moment</em> with the digital products, AI systems, and visual authority needed to win.
               </p>
             </div>
           </div>
@@ -101,22 +102,23 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Founding Team (Name & Work Roles, No Pictures) */}
+        {/* Founding Leadership Team */}
         <div>
           <div className="max-w-3xl mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-ivory-muted border border-ivory-border text-xs font-mono uppercase tracking-widest text-slate mb-3">
-              <span>Founding Team</span>
+              <span>Leadership</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-softblack font-display">
-              The Five Co-Founders
+              Founder & Core Leads
             </h2>
             <p className="text-slate text-base sm:text-lg mt-3">
-              Direct founder accountability across technical architecture, marketing strategy, visual systems, development, and video production.
+              Specialist leadership across technical architecture, marketing strategy, visual systems, development, and video production.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {foundersData.map((founder, idx) => {
+              const isFounder = founder.id === 'desvanth';
               const initials = founder.name
                 .split(' ')
                 .map((n) => n[0])
@@ -125,17 +127,33 @@ export default function AboutPage() {
               return (
                 <div
                   key={founder.id}
-                  className="bg-ivory-card border border-ivory-border rounded-2xl p-7 shadow-subtle-ivory hover:shadow-elevated-ivory transition-all duration-300 flex flex-col justify-between"
+                  className={`bg-ivory-card border rounded-2xl p-7 shadow-subtle-ivory hover:shadow-elevated-ivory transition-all duration-300 flex flex-col justify-between ${
+                    isFounder
+                      ? 'border-champagne/80 bg-gradient-to-b from-ivory-card to-champagne-subtle/30 ring-1 ring-champagne/30 md:col-span-2 lg:col-span-1'
+                      : 'border-ivory-border'
+                  }`}
                 >
                   <div>
                     {/* Header */}
                     <div className="flex items-center justify-between pb-4 border-b border-ivory-border mb-5">
-                      <div className="w-12 h-12 rounded-xl bg-ink text-ivory font-mono font-bold text-base flex items-center justify-center border border-navy-border">
+                      <div
+                        className={`w-12 h-12 rounded-xl font-mono font-bold text-base flex items-center justify-center border ${
+                          isFounder
+                            ? 'bg-ink text-champagne border-champagne'
+                            : 'bg-ink text-ivory border-navy-border'
+                        }`}
+                      >
                         {initials}
                       </div>
-                      <span className="font-mono text-xs font-bold text-champagne">
-                        0{idx + 1}
-                      </span>
+                      {isFounder ? (
+                        <span className="px-2.5 py-1 rounded bg-champagne text-ink text-[11px] font-bold uppercase font-mono tracking-wider">
+                          Founder
+                        </span>
+                      ) : (
+                        <span className="font-mono text-xs font-bold text-slate-muted">
+                          0{idx + 1}
+                        </span>
+                      )}
                     </div>
 
                     <div className="text-xs font-mono text-teal font-semibold uppercase tracking-wider mb-1">
@@ -174,7 +192,9 @@ export default function AboutPage() {
                   </div>
 
                   <div className="pt-4 border-t border-ivory-border flex items-center justify-between">
-                    <span className="text-xs text-slate font-medium">Co-Founder</span>
+                    <span className="text-xs text-slate font-medium">
+                      {isFounder ? 'Founder' : 'Founding Lead'}
+                    </span>
                     <div className="flex items-center gap-2 text-slate">
                       {founder.socialLinks.email && (
                         <a
