@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { foundersData } from '@/data/team';
-import { Users, Mail, ArrowRight } from 'lucide-react';
+import { Users, Mail, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { LinkedInIcon, GitHubIcon } from '@/components/ui/SocialIcons';
 
 export const TeamPreview: React.FC = () => {
@@ -19,7 +19,7 @@ export const TeamPreview: React.FC = () => {
               Led by specialists, not middlemen.
             </h2>
             <p className="text-slate text-base sm:text-lg mt-3 max-w-xl">
-              Meet the leadership team steering technical architecture, marketing, creative direction, development, and video production.
+              Meet Founder Desvanth and the dedicated team steering technology, marketing, creative direction, development, and video production.
             </p>
           </div>
 
@@ -32,26 +32,26 @@ export const TeamPreview: React.FC = () => {
           </Link>
         </div>
 
-        {/* 5 Founders Typographic Cards */}
+        {/* 5 Team Typographic Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
-          {foundersData.map((founder, idx) => {
-            const isFounder = founder.id === 'desvanth';
-            const initials = founder.name
+          {foundersData.map((member, idx) => {
+            const isFounder = member.id === 'desvanth';
+            const initials = member.name
               .split(' ')
               .map((n) => n[0])
               .join('');
 
             return (
               <div
-                key={founder.id}
+                key={member.id}
                 className={`group flex flex-col justify-between p-6 bg-ivory-card border rounded-xl shadow-subtle-ivory hover:shadow-elevated-ivory transition-all duration-300 ${
                   isFounder
-                    ? 'border-champagne/70 bg-gradient-to-b from-ivory-card to-champagne-subtle/30 ring-1 ring-champagne/30'
+                    ? 'border-champagne/80 bg-gradient-to-b from-ivory-card to-champagne-subtle/30 ring-1 ring-champagne/30'
                     : 'border-ivory-border hover:border-teal/50'
                 }`}
               >
                 <div>
-                  {/* Top Bar: Monogram + Number */}
+                  {/* Top Bar: Monogram + Badge/Number */}
                   <div className="flex items-center justify-between mb-5">
                     <div
                       className={`w-11 h-11 rounded-lg font-mono font-bold text-sm flex items-center justify-center border ${
@@ -63,7 +63,7 @@ export const TeamPreview: React.FC = () => {
                       {initials}
                     </div>
                     {isFounder ? (
-                      <span className="px-2 py-0.5 rounded bg-champagne text-ink text-[10px] font-bold uppercase font-mono tracking-wider flex items-center gap-1">
+                      <span className="px-2.5 py-0.5 rounded bg-champagne text-ink text-[10px] font-bold uppercase font-mono tracking-wider flex items-center gap-1 shadow-sm">
                         Founder
                       </span>
                     ) : (
@@ -75,62 +75,68 @@ export const TeamPreview: React.FC = () => {
 
                   {/* Name & Role */}
                   <h3 className="text-xl font-bold text-softblack tracking-tight mb-1 group-hover:text-teal transition-colors">
-                    {founder.name}
+                    {member.name}
                   </h3>
                   <div className="text-xs font-mono text-teal font-semibold mb-4">
-                    {founder.role}
+                    {member.role}
                   </div>
 
-                  <p className="text-xs text-slate leading-relaxed mb-6">
-                    {founder.bio}
+                  <p className="text-xs text-slate leading-relaxed mb-5">
+                    {member.bio}
                   </p>
 
-                  {/* Competency Badges */}
-                  <div className="flex flex-wrap gap-1 mb-6">
-                    {founder.skills.slice(0, 3).map((skill) => (
-                      <span
-                        key={skill}
-                        className="px-2 py-0.5 text-[10px] font-mono bg-ivory-muted text-slate-dark rounded border border-ivory-border"
-                      >
-                        {skill}
-                      </span>
+                  {/* Key Responsibilities List */}
+                  <div className="space-y-1.5 mb-6 pt-4 border-t border-ivory-border">
+                    <div className="text-[10px] font-mono uppercase text-slate tracking-wider font-semibold mb-2">
+                      Key Responsibilities:
+                    </div>
+                    {member.responsibilities?.slice(0, 4).map((resp, rIdx) => (
+                      <div key={rIdx} className="flex items-start gap-1.5 text-[11px] text-softblack">
+                        <CheckCircle2 className="w-3 h-3 text-teal flex-shrink-0 mt-0.5" />
+                        <span className="leading-tight">{resp}</span>
+                      </div>
                     ))}
+                    {(member.responsibilities?.length || 0) > 4 && (
+                      <div className="text-[10px] font-mono text-slate-muted pl-4">
+                        +{(member.responsibilities?.length || 0) - 4} more
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                {/* Footer Social Actions */}
+                {/* Footer Designation & Social Actions */}
                 <div className="pt-4 border-t border-ivory-border flex items-center justify-between text-slate">
                   <span className={`text-[11px] font-mono font-semibold ${isFounder ? 'text-softblack uppercase tracking-wider' : 'text-slate-muted'}`}>
-                    {isFounder ? 'Founder' : 'Founding Lead'}
+                    {isFounder ? 'Founder' : 'Lead'}
                   </span>
                   <div className="flex items-center gap-2">
-                    {founder.socialLinks.email && (
+                    {member.socialLinks.email && (
                       <a
-                        href={`mailto:${founder.socialLinks.email}`}
+                        href={`mailto:${member.socialLinks.email}`}
                         className="p-1 hover:text-teal transition-colors"
-                        aria-label={`Email ${founder.name}`}
+                        aria-label={`Email ${member.name}`}
                       >
                         <Mail className="w-3.5 h-3.5" />
                       </a>
                     )}
-                    {founder.socialLinks.linkedin && (
+                    {member.socialLinks.linkedin && (
                       <a
-                        href={founder.socialLinks.linkedin}
+                        href={member.socialLinks.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="p-1 hover:text-teal transition-colors"
-                        aria-label={`LinkedIn for ${founder.name}`}
+                        aria-label={`LinkedIn for ${member.name}`}
                       >
                         <LinkedInIcon className="w-3.5 h-3.5" />
                       </a>
                     )}
-                    {founder.socialLinks.github && (
+                    {member.socialLinks.github && (
                       <a
-                        href={founder.socialLinks.github}
+                        href={member.socialLinks.github}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="p-1 hover:text-teal transition-colors"
-                        aria-label={`GitHub for ${founder.name}`}
+                        aria-label={`GitHub for ${member.name}`}
                       >
                         <GitHubIcon className="w-3.5 h-3.5" />
                       </a>

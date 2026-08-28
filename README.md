@@ -33,15 +33,54 @@ We eliminate generic agency fluff and deliver production-ready software, verifia
 
 ---
 
-## 👥 Leadership Team
+## 👥 Leadership & Functional Roles
 
-We operate with **direct founder ownership**—zero junior handoffs or disconnected account managers:
+### 👨‍💻 Desvanth — Founder & Technology Lead
+- Web and app development
+- AI integrations
+- Design and editing
+- Client communication
+- Sales and client acquisition
+- Project execution
+- Technical decisions
+- Overall product direction
 
-- **Desvanth** — **Founder & Technology Lead** (Technical Architecture, Client Strategy, Cloud Infrastructure)
-- **Bhasha** — *Marketing & Operations Lead* (Growth Strategy, Agency Operations, Conversion Funnels)
-- **Siddiq** — *Creative & Content Lead* (UI/UX Design, Visual Strategy, Brand Systems)
-- **Rithesh** — *Development Lead* (Frontend Engineering, TypeScript, Component Libraries, Performance QA)
-- **Sai Deep** — *Video Production Lead* (Cinematography, Post-Production, Sound Design, Content Engine)
+### 📈 Bhasha — Marketing & Operations Lead
+- Digital marketing
+- Social media strategy
+- Marketing campaigns
+- Business strategy
+- Finance and expense tracking
+- Quotations and invoices
+- Operations
+- Client follow-ups
+
+### 🎨 Siddiq — Creative & Content Lead
+- Graphic design
+- UI/UX support
+- Video editing
+- Content creation
+- Creative direction
+- Social media creatives
+- Support video production
+
+### 💻 Rithesh — Development & Technical Support
+- Web development
+- App development support
+- Testing and debugging
+- Technical research
+- Development tasks
+- Learning new technologies
+- Project execution support
+
+### 🎥 Sai Deep — Video Production Lead
+- Camera operation
+- Video shooting
+- Photography
+- On-site production
+- Product/business shoots
+- Raw footage management
+- Support for video projects
 
 ---
 

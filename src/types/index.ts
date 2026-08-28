@@ -93,6 +93,7 @@ export interface Founder {
   quote?: string;
   photo: string;
   skills: string[];
+  responsibilities?: string[];
   socialLinks: {
     linkedin?: string;
     twitter?: string;

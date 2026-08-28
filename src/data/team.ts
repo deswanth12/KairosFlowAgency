@@ -5,11 +5,27 @@ export const foundersData: Founder[] = [
     id: 'desvanth',
     name: 'Desvanth',
     role: 'Founder & Technology Lead',
-    title: 'Founder • Technical Architecture & Client Strategy',
-    bio: 'Founder of Kairos Flow Agency. Leads overall agency direction, technical architecture, client alignment, and full-stack delivery governance. Passionate about translating complex business goals into high-speed digital products.',
+    title: 'Founder • Technology Architecture & Product Direction',
+    bio: 'Founder of Kairos Flow Agency. Leads end-to-end technical strategy, full-stack web and mobile development, AI integrations, client acquisition, and overall product direction.',
     quote: 'Technology should create clear leverage, not unnecessary complexity.',
     photo: '',
-    skills: ['System Architecture', 'Next.js & React', 'Client Strategy', 'Cloud Infrastructure', 'Product Engineering'],
+    skills: [
+      'Web & App Development',
+      'AI Integrations',
+      'Technical Architecture',
+      'Client Acquisition',
+      'Product Direction'
+    ],
+    responsibilities: [
+      'Web and app development',
+      'AI integrations',
+      'Design and editing',
+      'Client communication',
+      'Sales and client acquisition',
+      'Project execution',
+      'Technical decisions',
+      'Overall product direction'
+    ],
     socialLinks: {
       linkedin: 'https://www.linkedin.com/in/deswanth',
       github: 'https://github.com/deswanth12',
@@ -20,11 +36,27 @@ export const foundersData: Founder[] = [
     id: 'bhasha',
     name: 'Bhasha',
     role: 'Marketing & Operations Lead',
-    title: 'Founding Lead • Growth Strategy & Agency Operations',
-    bio: 'Drives agency operations, project delivery timelines, go-to-market marketing strategies, performance analytics, and lead qualification workflows.',
+    title: 'Marketing & Operations Lead • Growth & Finance',
+    bio: 'Drives agency marketing campaigns, digital marketing, business strategy, operations, finance and expense tracking, quotations, and client follow-ups.',
     quote: 'Momentum is created when strategy, timing, and relentless execution align.',
     photo: '',
-    skills: ['Performance Marketing', 'Agency Operations', 'Conversion Funnels', 'SEO & Analytics', 'Client Success'],
+    skills: [
+      'Digital Marketing',
+      'Social Media Strategy',
+      'Marketing Campaigns',
+      'Finance & Invoices',
+      'Operations & Client Follow-ups'
+    ],
+    responsibilities: [
+      'Digital marketing',
+      'Social media strategy',
+      'Marketing campaigns',
+      'Business strategy',
+      'Finance and expense tracking',
+      'Quotations and invoices',
+      'Operations',
+      'Client follow-ups'
+    ],
     socialLinks: {
       linkedin: 'https://linkedin.com',
       twitter: 'https://twitter.com',
@@ -35,11 +67,26 @@ export const foundersData: Founder[] = [
     id: 'siddiq',
     name: 'Siddiq',
     role: 'Creative & Content Lead',
-    title: 'Founding Lead • Creative Direction & Visual Strategy',
-    bio: 'Oversees creative direction, brand identity systems, UI/UX storytelling, and high-impact visual design that commands instant authority.',
+    title: 'Creative & Content Lead • Visual Direction & UI/UX',
+    bio: 'Oversees graphic design, creative direction, UI/UX design, video editing, social media creatives, and content creation across all client engagements.',
     quote: 'Good design is invisible; great design makes the brand unforgettable.',
     photo: '',
-    skills: ['UI/UX Design', 'Design Systems', 'Brand Strategy', 'Visual Storytelling', 'Figma Prototyping'],
+    skills: [
+      'Graphic Design',
+      'UI/UX Support',
+      'Video Editing',
+      'Content Creation',
+      'Creative Direction'
+    ],
+    responsibilities: [
+      'Graphic design',
+      'UI/UX support',
+      'Video editing',
+      'Content creation',
+      'Creative direction',
+      'Social media creatives',
+      'Support video production'
+    ],
     socialLinks: {
       linkedin: 'https://linkedin.com',
       twitter: 'https://twitter.com',
@@ -49,12 +96,27 @@ export const foundersData: Founder[] = [
   {
     id: 'rithesh',
     name: 'Rithesh',
-    role: 'Development Lead',
-    title: 'Founding Lead • Frontend & Core Engineering',
-    bio: 'Engineers robust, responsive frontends, reusable component libraries, API pipelines, and interactive UI micro-interactions built for speed and stability.',
+    role: 'Development & Technical Support',
+    title: 'Development & Technical Support • Core Engineering',
+    bio: 'Engineers robust web development, mobile app support, testing, debugging, technical research, and learning new technologies for project execution.',
     quote: 'Clean code and thoughtful architecture turn great designs into effortless software.',
     photo: '',
-    skills: ['Frontend Engineering', 'TypeScript', 'Tailwind CSS', 'API Integration', 'Performance QA'],
+    skills: [
+      'Web Development',
+      'App Development Support',
+      'Testing & Debugging',
+      'Technical Research',
+      'Execution Support'
+    ],
+    responsibilities: [
+      'Web development',
+      'App development support',
+      'Testing and debugging',
+      'Technical research',
+      'Development tasks',
+      'Learning new technologies',
+      'Project execution support'
+    ],
     socialLinks: {
       linkedin: 'https://linkedin.com',
       github: 'https://github.com',
@@ -65,11 +127,26 @@ export const foundersData: Founder[] = [
     id: 'sai-deep',
     name: 'Sai Deep',
     role: 'Video Production Lead',
-    title: 'Founding Lead • Cinematography & Content Engine',
-    bio: 'Spearheads commercial video production, brand films, product motion showcases, cinematography, and high-engagement social media content.',
+    title: 'Video Production Lead • Cinematography & Media',
+    bio: 'Spearheads camera operation, video shooting, photography, on-site production, product/business shoots, and raw footage asset management.',
     quote: 'In the digital age, cinematic storytelling captures what words alone cannot.',
     photo: '',
-    skills: ['Cinematography', 'Video Editing', 'Motion Graphics', 'Color Grading', 'Short-form Media'],
+    skills: [
+      'Camera Operation',
+      'Video Shooting',
+      'Photography',
+      'On-Site Production',
+      'Footage Management'
+    ],
+    responsibilities: [
+      'Camera operation',
+      'Video shooting',
+      'Photography',
+      'On-site production',
+      'Product/business shoots',
+      'Raw footage management',
+      'Support for video projects'
+    ],
     socialLinks: {
       linkedin: 'https://linkedin.com',
       instagram: 'https://instagram.com',
