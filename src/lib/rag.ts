@@ -180,7 +180,7 @@ export function queryConsultant(userQuery: string): ConsultantResponse {
   // 3. Team & Leadership queries
   if (query.includes('team') || query.includes('founder') || query.includes('who') || query.includes('desvanth') || query.includes('bhasha') || query.includes('siddiq') || query.includes('rithesh') || query.includes('sai deep')) {
     return {
-      answer: "Kairos Flow Agency is founded and led by Desvanth (Founder & Technology Lead), working alongside Bhasha (Marketing & Operations Lead), Siddiq (Creative & Content Lead), Rithesh (Development & Technical Support), and Sai Deep (Video Production Lead).",
+      answer: "Kairos Flow Agency is founded and led by Desvanth (Founder & Technology Lead), working alongside Mehaboob Basha (Marketing & Operations Lead), Siddiq (Creative & Content Lead), Rithesh (Development & Technical Support), and Sai Deep (Video Production Lead).",
       recommendation: "We maintain direct founder accountability on every project with zero junior handoffs.",
       nextActionPrompt: "You can connect directly with Founder Desvanth on LinkedIn, GitHub, or WhatsApp.",
       confidence: 'high',

@@ -33,8 +33,8 @@ export const foundersData: Founder[] = [
     }
   },
   {
-    id: 'bhasha',
-    name: 'Bhasha',
+    id: 'mehaboob-basha',
+    name: 'Mehaboob Basha',
     role: 'Marketing & Operations Lead',
     title: 'Marketing & Operations Lead • Growth & Finance',
     bio: 'Drives agency marketing campaigns, digital marketing, business strategy, operations, finance and expense tracking, quotations, and client follow-ups.',

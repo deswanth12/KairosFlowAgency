@@ -7,7 +7,7 @@
 - **founder**: Desvanth (Founder & Technology Lead)
 - **leadership_team**: 
   - Desvanth (Founder & Technology Lead)
-  - Bhasha (Marketing & Operations Lead)
+  - Mehaboob Basha (Marketing & Operations Lead)
   - Siddiq (Creative & Content Lead)
   - Rithesh (Development & Technical Support)
   - Sai Deep (Video Production Lead)

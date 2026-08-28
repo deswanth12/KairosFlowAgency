@@ -62,7 +62,7 @@ const STAGE_COLORS: Record<LeadStatus, { bg: string; text: string; border: strin
 
 const FOUNDERS = [
   'Desvanth (Founder)',
-  'Bhasha (Marketing)',
+  'Mehaboob Basha (Marketing)',
   'Siddiq (Creative)',
   'Rithesh (Development)',
   'Sai Deep (Video)'

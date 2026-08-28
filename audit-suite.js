@@ -63,7 +63,7 @@ async function runAudit() {
   assert(aboutHtml.includes('Founder & Technology Lead') || aboutHtml.includes('Founder'), 'Desvanth is designated Founder');
   assert(aboutHtml.includes('github.com/deswanth12'), 'Founder profile links to GitHub (deswanth12)');
   assert(aboutHtml.includes('linkedin.com/in/deswanth'), 'Founder profile links to LinkedIn (/in/deswanth)');
-  assert(aboutHtml.includes('Bhasha') && aboutHtml.includes('Siddiq') && aboutHtml.includes('Rithesh') && aboutHtml.includes('Sai Deep'), 'All 5 team members present');
+  assert((aboutHtml.includes('Mehaboob Basha') || aboutHtml.includes('Basha')) && aboutHtml.includes('Siddiq') && aboutHtml.includes('Rithesh') && aboutHtml.includes('Sai Deep'), 'All 5 team members present');
 
   // 4. AUTHENTIC GITHUB REPOSITORIES AUDIT
   console.log('\n4. Auditing Featured GitHub Projects...');

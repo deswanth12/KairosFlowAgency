@@ -14,7 +14,7 @@
 - **Skills**: System Architecture, Next.js, React, TypeScript, Python, Cloud Infra, Client Strategy
 - **Direct Contacts**: Email: kairosflowagency@gmail.com | LinkedIn: https://www.linkedin.com/in/deswanth | GitHub: https://github.com/deswanth12
 
-## 📈 Bhasha — Marketing & Operations Lead
+## 📈 Mehaboob Basha — Marketing & Operations Lead
 - **Role**: Marketing & Operations Lead
 - **Responsibilities**:
   - Digital marketing & growth funnels

@@ -45,7 +45,7 @@ We eliminate generic agency fluff and deliver production-ready software, verifia
 - Technical decisions
 - Overall product direction
 
-### 📈 Bhasha — Marketing & Operations Lead
+### 📈 Mehaboob Basha — Marketing & Operations Lead
 - Digital marketing
 - Social media strategy
 - Marketing campaigns
