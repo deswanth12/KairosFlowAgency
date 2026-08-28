@@ -14,7 +14,9 @@ import {
   CornerDownRight,
   ExternalLink,
   ArrowRight,
-  HelpCircle
+  HelpCircle,
+  Clock,
+  CheckCircle2
 } from 'lucide-react';
 import { ConsultantResponse } from '@/lib/rag';
 
@@ -42,13 +44,13 @@ export const AIConsultant: React.FC = () => {
     {
       id: 'welcome-1',
       sender: 'consultant',
-      text: 'Hello. I am the Kairos Flow AI Consultant. I can help estimate project scope, explain our 6 disciplines, reference verified case studies, and connect you directly with Founder Desvanth.',
+      text: 'Welcome to Kairos Flow Agency. I am your AI Consultant grounded in our approved services, technical architectures, indicative pricing, and team scopes.',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       response: {
-        answer: 'Welcome to Kairos Flow Agency. How can we help accelerate your project today?',
-        recommendation: 'Select an inquiry below or type your project requirements to get an indicative scope.',
+        answer: 'I can help estimate project scope, explain our 6 disciplines, reference verified case studies, or connect you directly with Founder Desvanth.',
+        recommendation: 'Select an inquiry below or type what you are building to receive an indicative scope.',
         confidence: 'high',
-        sources: ['agency/company.md'],
+        sources: ['agency/company.md', 'services/web.md'],
         actionButtons: [
           { label: 'Start a Project Brief', href: '/contact' },
           { label: 'WhatsApp Founder Directly', href: 'https://wa.me/917702256073', isExternal: true }
@@ -126,24 +128,26 @@ export const AIConsultant: React.FC = () => {
 
   return (
     <>
-      {/* Floating Launcher Button */}
+      {/* Floating Launcher Button with Kairos Flow Brand Integration */}
       <div className="fixed bottom-6 right-6 z-50">
         {!isOpen ? (
           <button
             onClick={() => setIsOpen(true)}
-            className="group flex items-center gap-3 px-4 py-3 bg-ink text-ivory rounded-full border border-champagne/40 shadow-2xl hover:border-champagne transition-all duration-300 hover:scale-105"
+            className="group flex items-center gap-3 pl-3 pr-4 py-2.5 bg-ink text-ivory rounded-full border border-navy-border shadow-2xl hover:border-champagne/60 transition-all duration-300 hover:scale-[1.02] backdrop-blur-md"
             aria-label="Open Kairos Flow AI Consultant"
           >
-            <div className="relative w-7 h-7 rounded-full bg-navy flex items-center justify-center text-champagne border border-champagne/30">
+            <div className="relative w-8 h-8 rounded-full bg-navy flex items-center justify-center text-champagne border border-navy-border group-hover:border-champagne/50 transition-colors">
               <Bot className="w-4 h-4" />
               <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-teal animate-pulse" />
             </div>
-            <div className="text-left pr-1 hidden sm:block">
+            <div className="text-left pr-1">
               <div className="text-xs font-bold text-ivory tracking-tight font-display flex items-center gap-1.5">
                 <span>AI Consultant</span>
-                <span className="px-1.5 py-0.2 rounded bg-champagne/20 text-champagne text-[9px] font-mono">LIVE</span>
+                <span className="px-1.5 py-0.2 rounded bg-champagne/15 text-champagne text-[9px] font-mono font-semibold">
+                  KAIROS OS
+                </span>
               </div>
-              <div className="text-[10px] text-slate-light font-mono">Scope & Capabilities</div>
+              <div className="text-[10px] text-slate font-mono">Scope & Capabilities</div>
             </div>
           </button>
         ) : null}
@@ -153,7 +157,7 @@ export const AIConsultant: React.FC = () => {
       {isOpen && (
         <div className="fixed bottom-6 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[440px] h-[580px] max-h-[85vh] bg-ink text-ivory rounded-2xl border border-navy-border shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200">
           {/* Header */}
-          <div className="p-4 bg-navy/80 border-b border-navy-border flex items-center justify-between">
+          <div className="p-4 bg-navy/90 border-b border-navy-border flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-ink border border-champagne/40 flex items-center justify-center text-champagne">
                 <Bot className="w-4 h-4" />
@@ -162,10 +166,10 @@ export const AIConsultant: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <h4 className="text-sm font-bold text-ivory font-display">Kairos Flow AI Consultant</h4>
                   <span className="px-1.5 py-0.5 rounded bg-teal/20 text-teal text-[9px] font-mono font-semibold">
-                    RAG Grounded
+                    Verified RAG
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-light font-mono">Answers strictly from verified knowledge</p>
+                <p className="text-[11px] text-slate-light font-mono">Grounded strictly in agency knowledge</p>
               </div>
             </div>
 
@@ -195,13 +199,13 @@ export const AIConsultant: React.FC = () => {
                         : 'bg-navy border border-navy-border text-ivory-muted rounded-tl-none space-y-2.5'
                     }`}
                   >
-                    <p className="text-xs">{msg.text}</p>
+                    <p className="text-xs leading-relaxed">{msg.text}</p>
 
                     {/* Consultant Structured Advice */}
                     {msg.response && (
                       <div className="space-y-2 pt-2 border-t border-navy-border/60">
                         {msg.response.recommendation && (
-                          <div className="p-2.5 rounded bg-ink/60 border-l-2 border-champagne text-[11px] text-slate-light">
+                          <div className="p-2.5 rounded bg-ink/70 border-l-2 border-champagne text-[11px] text-slate-light leading-relaxed">
                             <span className="font-semibold text-champagne font-mono block mb-0.5">Recommendation:</span>
                             {msg.response.recommendation}
                           </div>

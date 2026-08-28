@@ -1,25 +1,25 @@
 import React from 'react';
 import Link from 'next/link';
 import { foundersData } from '@/data/team';
-import { Users, Mail, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Users, Mail, ArrowRight, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { LinkedInIcon, GitHubIcon } from '@/components/ui/SocialIcons';
 
 export const TeamPreview: React.FC = () => {
   return (
     <section id="team" className="bg-ivory text-softblack py-20 sm:py-28 px-4 sm:px-6 lg:px-8 border-b border-ivory-border">
       <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
+        {/* Section Header with "Built by humans" positioning */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-ivory-muted border border-ivory-border text-xs font-mono uppercase tracking-widest text-slate mb-3">
               <Users className="w-3.5 h-3.5 text-teal" />
-              <span>Agency Leadership</span>
+              <span>Direct Founder Ownership</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-softblack font-display">
-              Led by specialists, not middlemen.
+              Five people. Five disciplines. One team.
             </h2>
             <p className="text-slate text-base sm:text-lg mt-3 max-w-xl">
-              Meet Founder Desvanth and the dedicated team steering technology, marketing, creative direction, development, and video production.
+              Zero junior handoffs. Zero account managers. You work directly with Founder Desvanth and the specialist leads building your product.
             </p>
           </div>
 
@@ -27,7 +27,7 @@ export const TeamPreview: React.FC = () => {
             href="/about"
             className="inline-flex items-center gap-2 text-sm font-semibold text-softblack hover:text-teal transition-colors pb-1 border-b border-softblack/30 hover:border-teal self-start md:self-auto"
           >
-            <span>Read Agency Story & Values</span>
+            <span>Read Agency Ethos & Profiles</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
