@@ -33,6 +33,7 @@ import {
   Briefcase,
   History,
   Shield,
+  Loader2,
   Activity,
   ArrowRight,
   UserCheck,
@@ -120,6 +121,8 @@ export default function AdminPage() {
   const [activeLead, setActiveLead] = useState<Lead | null>(null);
   const [leadHistoryModalId, setLeadHistoryModalId] = useState<string | null>(null);
   const [isManualModalOpen, setIsManualModalOpen] = useState<boolean>(false);
+  const [isSubmittingLead, setIsSubmittingLead] = useState<boolean>(false);
+  const [manualModalError, setManualModalError] = useState<string>('');
   const [newNoteContent, setNewNoteContent] = useState<string>('');
 
   // Manual Lead Form State
@@ -325,17 +328,21 @@ export default function AdminPage() {
 
   const handleCreateManualLead = async (e: React.FormEvent) => {
     e.preventDefault();
+    setManualModalError('');
+    setIsSubmittingLead(true);
+
     try {
       const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
+          ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
         },
         body: JSON.stringify(manualFormData)
       });
       const data = await res.json();
-      if (data.success) {
+      if (res.ok && data.success && data.lead) {
+        setLeads((prev) => [data.lead, ...prev.filter((l) => l.id !== data.lead.id)]);
         setIsManualModalOpen(false);
         setManualFormData({
           name: '',
@@ -347,14 +354,19 @@ export default function AdminPage() {
           budget: '$5,000 – $10,000',
           timeline: '1 – 2 Months',
           priority: 'Medium',
-          assignedTo: 'Desvanth',
+          assignedTo: availableUsers[0]?.name || 'Desvanth',
           estimatedValue: '₹50,000'
         });
         fetchLeads();
         fetchActivityLogs();
+      } else {
+        setManualModalError(data.message || 'Failed to save lead.');
       }
     } catch (err) {
       console.error('Failed to create manual lead:', err);
+      setManualModalError('Connection error while saving lead. Please try again.');
+    } finally {
+      setIsSubmittingLead(false);
     }
   };
 
@@ -1467,6 +1479,13 @@ export default function AdminPage() {
               </button>
             </div>
 
+            {manualModalError && (
+              <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl flex items-center gap-2 font-mono">
+                <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600" />
+                <span>{manualModalError}</span>
+              </div>
+            )}
+
             <form onSubmit={handleCreateManualLead} className="space-y-4 text-xs font-sans">
               <div className="grid grid-cols-2 gap-3 font-mono">
                 <div>
@@ -1558,6 +1577,7 @@ export default function AdminPage() {
               <div className="pt-4 border-t border-[#D9E0E5] flex justify-end gap-2 font-mono">
                 <button
                   type="button"
+                  disabled={isSubmittingLead}
                   onClick={() => setIsManualModalOpen(false)}
                   className="px-4 py-2 text-xs font-semibold text-[#5B6875] hover:text-[#0B1F33] bg-[#F7F7F4] rounded-lg border border-[#D9E0E5]"
                 >
@@ -1565,9 +1585,11 @@ export default function AdminPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-[#0B1F33] hover:bg-[#132B45] rounded-lg shadow-sm"
+                  disabled={isSubmittingLead}
+                  className="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-bold text-white bg-[#0B1F33] hover:bg-[#132B45] disabled:opacity-50 rounded-lg shadow-sm"
                 >
-                  Save Lead & Log Audit
+                  {isSubmittingLead && <Loader2 className="w-3.5 h-3.5 animate-spin text-[#B8613A]" />}
+                  <span>{isSubmittingLead ? 'Saving Lead...' : 'Save Lead & Log Audit'}</span>
                 </button>
               </div>
             </form>
