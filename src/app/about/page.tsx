@@ -1,18 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { foundersData } from '@/data/team';
 import { 
   Users, 
-  Compass, 
-  Sparkles, 
-  ArrowUpRight, 
   Mail, 
-  Target, 
-  Zap, 
-  ShieldCheck 
+  ArrowUpRight,
+  ShieldCheck,
+  CheckCircle2
 } from 'lucide-react';
-import { LinkedInIcon, GitHubIcon, TwitterIcon } from '@/components/ui/SocialIcons';
+import { LinkedInIcon, GitHubIcon } from '@/components/ui/SocialIcons';
 
 export const metadata = {
   title: 'About & Founding Team | Kairos Flow Agency',
@@ -105,45 +101,51 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Founding Team Deep Dive */}
+        {/* Founding Team (Name & Work Roles, No Pictures) */}
         <div>
           <div className="max-w-3xl mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-ivory-muted border border-ivory-border text-xs font-mono uppercase tracking-widest text-slate mb-3">
-              <span>Meet The Founders</span>
+              <span>Founding Team</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-softblack font-display">
               The Five Co-Founders
             </h2>
             <p className="text-slate text-base sm:text-lg mt-3">
-              A balanced team uniting technical architecture, marketing strategy, visual design, core engineering, and high-impact cinematography.
+              Direct founder accountability across technical architecture, marketing strategy, visual systems, development, and video production.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {foundersData.map((founder) => (
-              <div
-                key={founder.id}
-                className="bg-ivory-card border border-ivory-border rounded-2xl overflow-hidden shadow-subtle-ivory hover:shadow-elevated-ivory transition-all duration-300 flex flex-col justify-between"
-              >
-                <div>
-                  {/* Photo & Role Banner */}
-                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-navy-dark">
-                    <Image
-                      src={founder.photo}
-                      alt={founder.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-transparent to-transparent" />
-                    <div className="absolute bottom-4 left-4 right-4 text-ivory">
-                      <div className="text-lg font-bold tracking-tight">{founder.name}</div>
-                      <div className="text-xs text-teal font-mono">{founder.role}</div>
-                    </div>
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {foundersData.map((founder, idx) => {
+              const initials = founder.name
+                .split(' ')
+                .map((n) => n[0])
+                .join('');
 
-                  <div className="p-6">
-                    <p className="text-xs text-slate-muted font-mono mb-3">{founder.title}</p>
+              return (
+                <div
+                  key={founder.id}
+                  className="bg-ivory-card border border-ivory-border rounded-2xl p-7 shadow-subtle-ivory hover:shadow-elevated-ivory transition-all duration-300 flex flex-col justify-between"
+                >
+                  <div>
+                    {/* Header */}
+                    <div className="flex items-center justify-between pb-4 border-b border-ivory-border mb-5">
+                      <div className="w-12 h-12 rounded-xl bg-ink text-ivory font-mono font-bold text-base flex items-center justify-center border border-navy-border">
+                        {initials}
+                      </div>
+                      <span className="font-mono text-xs font-bold text-champagne">
+                        0{idx + 1}
+                      </span>
+                    </div>
+
+                    <div className="text-xs font-mono text-teal font-semibold uppercase tracking-wider mb-1">
+                      {founder.role}
+                    </div>
+                    <h3 className="text-2xl font-bold text-softblack tracking-tight font-display mb-1">
+                      {founder.name}
+                    </h3>
+                    <p className="text-xs text-slate-muted font-mono mb-4">{founder.title}</p>
+
                     <p className="text-sm text-slate leading-relaxed mb-6">
                       {founder.bio}
                     </p>
@@ -154,7 +156,7 @@ export default function AboutPage() {
                       </div>
                     )}
 
-                    <div className="space-y-1.5">
+                    <div className="space-y-1.5 mb-6">
                       <div className="text-[11px] font-mono uppercase text-slate tracking-wider font-semibold mb-2">
                         Core Competencies:
                       </div>
@@ -170,46 +172,46 @@ export default function AboutPage() {
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="p-6 pt-4 border-t border-ivory-border flex items-center justify-between">
-                  <span className="text-xs text-slate font-medium">Co-Founder</span>
-                  <div className="flex items-center gap-2 text-slate">
-                    {founder.socialLinks.email && (
-                      <a
-                        href={`mailto:${founder.socialLinks.email}`}
-                        className="p-1.5 hover:text-teal transition-colors"
-                        aria-label={`Email ${founder.name}`}
-                      >
-                        <Mail className="w-4 h-4" />
-                      </a>
-                    )}
-                    {founder.socialLinks.linkedin && (
-                      <a
-                        href={founder.socialLinks.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-1.5 hover:text-teal transition-colors"
-                        aria-label={`LinkedIn ${founder.name}`}
-                      >
-                        <LinkedInIcon className="w-4 h-4" />
-                      </a>
-                    )}
-                    {founder.socialLinks.github && (
-                      <a
-                        href={founder.socialLinks.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-1.5 hover:text-teal transition-colors"
-                        aria-label={`GitHub ${founder.name}`}
-                      >
-                        <GitHubIcon className="w-4 h-4" />
-                      </a>
-                    )}
+                  <div className="pt-4 border-t border-ivory-border flex items-center justify-between">
+                    <span className="text-xs text-slate font-medium">Co-Founder</span>
+                    <div className="flex items-center gap-2 text-slate">
+                      {founder.socialLinks.email && (
+                        <a
+                          href={`mailto:${founder.socialLinks.email}`}
+                          className="p-1.5 hover:text-teal transition-colors"
+                          aria-label={`Email ${founder.name}`}
+                        >
+                          <Mail className="w-4 h-4" />
+                        </a>
+                      )}
+                      {founder.socialLinks.linkedin && (
+                        <a
+                          href={founder.socialLinks.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1.5 hover:text-teal transition-colors"
+                          aria-label={`LinkedIn ${founder.name}`}
+                        >
+                          <LinkedInIcon className="w-4 h-4" />
+                        </a>
+                      )}
+                      {founder.socialLinks.github && (
+                        <a
+                          href={founder.socialLinks.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1.5 hover:text-teal transition-colors"
+                          aria-label={`GitHub ${founder.name}`}
+                        >
+                          <GitHubIcon className="w-4 h-4" />
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
