@@ -69,14 +69,20 @@ export default function ContactPage() {
 
               {/* Email */}
               <a
-                href={`mailto:${siteSettingsData.email}`}
+                href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(siteSettingsData.email)}&su=${encodeURIComponent('Project Inquiry | Kairos Flow Agency')}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group flex items-start gap-4 p-4 rounded-xl bg-ivory hover:bg-ivory-muted border border-ivory-border transition-all"
+                title="Click to compose in Gmail"
               >
                 <div className="w-10 h-10 rounded-lg bg-navy/10 text-navy flex items-center justify-center flex-shrink-0">
                   <Mail className="w-5 h-5 text-teal" />
                 </div>
                 <div className="flex-1">
-                  <div className="text-xs font-mono text-slate font-semibold">Email Us</div>
+                  <div className="text-xs font-mono text-teal font-semibold flex items-center gap-1">
+                    <span>Email Us</span>
+                    <ArrowUpRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                  </div>
                   <div className="text-sm font-bold text-softblack break-all">{siteSettingsData.email}</div>
                   <div className="text-xs text-slate mt-0.5">&lt; 4 hour reply guarantee</div>
                 </div>

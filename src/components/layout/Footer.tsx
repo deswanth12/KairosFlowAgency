@@ -54,7 +54,9 @@ export const Footer: React.FC = () => {
                 <MessageCircle className="w-4 h-4 text-teal" />
               </a>
               <a
-                href={`mailto:${siteSettingsData.email}`}
+                href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(siteSettingsData.email)}&su=${encodeURIComponent('Project Inquiry | Kairos Flow Agency')}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2.5 bg-navy/80 hover:bg-navy border border-navy-border rounded-lg text-slate-light hover:text-ivory transition-colors"
                 aria-label="Email"
               >
@@ -111,7 +113,13 @@ export const Footer: React.FC = () => {
             <div className="space-y-3 text-sm text-slate">
               <div className="flex items-start gap-2.5">
                 <Mail className="w-4 h-4 text-teal flex-shrink-0 mt-0.5" />
-                <a href={`mailto:${siteSettingsData.email}`} className="hover:text-ivory transition-colors break-all">
+                <a 
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(siteSettingsData.email)}&su=${encodeURIComponent('Project Inquiry | Kairos Flow Agency')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-ivory transition-colors break-all"
+                  title="Click to compose in Gmail"
+                >
                   {siteSettingsData.email}
                 </a>
               </div>

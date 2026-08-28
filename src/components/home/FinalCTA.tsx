@@ -1,11 +1,35 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { generateWhatsAppLink } from '@/lib/utils';
 import { siteSettingsData } from '@/data/settings';
-import { ArrowUpRight, MessageCircle, Mail, Clock } from 'lucide-react';
+import { ArrowUpRight, MessageCircle, Mail, Clock, Check, Copy } from 'lucide-react';
 
 export const FinalCTA: React.FC = () => {
+  const [copied, setCopied] = useState(false);
   const whatsappUrl = generateWhatsAppLink(siteSettingsData.whatsappNumber);
+
+  const handleEmailClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const email = siteSettingsData.email;
+    
+    // Copy to clipboard
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(email).catch(() => {});
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
+
+    // Open Gmail web compose in a new tab
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+      email
+    )}&su=${encodeURIComponent('Project Inquiry | Kairos Flow Agency')}&body=${encodeURIComponent(
+      'Hi Kairos Flow Team,\n\nI would like to discuss a project regarding:\n- Project Scope:\n- Estimated Timeline:\n- Target Budget:\n\nBest regards,\n'
+    )}`;
+
+    window.open(gmailUrl, '_blank', 'noopener,noreferrer');
+  };
 
   return (
     <section className="bg-ink text-ivory py-24 sm:py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -32,7 +56,7 @@ export const FinalCTA: React.FC = () => {
         </p>
 
         {/* Triple Action CTA Buttons: Start a Project, WhatsApp Us, Email Us */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto justify-center mb-10">
+        <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto justify-center mb-6">
           <Link
             href="/contact"
             className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold text-ivory bg-teal hover:bg-teal-hover border border-teal-border rounded-lg shadow-elevated-ivory transition-all duration-200 hover:shadow-glow-teal"
@@ -51,18 +75,34 @@ export const FinalCTA: React.FC = () => {
             <span>WhatsApp Us</span>
           </a>
 
-          <a
-            href={`mailto:${siteSettingsData.email}`}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 text-sm font-medium text-slate-light hover:text-ivory bg-ink-surface hover:bg-navy/50 border border-ink-border rounded-lg transition-colors"
+          <button
+            type="button"
+            onClick={handleEmailClick}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 text-sm font-medium text-slate-light hover:text-ivory bg-ink-surface hover:bg-navy border border-ink-border hover:border-teal/40 rounded-lg transition-all"
+            title="Click to compose in Gmail or copy address"
           >
-            <Mail className="w-4 h-4 text-teal" />
-            <span>Email Us</span>
-          </a>
+            {copied ? (
+              <>
+                <Check className="w-4 h-4 text-teal" />
+                <span className="text-teal font-semibold">Copied {siteSettingsData.email}!</span>
+              </>
+            ) : (
+              <>
+                <Mail className="w-4 h-4 text-teal" />
+                <span>Email Us</span>
+              </>
+            )}
+          </button>
         </div>
 
-        <div className="inline-flex items-center gap-2 text-xs text-slate font-mono">
+        {/* Copied notification / helper text */}
+        <div className="flex items-center gap-2 text-xs text-slate font-mono mb-4">
           <Clock className="w-3.5 h-3.5 text-champagne" />
           <span>Average response time: &lt; 4 hours during business days</span>
+        </div>
+
+        <div className="text-[11px] font-mono text-slate-muted">
+          Direct inbox: <span className="text-slate-light">{siteSettingsData.email}</span>
         </div>
       </div>
     </section>
