@@ -16,7 +16,8 @@ import {
   ArrowRight,
   HelpCircle,
   Clock,
-  CheckCircle2
+  CheckCircle2,
+  Share2
 } from 'lucide-react';
 import { ConsultantResponse } from '@/lib/rag';
 
@@ -47,7 +48,7 @@ export const AIConsultant: React.FC = () => {
       text: 'Welcome to Kairos Flow Agency. I am your AI Consultant grounded in our approved services, technical architectures, indicative pricing, and team scopes.',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       response: {
-        answer: 'I can help estimate project scope, explain our 6 disciplines, reference verified case studies, or connect you directly with Founder Desvanth.',
+        answer: 'I can help estimate project scope, explain our 6 disciplines, reference verified case studies, or connect you directly with Founder Desvanth on WhatsApp.',
         recommendation: 'Select an inquiry below or type what you are building to receive an indicative scope.',
         confidence: 'high',
         sources: ['agency/company.md', 'services/web.md'],
@@ -70,6 +71,25 @@ export const AIConsultant: React.FC = () => {
       scrollToBottom();
     }
   }, [messages, isOpen]);
+
+  // Generate seamless WhatsApp Handover link containing the entire conversation summary
+  const generateWhatsAppHandoverUrl = () => {
+    const userInquiries = messages
+      .filter((m) => m.sender === 'user')
+      .map((m) => `• ${m.text}`)
+      .join('\n');
+
+    const lines = [
+      `*Kairos Flow AI Consultant — Chat Handover*`,
+      `----------------------------------------`,
+      userInquiries ? `*Topics Discussed with AI Consultant:*\n${userInquiries}` : `*Inquiry:* Discussing custom project with Kairos Flow`,
+      `----------------------------------------`,
+      `_Hi Desvanth, I was chatting with the Kairos Flow AI Consultant on your website and would like to continue our project discussion directly with you here._`
+    ];
+
+    const encoded = encodeURIComponent(lines.join('\n'));
+    return `https://wa.me/917702256073?text=${encoded}`;
+  };
 
   const handleSend = async (customQuery?: string) => {
     const textToSend = customQuery || query;
@@ -147,7 +167,7 @@ export const AIConsultant: React.FC = () => {
                   KAIROS OS
                 </span>
               </div>
-              <div className="text-[10px] text-slate font-mono">Scope & Capabilities</div>
+              <div className="text-[10px] text-slate font-mono">Scope & WhatsApp Sync</div>
             </div>
           </button>
         ) : null}
@@ -155,8 +175,8 @@ export const AIConsultant: React.FC = () => {
 
       {/* Floating Chat Drawer Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[440px] h-[580px] max-h-[85vh] bg-ink text-ivory rounded-2xl border border-navy-border shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200">
-          {/* Header */}
+        <div className="fixed bottom-6 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[440px] h-[600px] max-h-[85vh] bg-ink text-ivory rounded-2xl border border-navy-border shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200">
+          {/* Header with Direct WhatsApp Transfer Button */}
           <div className="p-4 bg-navy/90 border-b border-navy-border flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-ink border border-champagne/40 flex items-center justify-center text-champagne">
@@ -166,20 +186,33 @@ export const AIConsultant: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <h4 className="text-sm font-bold text-ivory font-display">Kairos Flow AI Consultant</h4>
                   <span className="px-1.5 py-0.5 rounded bg-teal/20 text-teal text-[9px] font-mono font-semibold">
-                    Verified RAG
+                    RAG + WhatsApp
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-light font-mono">Grounded strictly in agency knowledge</p>
               </div>
             </div>
 
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-1.5 text-slate-light hover:text-ivory hover:bg-navy rounded-lg transition-colors"
-              aria-label="Close Consultant"
-            >
-              <X className="w-4 h-4" />
-            </button>
+            <div className="flex items-center gap-1.5">
+              <a
+                href={generateWhatsAppHandoverUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Transfer Conversation to WhatsApp"
+                className="p-1.5 bg-teal/20 hover:bg-teal text-teal hover:text-ivory border border-teal/40 rounded-lg transition-colors flex items-center gap-1 text-[10px] font-mono font-semibold"
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">WhatsApp</span>
+              </a>
+
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-1.5 text-slate-light hover:text-ivory hover:bg-navy rounded-lg transition-colors"
+                aria-label="Close Consultant"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
           {/* Messages Container */}
@@ -217,39 +250,48 @@ export const AIConsultant: React.FC = () => {
                           </div>
                         )}
 
-                        {/* Action Buttons */}
-                        {msg.response.actionButtons && msg.response.actionButtons.length > 0 && (
-                          <div className="flex flex-wrap gap-1.5 pt-1">
-                            {msg.response.actionButtons.map((btn, bIdx) => {
-                              if (btn.isExternal) {
-                                return (
-                                  <a
-                                    key={bIdx}
-                                    href={btn.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded bg-teal/20 hover:bg-teal text-teal hover:text-ivory border border-teal/40 text-[10px] font-semibold transition-colors"
-                                  >
-                                    <span>{btn.label}</span>
-                                    <ExternalLink className="w-2.5 h-2.5" />
-                                  </a>
-                                );
-                              }
+                        {/* Action Buttons & WhatsApp Handover */}
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          {/* Dedicated WhatsApp Transfer Button */}
+                          <a
+                            href={generateWhatsAppHandoverUrl()}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded bg-[#25D366]/20 hover:bg-[#25D366] text-[#25D366] hover:text-ink border border-[#25D366]/40 text-[10px] font-semibold transition-colors"
+                          >
+                            <MessageCircle className="w-3 h-3" />
+                            <span>Continue on WhatsApp</span>
+                          </a>
 
+                          {msg.response.actionButtons && msg.response.actionButtons.map((btn, bIdx) => {
+                            if (btn.isExternal) {
                               return (
-                                <Link
+                                <a
                                   key={bIdx}
                                   href={btn.href}
-                                  onClick={() => setIsOpen(false)}
-                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded bg-ivory-muted hover:bg-ivory text-softblack text-[10px] font-semibold transition-colors"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded bg-teal/20 hover:bg-teal text-teal hover:text-ivory border border-teal/40 text-[10px] font-semibold transition-colors"
                                 >
                                   <span>{btn.label}</span>
-                                  <ArrowRight className="w-2.5 h-2.5" />
-                                </Link>
+                                  <ExternalLink className="w-2.5 h-2.5" />
+                                </a>
                               );
-                            })}
-                          </div>
-                        )}
+                            }
+
+                            return (
+                              <Link
+                                key={bIdx}
+                                href={btn.href}
+                                onClick={() => setIsOpen(false)}
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded bg-ivory-muted hover:bg-ivory text-softblack text-[10px] font-semibold transition-colors"
+                              >
+                                <span>{btn.label}</span>
+                                <ArrowRight className="w-2.5 h-2.5" />
+                              </Link>
+                            );
+                          })}
+                        </div>
                       </div>
                     )}
                   </div>

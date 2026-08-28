@@ -75,8 +75,18 @@ async function test() {
   console.log('AI Consultant RAG status:', ragRes.status, 'Confidence:', ragData.data?.confidence);
   if (!ragData.success || !ragData.data?.answer) throw new Error('RAG query failed');
 
+  // 6. Test WhatsApp Webhook Endpoint
+  const waRes = await fetch(base + '/api/whatsapp/webhook', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: 'I need an iOS app for my clinic' })
+  });
+  const waData = await waRes.json();
+  console.log('WhatsApp Webhook RAG status:', waRes.status, 'Answer present:', !!waData.response?.answer);
+  if (!waData.success || !waData.response?.answer) throw new Error('WhatsApp webhook RAG failed');
+
   console.log('\n========================================');
-  console.log('✅ ALL PAGES, CRM & RAG AI CONSULTANT FULLY VERIFIED!');
+  console.log('✅ ALL PAGES, CRM, RAG & WHATSAPP FULLY VERIFIED!');
   console.log('========================================');
 }
 
