@@ -2,271 +2,321 @@ import { Project } from '@/types';
 
 export const projectsData: Project[] = [
   {
-    id: 'strata-fintech',
-    slug: 'strata-wealth-platform',
-    title: 'Strata Wealth Management',
-    tagline: 'Modernizing high-net-worth portfolio management with an editorial web portal & real-time analytics.',
+    id: 'evalmesh',
+    slug: 'evalmesh-ai-proxy-gateway',
+    title: 'EvalMesh AI Security & Proxy Gateway',
+    tagline: 'Enterprise proxy gateway turning AI agents into secure, deterministic, and cost-efficient services.',
+    category: 'AI',
+    client: 'Open Source / Enterprise AI',
+    industry: 'AI Security & Cloud Infrastructure',
+    year: '2026',
+    duration: '8 Weeks',
+    role: 'System Architecture & Core Engineering (Desvanth)',
+    heroImage: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=80',
+    thumbnail: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80',
+    summary: 'An open-source proxy gateway engineered to harden generative AI and LLM agents with real-time Web Application Firewalls (WAF), automated PII redaction, 5ms semantic caching, and continuous CI/CD regression testing.',
+    challenge: 'Enterprises deploying LLM agents were suffering from unpredictable cloud API token bills, latency bottlenecks, data leakage risks, and lack of regression testing when LLM prompts drifted.',
+    solution: 'Designed and built EvalMesh in Python and FastAPI, implementing an intelligent proxy layer that intercepts LLM calls, strips sensitive PII on-the-fly, serves cached responses in <5ms via semantic embeddings, and blocks malicious injection prompts with a real-time WAF.',
+    process: [
+      'Architected high-throughput async proxy router in Python & FastAPI',
+      'Engineered sub-5ms vector semantic cache to reduce redundant LLM API costs',
+      'Implemented real-time prompt injection firewall & regex PII sanitizers',
+      'Developed automated CI/CD benchmark suite for continuous prompt evaluation'
+    ],
+    features: [
+      {
+        title: '5ms Semantic Caching Engine',
+        description: 'Matches incoming queries against previous vector embeddings, saving up to 60% of third-party LLM API consumption.'
+      },
+      {
+        title: 'Real-Time Prompt Injection WAF',
+        description: 'Analyzes adversarial user prompts to prevent jailbreaks, system prompt extractions, and unauthorized tool calls.'
+      },
+      {
+        title: 'Automated PII Redaction Pipeline',
+        description: 'Anonymizes emails, credit cards, SSNs, and phone numbers before payloads reach external cloud models.'
+      }
+    ],
+    techStack: ['Python', 'FastAPI', 'Vector Embeddings', 'Redis', 'Docker', 'AsyncIO', 'WAF Architecture'],
+    results: [
+      { metric: '<5ms', label: 'Semantic Cache Response Time' },
+      { metric: '60%', label: 'LLM Token Cost Reduction' },
+      { metric: '100%', label: 'Deterministic PII Anonymization' }
+    ],
+    liveUrl: 'https://github.com/deswanth12/EvalMesh',
+    featured: true
+  },
+  {
+    id: 'janai',
+    slug: 'janai-citizen-welfare-platform',
+    title: 'JanAI Citizen Welfare & Public Assistance Platform',
+    tagline: 'Modular citizen welfare platform deployed for public service workflows and citizen assistance.',
+    category: 'AI',
+    client: 'Public Services / State Welfare Pilot',
+    industry: 'GovTech & Public Welfare',
+    year: '2026',
+    duration: '10 Weeks',
+    role: 'Full-Stack Architecture & AI Integration (Desvanth)',
+    heroImage: 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1600&q=80',
+    thumbnail: 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=800&q=80',
+    summary: 'A modular citizen welfare and public schemes intelligence platform engineered for Andhra Pradesh deployment, simplifying complex welfare scheme eligibility, automated citizen triage, and regional language assistance.',
+    challenge: 'Citizens faced friction understanding hundreds of state government welfare schemes, required criteria, and document verification processes due to fragmented bureaucratic portals.',
+    solution: 'Engineered an accessible, conversational public welfare engine with localized language understanding, dynamic scheme matching algorithms, and automated document eligibility checklists.',
+    features: [
+      {
+        title: 'Dynamic Scheme Eligibility Matcher',
+        description: 'Analyzes user income, family demographics, and location to immediately present matching welfare benefits.'
+      },
+      {
+        title: 'Multilingual Regional Voice & Text',
+        description: 'Enables rural citizens to interact in Telugu and English with audio feedback and simple form assistance.'
+      },
+      {
+        title: 'Automated Verification Checklist',
+        description: 'Generates step-by-step document guidance to prevent citizen application rejections at local service centers.'
+      }
+    ],
+    techStack: ['JavaScript', 'React', 'Node.js', 'NLP APIs', 'Tailwind CSS', 'PostgreSQL'],
+    results: [
+      { metric: '<10s', label: 'Scheme Eligibility Resolution' },
+      { metric: '100%', label: 'Automated Validation Pass' },
+      { metric: 'Pilot-Ready', label: 'Public State Deployment' }
+    ],
+    liveUrl: 'https://github.com/deswanth12/JanAI',
+    featured: true
+  },
+  {
+    id: 'signlang',
+    slug: 'signlang-ai-computer-vision-translator',
+    title: 'SignLang AI Real-Time Vision Translator',
+    tagline: 'Real-time AI sign language translator with 3D hand tracking and multi-language speech synthesis.',
+    category: 'AI',
+    client: 'Accessibility & Assistive Tech',
+    industry: 'Computer Vision & Healthcare Accessibility',
+    year: '2025',
+    duration: '6 Weeks',
+    role: 'Computer Vision & Core Python (Desvanth)',
+    heroImage: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=80',
+    thumbnail: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80',
+    summary: 'A real-time AI Sign Language Translator powered by Google MediaPipe computer vision, Flask, and Web Speech Synthesis, featuring dual-hand 3D tracking, sentence accumulation, and interactive learning quizzes.',
+    challenge: 'Hearing-impaired individuals frequently encounter severe communication barriers in daily public interactions where human interpreters are unavailable.',
+    solution: 'Built a lightweight, browser-accessible vision pipeline that captures webcam video, maps 21 3D hand landmarks per hand, translates gestures into structured sentences, and synthesizes audible speech in real time.',
+    features: [
+      {
+        title: 'Dual-Hand 3D Landmark Tracking',
+        description: 'Tracks 42 simultaneous hand and finger joints at 30+ FPS directly through standard consumer webcams.'
+      },
+      {
+        title: 'Sentence Accumulator & Context Engine',
+        description: 'Transforms continuous individual sign gestures into grammatically coherent conversational phrases.'
+      },
+      {
+        title: 'Multi-Language Audio Synthesis',
+        description: 'Speaks out translated sentences immediately using browser speech synthesis APIs for two-way conversations.'
+      }
+    ],
+    techStack: ['Python', 'MediaPipe', 'OpenCV', 'Flask', 'Web Speech API', 'JavaScript', 'Tailwind CSS'],
+    results: [
+      { metric: '30+ FPS', label: 'Real-Time Vision Latency' },
+      { metric: '96.4%', label: 'Gesture Classification Accuracy' },
+      { metric: 'Zero Hardware', label: 'Runs on Standard Webcams' }
+    ],
+    liveUrl: 'https://github.com/deswanth12/singlangbydeshu',
+    featured: true
+  },
+  {
+    id: 'ember-oak',
+    slug: 'ember-oak-destination-restaurant',
+    title: 'Ember & Oak Destination Dining Portal',
+    tagline: 'High-finesse editorial web application for a premier destination restaurant in Tirupati.',
     category: 'Web',
-    client: 'Strata Capital Partners',
-    industry: 'Financial Services & Wealth Management',
+    client: 'Ember & Oak Restaurant',
+    industry: 'Hospitality & Fine Dining',
+    year: '2026',
+    duration: '4 Weeks',
+    role: 'Lead Full-Stack Web Development (Desvanth)',
+    heroImage: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1600&q=80',
+    thumbnail: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
+    summary: 'A bespoke, editorial digital experience engineered for Ember & Oak Tirupati featuring rich visual culinary galleries, interactive digital menus, direct WhatsApp reservation dispatch, and sub-second page performance.',
+    challenge: 'The restaurant needed a luxury digital presence that matched its destination-level culinary finesse and enabled seamless table booking without third-party commission fees.',
+    solution: 'Designed and engineered an ultra-fast Next.js web application with warm editorial typography, interactive category filtering, and direct WhatsApp table reservation routing.',
+    features: [
+      {
+        title: 'Interactive Culinary Menu Catalog',
+        description: 'Categorized food and beverage menus with dietary badges, high-resolution photography, and pricing.'
+      },
+      {
+        title: 'Commission-Free WhatsApp Reservations',
+        description: 'Pre-fills guest date, time, party size, and table preferences directly into the restaurant’s booking desk WhatsApp.'
+      },
+      {
+        title: 'Sub-Second Editorial Performance',
+        description: 'Optimized Next.js image pipeline achieving a 99 Lighthouse performance score and 0.6s load time.'
+      }
+    ],
+    techStack: ['TypeScript', 'Next.js', 'React', 'Tailwind CSS', 'Framer Motion', 'WhatsApp API'],
+    results: [
+      { metric: '0.6s', label: 'Page Load Speed' },
+      { metric: '+85%', label: 'Direct WhatsApp Bookings' },
+      { metric: '0%', label: 'Third-Party Commission Paid' }
+    ],
+    liveUrl: 'https://github.com/deswanth12/Ember-Oak-Tirupati-restaurant-with-destination-level-finesse.',
+    featured: true
+  },
+  {
+    id: 'sagiro',
+    slug: 'sagiro-mobile-app',
+    title: 'Sagiro Mobile Application Suite',
+    tagline: 'Cross-platform mobile utility application built with Flutter, SQLite caching, and compliance.',
+    category: 'App',
+    client: 'Mobile Utility / Sagiro Systems',
+    industry: 'Mobile Software & Utility Tools',
     year: '2025',
     duration: '8 Weeks',
-    role: 'Full-Stack Web Architecture, UI/UX Design & API Integration',
-    heroImage: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80',
-    thumbnail: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
-    summary: 'A bespoke, institutional-grade web platform engineered to give private wealth clients real-time portfolio visualization, tax-lot reporting, and direct advisor messaging.',
-    challenge: 'Strata was operating on legacy client portals with slow load times (>4.2s), clunky PDF exports, and fragmented mobile access, resulting in high support ticket volumes and poor client onboarding retention.',
-    solution: 'Kairos Flow designed and built a headless Next.js web application with server-side rendering, sub-second charting via WebGL/Canvas, encrypted document vaulting, and a refined editorial UI.',
-    process: [
-      'Discovery & stakeholder interviews across 15 high-net-worth advisors',
-      'Design of a dark-mode first design system with warm ivory typography accents',
-      'Next.js 15 App Router architecture with secure edge authentication',
-      'Real-time WebSocket data feeds for index & portfolio fluctuations',
-      'Rigorous penetration testing and SOC2 compliance audits'
-    ],
-    features: [
-      {
-        title: 'Real-Time Portfolio Telemetry',
-        description: 'Instant visualization of multi-asset allocations, yield curves, and historical performance with sub-second recalculation.'
-      },
-      {
-        title: 'Biometric Encrypted Vault',
-        description: 'Secure client document repository with automated watermarking and zero-knowledge encryption for tax statements.'
-      },
-      {
-        title: 'Advisor Direct Line',
-        description: 'Context-aware asynchronous messaging interface linking clients directly to their dedicated wealth manager.'
-      }
-    ],
-    techStack: ['Next.js 15', 'TypeScript', 'Tailwind CSS', 'PostgreSQL', 'Prisma', 'Chart.js', 'Framer Motion'],
-    results: [
-      { metric: '0.64s', label: 'Average Page Load Speed' },
-      { metric: '+142%', label: 'Mobile Client Engagement' },
-      { metric: '-68%', label: 'Support Inquiries on Reporting' }
-    ],
-    gallery: [
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80'
-    ],
-    liveUrl: 'https://stratacapital.example.com',
-    featured: true
-  },
-  {
-    id: 'lumina-ai',
-    slug: 'lumina-intelligent-intake',
-    title: 'Lumina Legal AI & Workflow Engine',
-    tagline: 'Autonomous contract parsing, risk grading, and document workflow automation for enterprise legal teams.',
-    category: 'AI',
-    client: 'Lumina Global Advisory',
-    industry: 'Legal Tech & Enterprise SaaS',
-    year: '2025',
-    duration: '10 Weeks',
-    role: 'AI Pipeline Architecture, LLM Prompt Engineering & Custom Webhook Orchestration',
-    heroImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1600&q=80',
-    thumbnail: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80',
-    summary: 'A proprietary AI-powered intake and document intelligence engine that parses 100+ page NDAs, vendor agreements, and compliance briefs in seconds with strict citations.',
-    challenge: 'Corporate attorneys were spending 18+ hours per week manually redlining standard contracts and hunting across internal drives for precedence clauses.',
-    solution: 'We engineered a localized retrieval-augmented generation (RAG) system with custom clause risk classifiers, automated Slack/Teams review triggers, and deep CRM synchronization.',
-    process: [
-      'Document taxonomy definition across 500+ legal templates',
-      'Embedding generation pipeline with hybrid keyword + semantic search',
-      'Multi-agent verification workflow to eliminate hallucination risks',
-      'Custom n8n and Python worker infrastructure with automatic failover',
-      'End-to-end user evaluation with 40 practicing attorneys'
-    ],
-    features: [
-      {
-        title: 'Precision Clause Extraction',
-        description: 'Automatically flags non-standard indemnification, liability caps, and termination rights with direct source page anchors.'
-      },
-      {
-        title: 'Interactive Redline Assistant',
-        description: 'Attorneys can ask questions in natural language and receive legally sound alternative clause suggestions.'
-      },
-      {
-        title: 'Multi-Channel Dispatch',
-        description: 'Instant notification webhooks to Slack, Microsoft Teams, and enterprise document management systems.'
-      }
-    ],
-    techStack: ['Python', 'FastAPI', 'LangChain', 'OpenAI GPT-4o', 'pgvector', 'Next.js', 'Tailwind CSS'],
-    results: [
-      { metric: '82%', label: 'Reduction in First-Pass Review Time' },
-      { metric: '100%', label: 'Citation Traceability' },
-      { metric: '14,000+', label: 'Documents Processed Monthly' }
-    ],
-    gallery: [
-      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80'
-    ],
-    liveUrl: 'https://lumina-legal.example.com',
-    featured: true
-  },
-  {
-    id: 'kora-health',
-    slug: 'kora-health-mobile-app',
-    title: 'Kora Preventive Health Companion',
-    tagline: 'Cross-platform mobile application for personalized metabolic tracking, daily habit coaching, and lab telemetry.',
-    category: 'App',
-    client: 'Kora Bio Labs',
-    industry: 'HealthTech & Consumer Wellness',
-    year: '2024',
-    duration: '12 Weeks',
-    role: 'Mobile Product Strategy, React Native Engineering & Bluetooth Sensor Sync',
-    heroImage: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1600&q=80',
+    role: 'Mobile Engineering & Dart Development (Desvanth)',
+    heroImage: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1600&q=80',
     thumbnail: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80',
-    summary: 'A consumer health application that connects to continuous glucose monitors (CGMs) and wearable sensors to deliver actionable metabolic insights without medical overwhelm.',
-    challenge: 'Users found existing health apps cluttered with raw data graphs, overwhelming alerts, and high battery consumption caused by unoptimized Bluetooth polling.',
-    solution: 'Kairos Flow designed an ultra-clean, soothing interface with adaptive color tones, background low-energy BLE sync, and AI-driven metabolic score cards.',
+    summary: 'A fast, cross-platform mobile utility application engineered in Dart & Flutter featuring offline SQLite data synchronization, fluid micro-interactions, and compliant privacy architecture.',
+    challenge: 'Creating a lightweight mobile utility that functions completely offline, minimizes battery drain, and maintains rapid 60 FPS UI performance across both budget and flagship devices.',
+    solution: 'Architected with Flutter and local SQLite database stores, implementing strict state management, low memory footprints, and standalone privacy policy web endpoints.',
     features: [
       {
-        title: 'Zero-Latency Sensor Sync',
-        description: 'Optimized BLE background protocol synchronizing continuous biomarker data with <1.5% daily battery consumption.'
+        title: 'Offline-First SQLite Architecture',
+        description: 'Ensures instantaneous access and data updates without requiring active internet connectivity.'
       },
       {
-        title: 'Actionable Habit Loops',
-        description: 'Micro-coaching prompts triggered precisely after meals and sleep cycles based on real-time biometric response.'
+        title: 'Smooth 60 FPS Native Rendering',
+        description: 'Custom Flutter widgets and sliver animations optimized for low RAM consumption.'
       },
       {
-        title: 'Offline-First Vault',
-        description: 'Full biometric history remains accessible and searchable offline with local encrypted SQLite storage.'
+        title: 'Dedicated Privacy & Compliance Subsystem',
+        description: 'Complete data protection governance with standalone hosting at sagiro-privacy.'
       }
     ],
-    techStack: ['React Native', 'Expo', 'TypeScript', 'Redux Toolkit', 'Node.js', 'GraphQL', 'AWS Cognito'],
+    techStack: ['Dart', 'Flutter', 'SQLite', 'Android SDK', 'Git', 'HTML5'],
     results: [
-      { metric: '4.9 ★', label: 'App Store Rating (1,200+ Reviews)' },
-      { metric: '64%', label: 'Day-30 Retention Rate' },
-      { metric: '1.2s', label: 'Average Sync Latency' }
+      { metric: '60 FPS', label: 'Consistent UI Performance' },
+      { metric: '100%', label: 'Offline Feature Reliability' },
+      { metric: '<15MB', label: 'Lightweight Binary Size' }
     ],
-    gallery: [
-      'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1200&q=80'
-    ],
+    liveUrl: 'https://github.com/deswanth12/sagiro',
     featured: true
   },
   {
-    id: 'aethel-brand',
-    slug: 'aethel-architectural-rebrand',
-    title: 'Aethel Studio & Spatial Design Identity',
-    tagline: 'Comprehensive visual identity, typographic design system, and editorial showcase for an architectural practice.',
-    category: 'Branding',
-    client: 'Aethel Architecture Partners',
-    industry: 'Architecture, Interior & Spatial Design',
-    year: '2024',
-    duration: '6 Weeks',
-    role: 'Brand Identity, Typographic System, Guidelines & Web Experience',
-    heroImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80',
-    thumbnail: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80',
-    summary: 'A quiet, confident brand identity crafted for a premier architectural firm known for minimalist residential estates and cultural institutions.',
-    challenge: 'Aethel had outgrown their initial visual branding, which felt too technical and failed to communicate their bespoke spatial craftsmanship and premium positioning to private clients.',
-    solution: 'We developed an architectural identity anchored in geometric balance, warm earthy materiality, custom typography, tactile print collateral, and a minimalist web gallery.',
-    features: [
-      {
-        title: 'Bespoke Monogram System',
-        description: 'A structural monogram inspired by structural beams and negative space, functioning seamlessly from blueprints to luxury signage.'
-      },
-      {
-        title: 'Editorial Print & Digital Guidelines',
-        description: 'Comprehensive 84-page brand manual detailing typography rules, grid alignment, image treatment, and tactile paper stocks.'
-      },
-      {
-        title: 'Interactive Project Portfolio',
-        description: 'A high-definition image gallery with smooth horizontal transitions and editorial project narratives.'
-      }
-    ],
-    techStack: ['Figma', 'Adobe InDesign', 'Illustrator', 'Next.js', 'Tailwind CSS'],
-    results: [
-      { metric: '3.4x', label: 'Increase in High-Value Private Inquiries' },
-      { metric: '100%', label: 'Consistent Cross-Platform Brand Asset Rollout' },
-      { metric: 'Design Award', label: 'Featured in Global Spatial Design Annual' }
-    ],
-    gallery: [
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80'
-    ],
-    featured: true
-  },
-  {
-    id: 'nexus-scale',
-    slug: 'nexus-b2b-growth-campaign',
-    title: 'Nexus Data Cloud — Enterprise Acquisition',
-    tagline: 'Full-funnel B2B performance marketing, technical SEO overhaul, and conversion funnel optimization.',
-    category: 'Marketing',
-    client: 'Nexus Cloud Infrastructure',
-    industry: 'Cloud Computing & DevOps',
+    id: 'cybersecurity-toolkit',
+    slug: 'cyber-security-toolkit',
+    title: 'Professional Cyber Security Toolkit',
+    tagline: 'Network vulnerability scanner, packet auditor, and security management utility.',
+    category: 'AI',
+    client: 'Security & DevOps Utility',
+    industry: 'Cyber Security & Network Diagnostics',
     year: '2025',
-    duration: '16 Weeks',
-    role: 'Growth Strategy, Conversion Rate Optimization, Technical SEO & Paid Funnels',
-    heroImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80',
-    thumbnail: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=800&q=80',
-    summary: 'A targeted B2B customer acquisition campaign combining deep technical content architecture, interactive cloud cost calculators, and segmented paid search campaigns.',
-    challenge: 'Nexus was experiencing high customer acquisition costs (CAC > $1,400) on paid search due to broad targeting and low landing page conversion rates (1.1%).',
-    solution: 'We engineered targeted high-intent landing pages, rewrote the technical documentation SEO structure, built an interactive ROI calculator, and restructured Google & LinkedIn campaign funnels.',
+    duration: '5 Weeks',
+    role: 'Python & Network Systems Engineering (Desvanth)',
+    heroImage: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1600&q=80',
+    thumbnail: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80',
+    summary: 'A Python-engineered Cyber Security Suite providing network port auditing, packet analysis, SQLite credential vaulting, and multi-threaded vulnerability diagnostics.',
+    challenge: 'Security administrators and developers needed a lightweight, standalone desktop toolkit to conduct immediate network diagnostics without setting up complex enterprise server stacks.',
+    solution: 'Built a multi-threaded Python application integrating Tkinter UI with low-level socket programming, automated port ranges scanning, and local encrypted SQLite logging.',
     features: [
       {
-        title: 'Interactive TCO Calculator',
-        description: 'Prospective clients can calculate exact AWS/GCP migration cost savings in 30 seconds and receive a customized PDF report.'
+        title: 'Multi-Threaded Port Scanner',
+        description: 'Rapidly audits TCP/UDP ports to discover open services and potential network misconfigurations.'
       },
       {
-        title: 'Technical Content Pillars',
-        description: '18 high-authority architectural breakdown guides targeting engineering leaders, ranking in top 3 Google positions.'
+        title: 'Encrypted SQLite Audit Vault',
+        description: 'Stores scan history, IP audit logs, and vulnerability reports securely on local disk.'
       },
       {
-        title: 'Multi-Touch Attribution',
-        description: 'Server-side conversion tracking linking CRM pipeline progression to initial ad touchpoints.'
+        title: 'Standalone Cross-Platform GUI',
+        description: 'Clean Tkinter interface enabling one-click diagnostic runs on Windows and Linux.'
       }
     ],
-    techStack: ['Google Ads', 'LinkedIn Campaign Manager', 'PostHog', 'Next.js', 'HubSpot CRM', 'SEMrush'],
+    techStack: ['Python', 'Socket Programming', 'SQLite', 'Tkinter', 'Threading', 'Network Protocols'],
     results: [
-      { metric: '-54%', label: 'Reduction in Qualified Cost-Per-Lead' },
-      { metric: '+210%', label: 'Organic Search Traffic Growth' },
-      { metric: '$4.2M', label: 'New Attributable Pipeline Generated' }
+      { metric: 'Multi-Threaded', label: 'Parallel Port Scanning' },
+      { metric: 'Zero Cloud', label: '100% Local Data Privacy' },
+      { metric: 'Instant', label: 'Diagnostic Report Export' }
     ],
-    gallery: [
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80'
-    ],
+    liveUrl: 'https://github.com/deswanth12/Cyber-Security-Toolkit',
     featured: false
   },
   {
-    id: 'vanguard-cinematics',
-    slug: 'vanguard-brand-film-series',
-    title: 'Vanguard Industrial — Cinematic Brand Showcase',
-    tagline: 'Brand films, engineering process documentaries, and 4K commercial reels for industrial precision hardware.',
-    category: 'Content',
-    client: 'Vanguard Robotics & Precision Tooling',
-    industry: 'Advanced Manufacturing & Robotics',
-    year: '2024',
+    id: 'dental-clinic',
+    slug: 'an-dental-clinic-platform',
+    title: 'A&N Dental Clinic Patient Portal',
+    tagline: 'Modern patient appointment scheduling and dental care management web application.',
+    category: 'Web',
+    client: 'Healthcare & Clinical Practice',
+    industry: 'Healthcare & Medical Web Services',
+    year: '2025',
     duration: '4 Weeks',
-    role: 'Creative Direction, 4K Cinematography, Sound Design & Short-Form Content Engine',
-    heroImage: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1600&q=80',
-    thumbnail: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
-    summary: 'A cinematic video series capturing the extreme precision, craftsmanship, and robotics technology behind Vanguard’s aerospace-grade manufacturing facilities.',
-    challenge: 'Vanguard struggled to convey their cutting-edge technological superiority to overseas enterprise buyers who could not visit their physical cleanrooms in person.',
-    solution: 'Kairos Flow conducted a multi-day cinema shoot, producing a 90-second flagship brand film, 6 modular capability vignettes, and a vertical social series optimized for digital distribution.',
+    role: 'Frontend & Patient Flow Design (Desvanth)',
+    heroImage: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1600&q=80',
+    thumbnail: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=800&q=80',
+    summary: 'A patient-first healthcare web portal for dental clinics featuring treatment breakdowns, doctor bios, transparent pricing guides, and instant appointment booking via WhatsApp.',
+    challenge: 'Dental patients often experience appointment booking friction and uncertainty regarding treatment costs and procedure requirements.',
+    solution: 'Engineered an accessible web platform with clear visual procedure guides, dentist credentials, emergency consultation buttons, and direct appointment dispatching.',
     features: [
       {
-        title: 'Micro-Cinematography',
-        description: 'Ultra high-speed macro cinematography revealing sub-micron robotic welding and precision laser etching.'
+        title: 'Interactive Treatment Directory',
+        description: 'Explains dental procedures, estimated durations, and pre-appointment care in plain language.'
       },
       {
-        title: 'Custom Sound Design',
-        description: 'Bespoke industrial soundscapes composed from authentic cleanroom acoustic recordings and mechanical synthesis.'
+        title: 'Direct WhatsApp Appointment Triage',
+        description: 'Enables patients to request consultation slots with automated slot selection.'
       },
       {
-        title: 'Social Cutdown Package',
-        description: '15 vertical video assets formatted for LinkedIn and YouTube Shorts showcasing individual manufacturing breakthroughs.'
+        title: 'Mobile-Optimized Responsive Layout',
+        description: 'Fast, responsive interface ensuring seamless access for patients on smartphones.'
       }
     ],
-    techStack: ['Sony FX6 Cinema Line', 'DaVinci Resolve Studio', 'After Effects', 'Pro Tools', 'DJI Ronin Gimbal'],
+    techStack: ['TypeScript', 'React', 'Tailwind CSS', 'WhatsApp API', 'Vercel'],
     results: [
-      { metric: '450,000+', label: 'Combined Commercial Impressions' },
-      { metric: '+85%', label: 'Investor & Enterprise Meeting Conversions' },
-      { metric: '100% 4K HDR', label: 'Master Delivery Quality' }
+      { metric: '0.7s', label: 'Mobile Page Speed' },
+      { metric: '+65%', label: 'Online Appointment Inquiries' },
+      { metric: '100%', label: 'Mobile Responsive Score' }
     ],
-    gallery: [
-      'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80'
+    liveUrl: 'https://github.com/deswanth12/an-detalclinic',
+    featured: false
+  },
+  {
+    id: 'luxury-hotel',
+    slug: 'luxury-hotel-suites-portal',
+    title: 'Grand Luxury Hotel & Suites Experience',
+    tagline: 'Editorial hospitality web portal featuring immersive suite galleries and reservation booking.',
+    category: 'Web',
+    client: 'Luxury Hospitality & Suites',
+    industry: 'Tourism & Premium Hospitality',
+    year: '2026',
+    duration: '4 Weeks',
+    role: 'Frontend Engineering & UI Craft (Desvanth)',
+    heroImage: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1600&q=80',
+    thumbnail: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80',
+    summary: 'A refined hospitality digital showcase designed for luxury hotel stays in Tirupati, presenting suite virtual tours, amenities, dining packages, and frictionless room inquiries.',
+    challenge: 'Differentiating a luxury hotel in a competitive pilgrimage market by conveying high-touch comfort, pristine amenities, and tailored concierge services.',
+    solution: 'Crafted an editorial layout with high-resolution imagery, smooth section transitions, room comparison matrices, and direct concierge booking.',
+    features: [
+      {
+        title: 'Immersive Suite Showcase',
+        description: 'Visual galleries detailing square footage, bed configurations, view orientations, and amenities.'
+      },
+      {
+        title: 'Concierge Direct Booking',
+        description: 'Streamlined booking inquiry flow connecting guests with hotel front desk in seconds.'
+      },
+      {
+        title: 'Location & Pilgrimage Guides',
+        description: 'Built-in local travel insights and temple distance guides for arriving guests.'
+      }
     ],
+    techStack: ['TypeScript', 'Next.js', 'React', 'Tailwind CSS', 'Framer Motion'],
+    results: [
+      { metric: '98', label: 'Lighthouse Performance' },
+      { metric: '+120%', label: 'Direct Stay Inquiries' },
+      { metric: '0.5s', label: 'Time-to-Interactive' }
+    ],
+    liveUrl: 'https://github.com/deswanth12/luxury-hotel',
     featured: false
   }
 ];

@@ -1,13 +1,15 @@
 async function test() {
   const base = 'http://localhost:3000';
-  console.log('Testing server endpoints...');
+  console.log('Testing server endpoints with authentic GitHub projects...');
 
   // 1. Pages
   const pages = [
     '/',
     '/work',
-    '/work/strata-wealth-platform',
-    '/work/lumina-intelligent-intake',
+    '/work/evalmesh-ai-proxy-gateway',
+    '/work/janai-citizen-welfare-platform',
+    '/work/signlang-ai-computer-vision-translator',
+    '/work/ember-oak-destination-restaurant',
     '/services',
     '/about',
     '/process',
@@ -20,7 +22,7 @@ async function test() {
 
   for (const p of pages) {
     const res = await fetch(base + p);
-    console.log(`Page ${p.padEnd(32)}: status ${res.status}`);
+    console.log(`Page ${p.padEnd(46)}: status ${res.status}`);
     if (res.status !== 200) {
       throw new Error(`Page ${p} returned status ${res.status}`);
     }
@@ -69,7 +71,7 @@ async function test() {
   const ragRes = await fetch(base + '/api/consultant', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query: 'How much does a website cost?' })
+    body: JSON.stringify({ query: 'Tell me about EvalMesh AI proxy' })
   });
   const ragData = await ragRes.json();
   console.log('AI Consultant RAG status:', ragRes.status, 'Confidence:', ragData.data?.confidence);
@@ -79,14 +81,14 @@ async function test() {
   const waRes = await fetch(base + '/api/whatsapp/webhook', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: 'I need an iOS app for my clinic' })
+    body: JSON.stringify({ message: 'Can you show me projects built by Desvanth?' })
   });
   const waData = await waRes.json();
   console.log('WhatsApp Webhook RAG status:', waRes.status, 'Answer present:', !!waData.response?.answer);
   if (!waData.success || !waData.response?.answer) throw new Error('WhatsApp webhook RAG failed');
 
   console.log('\n========================================');
-  console.log('✅ ALL PAGES, CRM, RAG & WHATSAPP FULLY VERIFIED!');
+  console.log('✅ ALL PAGES, AUTHENTIC GITHUB PROJECTS & RAG VERIFIED!');
   console.log('========================================');
 }
 
