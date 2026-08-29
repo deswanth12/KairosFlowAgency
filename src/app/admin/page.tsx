@@ -152,10 +152,11 @@ export default function AdminPage() {
         setCurrentUser(user);
         setAuthToken(token);
         fetchUsersList(token);
-        fetchLeads();
-        fetchActivityLogs();
+        fetchLeads(token);
+        fetchActivityLogs(token);
       } catch {
         sessionStorage.removeItem('kairos_admin_token');
+        sessionStorage.removeItem('kairos_admin_user');
         fetchUsersList();
       }
     } else {
@@ -208,11 +209,13 @@ export default function AdminPage() {
     setIsAuthLoading(true);
 
     try {
+      const selectedUser = availableUsers.find((u) => u.id === selectedLoginUserId);
       const res = await fetch('/api/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           userId: selectedLoginUserId,
+          email: (selectedUser as any)?.email || selectedLoginUserId,
           password: passwordInput 
         })
       });
@@ -267,6 +270,10 @@ export default function AdminPage() {
       const res = await fetch('/api/leads', {
         headers: { Authorization: `Bearer ${activeToken}` }
       });
+      if (res.status === 401) {
+        handleLogout();
+        return;
+      }
       const data = await res.json();
       if (data.success) {
         setLeads(data.leads || []);
@@ -287,6 +294,10 @@ export default function AdminPage() {
       const res = await fetch('/api/activity', {
         headers: { Authorization: `Bearer ${activeToken}` }
       });
+      if (res.status === 401) {
+        handleLogout();
+        return;
+      }
       const data = await res.json();
       if (data.success) {
         setActivityLogs(data.logs || []);
@@ -425,28 +436,30 @@ export default function AdminPage() {
     const headers = ['ID', 'Name', 'Company', 'Email', 'Phone', 'Services', 'Status', 'Priority', 'Assigned To', 'Est Value', 'Created By', 'Last Updated By', 'Created At'];
     const rows = leads.map((l) => [
       l.id,
-      `"${l.name.replace(/"/g, '""')}"`,
-      `"${l.company.replace(/"/g, '""')}"`,
-      l.email,
-      l.phone,
-      `"${l.services.join(', ')}"`,
-      l.status,
+      `"${(l.name || '').replace(/"/g, '""')}"`,
+      `"${(l.company || '').replace(/"/g, '""')}"`,
+      l.email || '',
+      l.phone || '',
+      `"${Array.isArray(l.services) ? l.services.join(', ') : (l.services || '')}"`,
+      l.status || 'New Lead',
       l.priority || 'Medium',
       l.assignedTo || 'Unassigned',
       l.estimatedValue || 'N/A',
       l.createdBy ? `${l.createdBy.name} (${l.createdBy.role})` : 'System',
       l.updatedBy ? `${l.updatedBy.name} (${l.updatedBy.role})` : 'System',
-      l.createdAt
+      l.createdAt || ''
     ]);
 
-    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
-    const encodedUri = encodeURI(csvContent);
+    const csvContent = [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
+    link.setAttribute('href', url);
     link.setAttribute('download', `kairos-leads-${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // Filtered Leads Calculation
@@ -569,7 +582,6 @@ export default function AdminPage() {
             <div>
               <div className="flex items-center justify-between text-xs font-mono mb-1.5">
                 <span className="text-[#5B6875] uppercase tracking-wider font-semibold">Security Key / Password</span>
-                <span className="text-[#B8613A] font-semibold text-[10px]">Master: Kairos@$$</span>
               </div>
               <div className="relative">
                 <input

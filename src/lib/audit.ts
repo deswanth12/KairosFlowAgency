@@ -1,50 +1,33 @@
-import fs from 'fs';
-import path from 'path';
 import { ActivityLog, ActivityAction, ActivityCategory, FieldChange, UserRole } from '@/types';
+import { kvGet, kvSet, kvGetSync, kvSetSync, KV_KEYS } from './kv';
 
-const DATA_DIR = path.join(process.cwd(), '.data');
-const AUDIT_FILE = path.join(DATA_DIR, 'activity_logs.json');
+const MAX_LOGS = 1000;
 
-function ensureDataDir(): void {
+// ---------------------------------------------------------------------------
+// Activity log persistence — KV-backed
+// ---------------------------------------------------------------------------
+
+export async function getAllActivityLogsAsync(): Promise<ActivityLog[]> {
   try {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
-  } catch (err) {
-    console.error('Error creating data directory:', err);
-  }
-}
-
-// Atomic file write using temporary file + rename
-function atomicWriteFileSync(filePath: string, content: string): void {
-  ensureDataDir();
-  const tempPath = `${filePath}.${Date.now()}.${Math.random().toString(36).substring(2, 7)}.tmp`;
-  try {
-    fs.writeFileSync(tempPath, content, 'utf-8');
-    fs.renameSync(tempPath, filePath);
-  } catch (err) {
-    if (fs.existsSync(tempPath)) {
-      try { fs.unlinkSync(tempPath); } catch {}
-    }
-    fs.writeFileSync(filePath, content, 'utf-8');
+    const data = await kvGet<ActivityLog[]>(KV_KEYS.ACTIVITY_LOGS);
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
   }
 }
 
 export function getAllActivityLogs(): ActivityLog[] {
   try {
-    ensureDataDir();
-    if (!fs.existsSync(AUDIT_FILE)) {
-      atomicWriteFileSync(AUDIT_FILE, JSON.stringify([], null, 2));
-      return [];
-    }
-    const data = fs.readFileSync(AUDIT_FILE, 'utf-8');
-    return JSON.parse(data);
-  } catch (error) {
-    console.error('Error reading activity logs:', error);
+    const data = kvGetSync<ActivityLog[]>(KV_KEYS.ACTIVITY_LOGS);
+    return Array.isArray(data) ? data : [];
+  } catch {
     return [];
   }
 }
 
+// ---------------------------------------------------------------------------
+// Log parameters
+// ---------------------------------------------------------------------------
 export interface LogActionParams {
   userId: string;
   userName: string;
@@ -54,12 +37,13 @@ export interface LogActionParams {
   entityType: 'lead' | 'project' | 'user' | 'payment' | 'settings' | 'auth';
   entityId: string;
   entityTitle: string;
+  /** Pass the verified real IP from the rate limiter helper — never a raw client header */
   ipAddress?: string;
   summary: string;
   changes?: FieldChange[];
-  before?: Record<string, any>;
-  after?: Record<string, any>;
-  meta?: Record<string, any>;
+  before?: Record<string, unknown>;
+  after?: Record<string, unknown>;
+  meta?: Record<string, unknown>;
 }
 
 export function logActivity(params: LogActionParams): ActivityLog {
@@ -76,7 +60,8 @@ export function logActivity(params: LogActionParams): ActivityLog {
       entityId: params.entityId,
       entityTitle: params.entityTitle,
       timestamp: new Date().toISOString(),
-      ipAddress: params.ipAddress || '127.0.0.1',
+      // Only store IP if explicitly passed (server-resolved, not client-supplied raw header)
+      ipAddress: params.ipAddress || 'server',
       details: {
         summary: params.summary,
         changes: params.changes || [],
@@ -87,11 +72,9 @@ export function logActivity(params: LogActionParams): ActivityLog {
     };
 
     logs.unshift(newLog);
+    const trimmedLogs = logs.slice(0, MAX_LOGS);
 
-    // Keep last 1,000 logs
-    const trimmedLogs = logs.slice(0, 1000);
-
-    atomicWriteFileSync(AUDIT_FILE, JSON.stringify(trimmedLogs, null, 2));
+    kvSetSync(KV_KEYS.ACTIVITY_LOGS, trimmedLogs);
     return newLog;
   } catch (error) {
     console.error('Error recording activity log:', error);
@@ -99,10 +82,12 @@ export function logActivity(params: LogActionParams): ActivityLog {
   }
 }
 
-// Compute field-by-field differences between before and after states
+// ---------------------------------------------------------------------------
+// Field diffs
+// ---------------------------------------------------------------------------
 export function computeFieldDiffs(
-  before: Record<string, any>,
-  after: Record<string, any>,
+  before: Record<string, unknown>,
+  after: Record<string, unknown>,
   fieldLabels: Record<string, string> = {
     status: 'Pipeline Stage',
     priority: 'Lead Priority',
@@ -121,14 +106,11 @@ export function computeFieldDiffs(
   const keys = new Set([...Object.keys(before || {}), ...Object.keys(after || {})]);
 
   for (const key of keys) {
-    // Ignore internal timestamp fields
     if (['updatedAt', 'createdAt', 'notes', 'createdBy', 'updatedBy', 'id'].includes(key)) {
       continue;
     }
-
-    const beforeVal = before ? before[key] : undefined;
-    const afterVal = after ? after[key] : undefined;
-
+    const beforeVal = before?.[key];
+    const afterVal = after?.[key];
     if (beforeVal !== afterVal && afterVal !== undefined) {
       changes.push({
         field: key,
@@ -138,10 +120,12 @@ export function computeFieldDiffs(
       });
     }
   }
-
   return changes;
 }
 
+// ---------------------------------------------------------------------------
+// Filter logs
+// ---------------------------------------------------------------------------
 export function filterActivityLogs(filters: {
   category?: string;
   userId?: string;
@@ -150,28 +134,24 @@ export function filterActivityLogs(filters: {
   limit?: number;
 }): ActivityLog[] {
   const logs = getAllActivityLogs();
+  // Hard cap: server enforces maximum 500 per request regardless of client request
+  const cap = Math.min(filters.limit || 100, 500);
+
   return logs
     .filter((log) => {
-      if (filters.category && filters.category !== 'all' && log.category !== filters.category) {
-        return false;
-      }
-      if (filters.userId && filters.userId !== 'all' && log.userId !== filters.userId) {
-        return false;
-      }
-      if (filters.entityId && log.entityId !== filters.entityId) {
-        return false;
-      }
+      if (filters.category && filters.category !== 'all' && log.category !== filters.category) return false;
+      if (filters.userId && filters.userId !== 'all' && log.userId !== filters.userId) return false;
+      if (filters.entityId && log.entityId !== filters.entityId) return false;
       if (filters.search) {
         const q = filters.search.toLowerCase();
-        const matchesSummary = log.details.summary.toLowerCase().includes(q);
-        const matchesEntity = log.entityTitle.toLowerCase().includes(q);
-        const matchesUser = log.userName.toLowerCase().includes(q);
-        const matchesAction = log.action.toLowerCase().includes(q);
-        if (!matchesSummary && !matchesEntity && !matchesUser && !matchesAction) {
-          return false;
-        }
+        const match =
+          log.details.summary.toLowerCase().includes(q) ||
+          log.entityTitle.toLowerCase().includes(q) ||
+          log.userName.toLowerCase().includes(q) ||
+          log.action.toLowerCase().includes(q);
+        if (!match) return false;
       }
       return true;
     })
-    .slice(0, filters.limit || 100);
+    .slice(0, cap);
 }

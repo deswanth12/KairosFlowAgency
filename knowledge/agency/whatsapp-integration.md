@@ -7,7 +7,7 @@ The Kairos Flow AI Consultant is connected to WhatsApp in two ways:
 
 ## 2. Webhook Endpoints
 - **Verification URL**: `https://kairosflow.agency/api/whatsapp/webhook`
-- **Verify Token**: Configured via `WHATSAPP_VERIFY_TOKEN` (default: `KairosWhatsAppToken2026`)
+- **Verify Token**: Configured via `WHATSAPP_VERIFY_TOKEN` (required)
 - **Supported Methods**: `GET` (Meta verification handshake), `POST` (Incoming WhatsApp message dispatcher)
 
 ## 3. Environment Variables

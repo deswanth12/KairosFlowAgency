@@ -126,10 +126,21 @@ export default function WorkPage() {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute top-3 left-3 flex items-center gap-1.5 font-mono">
+                    <div className="absolute top-3 left-3 flex flex-wrap items-center gap-1.5 font-mono">
                       <span className="px-2.5 py-0.5 rounded-full bg-[#0B1F33]/90 text-white text-[11px] border border-white/15">
                         {project.category}
                       </span>
+                      {project.projectType && (
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border backdrop-blur-md ${
+                          project.projectType === 'Client Project'
+                            ? 'bg-emerald-950/90 text-emerald-300 border-emerald-500/40'
+                            : project.projectType === 'Pilot System'
+                            ? 'bg-blue-950/90 text-blue-300 border-blue-500/40'
+                            : 'bg-[#0B1F33]/90 text-amber-300 border-amber-500/40'
+                        }`}>
+                          {project.projectType}
+                        </span>
+                      )}
                       {project.featured && (
                         <span className="px-2 py-0.5 rounded-full bg-[#B8613A] text-white text-[10px] font-bold shadow-sm">
                           FEATURED

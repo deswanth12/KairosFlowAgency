@@ -39,7 +39,7 @@ export const Footer: React.FC = () => {
               {/* Status Indicator */}
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs text-white font-mono">
                 <span className="w-2 h-2 rounded-full bg-[#B8613A] animate-pulse" />
-                <span className="font-semibold">STATUS: Q1/Q2 SPRINTS ACTIVE</span>
+                <span className="font-semibold">STATUS: ACCEPTING SELECT PROJECTS</span>
               </div>
             </div>
 

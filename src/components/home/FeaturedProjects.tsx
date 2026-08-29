@@ -79,10 +79,21 @@ export const FeaturedProjects: React.FC = () => {
                 />
 
                 {/* Top Floating Badges */}
-                <div className="absolute top-4 left-4 flex items-center gap-2 font-mono">
+                <div className="absolute top-4 left-4 flex flex-wrap items-center gap-2 font-mono">
                   <span className="px-3 py-1 rounded-full bg-[#0B1F33]/90 backdrop-blur-md text-white text-xs font-medium border border-white/15">
                     {project.category}
                   </span>
+                  {project.projectType && (
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase border backdrop-blur-md ${
+                      project.projectType === 'Client Project'
+                        ? 'bg-emerald-950/90 text-emerald-300 border-emerald-500/40'
+                        : project.projectType === 'Pilot System'
+                        ? 'bg-blue-950/90 text-blue-300 border-blue-500/40'
+                        : 'bg-[#0B1F33]/90 text-amber-300 border-amber-500/40'
+                    }`}>
+                      {project.projectType}
+                    </span>
+                  )}
                   {project.featured && (
                     <span className="px-2.5 py-1 rounded-full bg-[#B8613A] text-white text-[11px] font-bold flex items-center gap-1 shadow-sm">
                       <Sparkles className="w-3 h-3 text-[#F7F7F4]" />

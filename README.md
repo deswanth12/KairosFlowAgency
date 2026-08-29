@@ -120,12 +120,9 @@ Champagne     #B99A62   1%–2% visual budget for luxury badges, milestone metri
    ```
 
 3. **Configure Environment Variables**:
-   Create a `.env.local` file in the root directory:
-   ```env
-   ADMIN_PASSWORD=Kairos@$$
-   NEXT_PUBLIC_WHATSAPP_NUMBER=917702256073
-   NEXT_PUBLIC_CONTACT_EMAIL=kairosflowagency@gmail.com
-   NEXT_PUBLIC_SITE_URL=https://kairosflow.agency
+   Copy `.env.example` to `.env.local` and set strong random secrets:
+   ```bash
+   cp .env.example .env.local
    ```
 
 4. **Run the development server**:

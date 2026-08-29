@@ -17,16 +17,13 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get('userId') || undefined;
     const entityId = searchParams.get('entityId') || undefined;
     const search = searchParams.get('search') || undefined;
-    const limitParam = searchParams.get('limit');
-    const limit = limitParam ? parseInt(limitParam, 10) : 100;
 
-    const logs = filterActivityLogs({
-      category,
-      userId,
-      entityId,
-      search,
-      limit
-    });
+    // Server enforces max limit of 500 regardless of client request
+    const limitParam = searchParams.get('limit');
+    const requestedLimit = limitParam ? parseInt(limitParam, 10) : 100;
+    const limit = isNaN(requestedLimit) ? 100 : Math.min(Math.max(1, requestedLimit), 500);
+
+    const logs = filterActivityLogs({ category, userId, entityId, search, limit });
 
     return NextResponse.json({
       success: true,

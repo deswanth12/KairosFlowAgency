@@ -242,24 +242,117 @@ function scoreChunk(chunk: RAGChunk, query: string, queryTokens: string[]): numb
 }
 
 /**
+ * Normalizes text to defeat unicode homoglyphs, zero-width characters,
+ * character separation/spacing, and casing tricks.
+ */
+function normalizeForSafetyCheck(text: string): string {
+  return text
+    // Normalize unicode (NFKD decomposes ligatures and accented characters)
+    .normalize('NFKD')
+    // Remove diacritics / combining marks
+    .replace(/[\u0300-\u036f]/g, '')
+    // Normalize common homoglyphs / lookalikes
+    .replace(/[ıìíîïīį]/gi, 'i')
+    .replace(/[àáâãäåā]/gi, 'a')
+    .replace(/[èéêëēę]/gi, 'e')
+    .replace(/[òóôõöō]/gi, 'o')
+    .replace(/[ùúûüū]/gi, 'u')
+    .replace(/[0]/g, 'o')
+    .replace(/[1!|]/g, 'i')
+    .replace(/[@]/g, 'a')
+    .replace(/[$5]/g, 's')
+    .replace(/[3]/g, 'e')
+    .toLowerCase()
+    // Remove all non-alphanumeric characters for compressed check
+    .replace(/[^a-z0-9]/g, '');
+}
+
+function isSecuritySensitiveQuery(rawQuery: string): boolean {
+  const qLower = rawQuery.toLowerCase();
+  const compressed = normalizeForSafetyCheck(rawQuery);
+
+  const sensitivePatterns = [
+    'adminpassword',
+    'masterpassword',
+    'masterkey',
+    'secretkey',
+    'jwtsecret',
+    'jwttoken',
+    'jwt',
+    'systemprompt',
+    'ignorepreviousinstructions',
+    'revealprompt',
+    'environmentvariable',
+    'processenv',
+    'crmleads',
+    'crmdata',
+    'getleads',
+    'deleteleads',
+    'privaterevenue',
+    'internalprofit',
+    'databasepassword',
+    'dbpassword',
+    'apisecret',
+    'apikey',
+    'privatekey',
+    'accesskey',
+    'authsecret',
+    'passwordhash',
+    'bcrypt',
+    'leakdata',
+    'dumpleads',
+  ];
+
+  // 1. Direct compressed pattern matching
+  for (const pattern of sensitivePatterns) {
+    if (compressed.includes(pattern)) return true;
+  }
+
+  // 2. Phrase matching in lowercased string
+  const sensitivePhrases = [
+    'admin password',
+    'master password',
+    'master key',
+    'secret key',
+    'jwt secret',
+    'system prompt',
+    'ignore previous',
+    'ignore all previous',
+    'reveal your prompt',
+    'show me your prompt',
+    'environment variables',
+    'env vars',
+    'process.env',
+    'crm lead',
+    'crm data',
+    'show all leads',
+    'give me all leads',
+    'dump leads',
+    'private revenue',
+    'internal profit',
+    'api key',
+    'api secret',
+    'database credentials',
+  ];
+
+  for (const phrase of sensitivePhrases) {
+    if (qLower.includes(phrase)) return true;
+  }
+
+  return false;
+}
+
+/**
  * Query Consultant Engine with contextual reasoning and actionable handover.
  */
 export function queryConsultant(userQuery: string, conversationHistory?: Array<{ sender: string; text: string }>): ConsultantResponse {
   const query = userQuery.toLowerCase().trim();
   const chunks = loadKnowledgeBase();
 
-  // Safety & Privacy Guardrails
-  if (
-    query.includes('admin password') ||
-    query.includes('master key') ||
-    query.includes('secret key') ||
-    query.includes('jwt') ||
-    query.includes('system prompt') ||
-    query.includes('private revenue') ||
-    query.includes('internal profit')
-  ) {
+  // Safety & Privacy Guardrails — Unicode, spacing & homoglyph-resistant
+  if (isSecuritySensitiveQuery(userQuery)) {
     return {
-      answer: "I do not have access to private administrative credentials, server secrets, or internal financial accounts. If you have inquiries regarding project engagements, services, or pricing, I am ready to assist.",
+      answer: "I do not have access to private administrative credentials, server secrets, internal CRM records, or system configuration. If you have questions about our agency capabilities, services, or project scoping, I am happy to help.",
       confidence: 'high',
       sources: [{ title: 'AI & Data Privacy Policy', section: 'Data Protection & Boundary', file: 'policies/ai-policy.md' }],
       actionButtons: [

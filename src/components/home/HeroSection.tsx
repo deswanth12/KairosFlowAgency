@@ -45,7 +45,7 @@ export const HeroSection: React.FC = () => {
               <span className="w-2 h-2 rounded-full bg-[#B8613A] animate-pulse" />
               <span className="text-[#0B1F33] font-bold tracking-wider">DESIGN + ENGINEERING + AI + GROWTH</span>
               <span className="text-[#D9E0E5] hidden sm:inline">•</span>
-              <span className="text-[#5B6875] font-medium hidden sm:inline">Q1/Q2 SPRINTS ACTIVE</span>
+              <span className="text-[#5B6875] font-medium hidden sm:inline">NOW ACCEPTING SELECT PROJECTS</span>
             </div>
 
             {/* Main Headline */}
@@ -54,7 +54,7 @@ export const HeroSection: React.FC = () => {
                 We build digital experiences that move businesses <span className="text-[#B8613A]">forward.</span>
               </h1>
               <p className="text-[#5B6875] text-lg sm:text-xl font-normal leading-[1.65] max-w-2xl">
-                Websites, apps, AI systems, brands, and digital experiences engineered by one focused founding team. Zero junior handoffs. Zero account managers.
+                Small senior team. Direct communication. Fast execution. Websites, mobile apps, AI pipelines, and brand systems built with zero junior handoffs.
               </p>
             </div>
 
@@ -88,6 +88,51 @@ export const HeroSection: React.FC = () => {
                 <MessageCircle className="w-4 h-4 text-emerald-600" />
                 <span className="font-semibold text-xs">WhatsApp</span>
               </a>
+            </div>
+
+            {/* Quick Intent Selector Pills */}
+            <div className="pt-2">
+              <div className="text-[11px] font-mono text-[#5B6875] uppercase tracking-wider font-semibold mb-2.5 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-[#B8613A]" />
+                <span>Quick Inquiry Tracks:</span>
+              </div>
+              <div className="flex flex-wrap gap-2 font-mono">
+                <Link
+                  href="/contact?service=Web+Development"
+                  className="px-3 py-1.5 rounded-lg bg-white hover:bg-[#FBF4F0] text-[#0B1F33] hover:text-[#B8613A] border border-[#D9E0E5] text-xs font-semibold shadow-subtle-card transition-all flex items-center gap-1 group"
+                >
+                  <span>Need a Website</span>
+                  <ArrowUpRight className="w-3 h-3 text-[#B8613A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Link>
+                <Link
+                  href="/contact?service=App+Development"
+                  className="px-3 py-1.5 rounded-lg bg-white hover:bg-[#FBF4F0] text-[#0B1F33] hover:text-[#B8613A] border border-[#D9E0E5] text-xs font-semibold shadow-subtle-card transition-all flex items-center gap-1 group"
+                >
+                  <span>Need an App</span>
+                  <ArrowUpRight className="w-3 h-3 text-[#B8613A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Link>
+                <Link
+                  href="/contact?service=AI+%26+Automation"
+                  className="px-3 py-1.5 rounded-lg bg-white hover:bg-[#FBF4F0] text-[#0B1F33] hover:text-[#B8613A] border border-[#D9E0E5] text-xs font-semibold shadow-subtle-card transition-all flex items-center gap-1 group"
+                >
+                  <span>Need AI Automation</span>
+                  <ArrowUpRight className="w-3 h-3 text-[#B8613A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Link>
+                <Link
+                  href="/contact?service=UI%2FUX+%26+Branding"
+                  className="px-3 py-1.5 rounded-lg bg-white hover:bg-[#FBF4F0] text-[#0B1F33] hover:text-[#B8613A] border border-[#D9E0E5] text-xs font-semibold shadow-subtle-card transition-all flex items-center gap-1 group"
+                >
+                  <span>Need Branding</span>
+                  <ArrowUpRight className="w-3 h-3 text-[#B8613A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Link>
+                <Link
+                  href="/contact?service=Digital+Marketing"
+                  className="px-3 py-1.5 rounded-lg bg-white hover:bg-[#FBF4F0] text-[#0B1F33] hover:text-[#B8613A] border border-[#D9E0E5] text-xs font-semibold shadow-subtle-card transition-all flex items-center gap-1 group"
+                >
+                  <span>Need Marketing</span>
+                  <ArrowUpRight className="w-3 h-3 text-[#B8613A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Link>
+              </div>
             </div>
 
             {/* Micro Technical Trust Indicators */}
@@ -153,8 +198,8 @@ export const HeroSection: React.FC = () => {
                   <div className="text-[9px] text-[#5B6875] uppercase font-semibold mt-0.5">Founders</div>
                 </div>
                 <div className="p-3.5 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5]">
-                  <div className="text-xl font-bold text-[#B8613A]">&lt;0.8s</div>
-                  <div className="text-[9px] text-[#5B6875] uppercase font-semibold mt-0.5">Latency</div>
+                  <div className="text-xl font-bold text-[#B8613A]">0.6s</div>
+                  <div className="text-[9px] text-[#5B6875] uppercase font-semibold mt-0.5">Ember & Oak</div>
                 </div>
                 <div className="p-3.5 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5]">
                   <div className="text-xl font-bold text-[#0B1F33]">100%</div>

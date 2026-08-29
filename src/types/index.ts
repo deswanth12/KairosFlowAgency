@@ -113,12 +113,15 @@ export interface CaseStudyFeature {
   description: string;
 }
 
+export type ProjectType = 'Client Project' | 'Internal R&D' | 'Pilot System' | 'Prototype';
+
 export interface Project {
   id: string;
   slug: string;
   title: string;
   tagline: string;
   category: ProjectCategory;
+  projectType?: ProjectType;
   client: string;
   industry: string;
   year: string;
@@ -138,6 +141,32 @@ export interface Project {
   featured: boolean;
   createdBy?: UserAuditRef;
   updatedBy?: UserAuditRef;
+}
+
+export interface Testimonial {
+  id: string;
+  clientName: string;
+  clientRole: string;
+  companyName: string;
+  avatar?: string;
+  projectBuilt: string;
+  quote: string;
+  rating: number;
+  resultsMetric?: string;
+  verified?: boolean;
+}
+
+export interface PricingTier {
+  id: string;
+  title: string;
+  startingPriceINR: string;
+  startingPriceUSD: string;
+  turnaround: string;
+  description: string;
+  idealFor: string;
+  features: string[];
+  serviceSlug: string;
+  popular?: boolean;
 }
 
 export interface ServiceDeliverable {

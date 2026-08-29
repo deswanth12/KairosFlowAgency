@@ -40,7 +40,7 @@ export const FinalCTA: React.FC = () => {
         {/* Availability Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-mono text-slate-200 mb-8 backdrop-blur-sm shadow-sm">
           <span className="w-2 h-2 rounded-full bg-[#B8613A] animate-pulse" />
-          <span>STATUS: ACCEPTING SELECTED Q1/Q2 PROJECTS</span>
+          <span>STATUS: NOW ACCEPTING SELECT PROJECTS</span>
         </div>
 
         {/* Headline */}
@@ -51,9 +51,37 @@ export const FinalCTA: React.FC = () => {
           </span>
         </h2>
 
-        <p className="text-base sm:text-lg text-slate-300 max-w-xl font-normal leading-relaxed mb-10">
-          Whether you need a modern web application, an autonomous AI pipeline, a mobile app, or a complete brand system, our founding team is ready to execute.
+        <p className="text-base sm:text-lg text-slate-300 max-w-xl font-normal leading-relaxed mb-8">
+          Whether you need a high-converting website, custom web or mobile app, autonomous AI pipeline, or complete brand system, our focused senior team is ready to execute.
         </p>
+
+        {/* Quick Inquiry Routing Buttons */}
+        <div className="flex flex-wrap justify-center gap-2 mb-8 font-mono max-w-xl">
+          <Link
+            href="/contact?service=Web+Development"
+            className="px-3 py-1.5 text-xs rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white border border-white/15 transition-colors"
+          >
+            Website Inquiries
+          </Link>
+          <Link
+            href="/contact?service=App+Development"
+            className="px-3 py-1.5 text-xs rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white border border-white/15 transition-colors"
+          >
+            Mobile & Web Apps
+          </Link>
+          <Link
+            href="/contact?service=AI+%26+Automation"
+            className="px-3 py-1.5 text-xs rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white border border-white/15 transition-colors"
+          >
+            AI & Automation
+          </Link>
+          <Link
+            href="/contact?service=UI%2FUX+%26+Branding"
+            className="px-3 py-1.5 text-xs rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white border border-white/15 transition-colors"
+          >
+            UI/UX & Branding
+          </Link>
+        </div>
 
         {/* Triple Action CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto justify-center mb-6 font-mono">

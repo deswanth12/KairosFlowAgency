@@ -1,22 +1,80 @@
 import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
+import { User, StoredUser, UserRole } from '@/types';
+import { kvGet, kvSet, kvGetSync, kvSetSync, KV_KEYS } from './kv';
+
 import fs from 'fs';
 import path from 'path';
-import { User, StoredUser, UserRole } from '@/types';
 
-const DATA_DIR = path.join(process.cwd(), '.data');
-const USERS_FILE = path.join(DATA_DIR, 'users.json');
-
-// Fail safely if secret is missing in production runtime, with fallback for build and development
-function getJwtSecret(): string {
-  return process.env.ADMIN_JWT_SECRET || 'kairos-flow-agency-secure-jwt-secret-key-2026';
+function readEnvVarFromFile(varName: string): string | undefined {
+  try {
+    for (const filename of ['.env.local', '.env.production', '.env']) {
+      const filePath = path.join(process.cwd(), filename);
+      if (fs.existsSync(filePath)) {
+        const content = fs.readFileSync(filePath, 'utf-8');
+        const lines = content.split(/\r?\n/);
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (trimmed.startsWith(`${varName}=`)) {
+            return trimmed.substring(varName.length + 1).trim();
+          }
+        }
+      }
+    }
+  } catch {}
+  return undefined;
 }
 
-export function hashPassword(password: string): string {
-  const secret = getJwtSecret();
-  return crypto.createHash('sha256').update(password + secret).digest('hex');
+// ---------------------------------------------------------------------------
+// JWT Secret — MUST be set via environment variable.
+// Fails closed: throws if missing. No hardcoded fallback.
+// ---------------------------------------------------------------------------
+export function getJwtSecret(): string {
+  let secret = process.env.ADMIN_JWT_SECRET || readEnvVarFromFile('ADMIN_JWT_SECRET');
+  if (secret) {
+    secret = secret.trim().replace(/^['"]|['"]$/g, '');
+  }
+  if (!secret || secret.length < 32) {
+    throw new Error(
+      '[KAIROS CONFIG ERROR] ADMIN_JWT_SECRET environment variable is not set or is too short (< 32 chars). ' +
+      'Set a strong random secret in your deployment environment. The application cannot start without it.'
+    );
+  }
+  return secret;
 }
 
-// 5 Predefined Team Founder Accounts with deterministic password hashes
+// ---------------------------------------------------------------------------
+// Password Hashing — bcrypt (cost 12), secure random salt per hash
+// No JWT secret used as salt. No SHA-256 shortcuts.
+// ---------------------------------------------------------------------------
+const BCRYPT_COST = 12;
+
+export async function hashPassword(password: string): Promise<string> {
+  return bcrypt.hash(password, BCRYPT_COST);
+}
+
+export async function verifyPassword(
+  password: string,
+  storedHash: string
+): Promise<boolean> {
+  if (!password || !storedHash) return false;
+  // Support bcrypt hashes ($2b$)
+  if (storedHash.startsWith('$2b$') || storedHash.startsWith('$2a$')) {
+    return bcrypt.compare(password, storedHash);
+  }
+  // Reject all other formats (old SHA-256 hashes are no longer accepted)
+  return false;
+}
+
+// ---------------------------------------------------------------------------
+// Default team user accounts — NO passwords in source code.
+// Passwords MUST be set via TEAM_PASSWORD_HASHES environment variable.
+//
+// Format (JSON string):
+//   {"usr-desvanth":"$2b$12$...","usr-basha":"$2b$12$...",...}
+//
+// Generate a hash with:  node -e "require('bcryptjs').hash('YourNewPass',12).then(console.log)"
+// ---------------------------------------------------------------------------
 export const DEFAULT_TEAM_USERS: StoredUser[] = [
   {
     id: 'usr-desvanth',
@@ -27,7 +85,7 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
     lastLogin: null,
-    passwordHash: hashPassword('Kairos@$$')
+    passwordHash: '' // Set via TEAM_PASSWORD_HASHES env var
   },
   {
     id: 'usr-basha',
@@ -38,7 +96,7 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
     lastLogin: null,
-    passwordHash: hashPassword('Basha@2026')
+    passwordHash: '' // Set via TEAM_PASSWORD_HASHES env var
   },
   {
     id: 'usr-siddiq',
@@ -49,7 +107,7 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
     lastLogin: null,
-    passwordHash: hashPassword('Siddiq@2026')
+    passwordHash: '' // Set via TEAM_PASSWORD_HASHES env var
   },
   {
     id: 'usr-rithesh',
@@ -60,7 +118,7 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
     lastLogin: null,
-    passwordHash: hashPassword('Rithesh@2026')
+    passwordHash: '' // Set via TEAM_PASSWORD_HASHES env var
   },
   {
     id: 'usr-saideep',
@@ -71,85 +129,91 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
     lastLogin: null,
-    passwordHash: hashPassword('SaiDeep@2026')
+    passwordHash: '' // Set via TEAM_PASSWORD_HASHES env var
   }
 ];
 
-function ensureDataDir(): void {
+// ---------------------------------------------------------------------------
+// Merge env-supplied bcrypt hashes into user records.
+// TEAM_PASSWORD_HASHES = '{"usr-desvanth":"$2b$12$...","usr-basha":"$2b$12$..."}'
+// ---------------------------------------------------------------------------
+function applyEnvPasswordHashes(users: StoredUser[]): StoredUser[] {
+  let raw = process.env.TEAM_PASSWORD_HASHES || readEnvVarFromFile('TEAM_PASSWORD_HASHES');
+  if (!raw) return users;
   try {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
+    raw = raw.trim();
+    while ((raw.startsWith("'") && raw.endsWith("'")) || (raw.startsWith('"') && raw.endsWith('"'))) {
+      raw = raw.slice(1, -1).trim();
     }
+    if (raw.includes('\\"')) {
+      raw = raw.replace(/\\"/g, '"');
+    }
+    let parsed: any = JSON.parse(raw);
+    if (typeof parsed === 'string') {
+      parsed = JSON.parse(parsed);
+    }
+    const map: Record<string, string> = parsed;
+    return users.map((u) => {
+      if (map && map[u.id] && (map[u.id].startsWith('$2b$') || map[u.id].startsWith('$2a$'))) {
+        return { ...u, passwordHash: map[u.id] };
+      }
+      return u;
+    });
   } catch (err) {
-    console.error('Error creating data directory:', err);
+    console.error('[KAIROS AUTH] Failed to parse TEAM_PASSWORD_HASHES:', err);
+    return users;
   }
 }
 
-// Atomic file write using temporary file + rename to prevent race condition corruption
-function atomicWriteFileSync(filePath: string, content: string): void {
-  ensureDataDir();
-  const tempPath = `${filePath}.${Date.now()}.${Math.random().toString(36).substring(2, 7)}.tmp`;
+// ---------------------------------------------------------------------------
+// User persistence — async (production KV) + sync (local dev)
+// ---------------------------------------------------------------------------
+export async function getUsersAsync(): Promise<StoredUser[]> {
   try {
-    fs.writeFileSync(tempPath, content, 'utf-8');
-    fs.renameSync(tempPath, filePath);
-  } catch (err) {
-    if (fs.existsSync(tempPath)) {
-      try { fs.unlinkSync(tempPath); } catch {}
+    const stored = await kvGet<StoredUser[]>(KV_KEYS.USERS);
+    if (!stored || !Array.isArray(stored) || stored.length === 0) {
+      const defaults = applyEnvPasswordHashes(DEFAULT_TEAM_USERS);
+      await kvSet(KV_KEYS.USERS, defaults);
+      return defaults;
     }
-    // Fallback to direct write if atomic rename fails on Windows filesystem locks
-    fs.writeFileSync(filePath, content, 'utf-8');
+    return applyEnvPasswordHashes(stored);
+  } catch {
+    return applyEnvPasswordHashes(DEFAULT_TEAM_USERS);
   }
 }
 
 export function getUsers(): StoredUser[] {
   try {
-    ensureDataDir();
-    if (!fs.existsSync(USERS_FILE)) {
-      atomicWriteFileSync(USERS_FILE, JSON.stringify(DEFAULT_TEAM_USERS, null, 2));
-      return DEFAULT_TEAM_USERS;
+    const stored = kvGetSync<StoredUser[]>(KV_KEYS.USERS);
+    if (!stored || !Array.isArray(stored) || stored.length === 0) {
+      const defaults = applyEnvPasswordHashes(DEFAULT_TEAM_USERS);
+      kvSetSync(KV_KEYS.USERS, defaults);
+      return defaults;
     }
-    const data = fs.readFileSync(USERS_FILE, 'utf-8');
-    const parsed = JSON.parse(data);
-    if (!Array.isArray(parsed) || parsed.length === 0) {
-      atomicWriteFileSync(USERS_FILE, JSON.stringify(DEFAULT_TEAM_USERS, null, 2));
-      return DEFAULT_TEAM_USERS;
-    }
-
-    // Synchronize deterministic password hashes from DEFAULT_TEAM_USERS if secret rotated
-    const synced = parsed.map((u: StoredUser) => {
-      const defaultUser = DEFAULT_TEAM_USERS.find((d) => d.id === u.id);
-      if (defaultUser) {
-        return {
-          ...u,
-          passwordHash: defaultUser.passwordHash
-        };
-      }
-      return u;
-    });
-
-    return synced;
-  } catch (error) {
-    console.error('Error reading users:', error);
-    return DEFAULT_TEAM_USERS;
+    return applyEnvPasswordHashes(stored);
+  } catch {
+    return applyEnvPasswordHashes(DEFAULT_TEAM_USERS);
   }
+}
+
+export async function saveUsersAsync(users: StoredUser[]): Promise<void> {
+  await kvSet(KV_KEYS.USERS, users);
 }
 
 export function saveUsers(users: StoredUser[]): void {
-  try {
-    atomicWriteFileSync(USERS_FILE, JSON.stringify(users, null, 2));
-  } catch (err) {
-    console.error('Error saving users:', err);
-  }
+  kvSetSync(KV_KEYS.USERS, users);
 }
 
+// ---------------------------------------------------------------------------
+// Public user view — strips passwordHash and limits field exposure
+// ---------------------------------------------------------------------------
 export function getPublicUsers(currentRequesterId?: string): User[] {
   const users = getUsers();
   const now = Date.now();
-  const ACTIVE_THRESHOLD_MS = 15 * 60 * 1000; // 15 minutes window
+  const ACTIVE_THRESHOLD_MS = 15 * 60 * 1000;
 
   return users.map(({ passwordHash, ...user }) => {
     let isCurrentlyOnline = false;
-
     if (currentRequesterId && user.id === currentRequesterId) {
       isCurrentlyOnline = true;
     } else if (user.isOnline && user.lastActiveAt) {
@@ -158,22 +222,47 @@ export function getPublicUsers(currentRequesterId?: string): User[] {
         isCurrentlyOnline = true;
       }
     }
+    return { ...user, isOnline: isCurrentlyOnline };
+  });
+}
 
+/**
+ * Minimal public team data for unauthenticated /api/users.
+ * Only exposes: id, name, role, isOnline.
+ * Does NOT expose email, lastLogin, lastActiveAt, status.
+ */
+export function getMinimalPublicUsers(): Pick<User, 'id' | 'name' | 'role' | 'isOnline'>[] {
+  const users = getUsers();
+  const now = Date.now();
+  const ACTIVE_THRESHOLD_MS = 15 * 60 * 1000;
+
+  return users.map((user) => {
+    let isCurrentlyOnline = false;
+    if (user.isOnline && user.lastActiveAt) {
+      const lastActiveTime = new Date(user.lastActiveAt).getTime();
+      if (now - lastActiveTime < ACTIVE_THRESHOLD_MS) {
+        isCurrentlyOnline = true;
+      }
+    }
     return {
-      ...user,
+      id: user.id,
+      name: user.name,
+      role: user.role,
       isOnline: isCurrentlyOnline
     };
   });
 }
 
 export function findUserById(id: string): StoredUser | null {
-  const users = getUsers();
-  return users.find((u) => u.id === id) || null;
+  return getUsers().find((u) => u.id === id) || null;
 }
 
 export function findUserByEmail(email: string): StoredUser | null {
-  const users = getUsers();
-  return users.find((u) => u.email.toLowerCase() === email.toLowerCase() || u.name.toLowerCase() === email.toLowerCase()) || null;
+  return getUsers().find(
+    (u) =>
+      u.email.toLowerCase() === email.toLowerCase() ||
+      u.name.toLowerCase() === email.toLowerCase()
+  ) || null;
 }
 
 export function updateUserLastLogin(userId: string): void {
@@ -215,11 +304,13 @@ export function updateUserLogout(userId: string): void {
       saveUsers(users);
     }
   } catch (err) {
-    console.error('Failed to update logout status:', err);
+    console.error('Failed to update logout:', err);
   }
 }
 
-// Session Token Creation & Verification (HMAC-SHA256)
+// ---------------------------------------------------------------------------
+// Session Token (HMAC-SHA256 custom format)
+// ---------------------------------------------------------------------------
 export interface TokenPayload {
   userId: string;
   name: string;
@@ -229,7 +320,7 @@ export interface TokenPayload {
 }
 
 export function createSessionToken(user: User): string {
-  const secret = getJwtSecret();
+  const secret = getJwtSecret(); // throws if missing
   const payload: TokenPayload = {
     userId: user.id,
     name: user.name,
@@ -237,7 +328,6 @@ export function createSessionToken(user: User): string {
     role: user.role,
     exp: Date.now() + 7 * 24 * 60 * 60 * 1000 // 7 days
   };
-
   const payloadB64 = Buffer.from(JSON.stringify(payload)).toString('base64url');
   const signature = crypto.createHmac('sha256', secret).update(payloadB64).digest('base64url');
   return `${payloadB64}.${signature}`;
@@ -246,45 +336,44 @@ export function createSessionToken(user: User): string {
 export function verifySessionToken(token: string): TokenPayload | null {
   try {
     if (!token || !token.includes('.')) return null;
-    const [payloadB64, signature] = token.split('.');
-    const secret = getJwtSecret();
-    const expectedSignature = crypto.createHmac('sha256', secret).update(payloadB64).digest('base64url');
+    const dotIndex = token.lastIndexOf('.');
+    const payloadB64 = token.substring(0, dotIndex);
+    const signature = token.substring(dotIndex + 1);
 
-    // Constant time comparison to prevent timing attacks
-    const signatureBuf = Buffer.from(signature);
-    const expectedBuf = Buffer.from(expectedSignature);
-    if (signatureBuf.length !== expectedBuf.length || !crypto.timingSafeEqual(signatureBuf, expectedBuf)) {
+    const secret = getJwtSecret(); // throws if missing
+    const expectedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(payloadB64)
+      .digest('base64url');
+
+    // Constant-time comparison
+    const sigBuf = Buffer.from(signature);
+    const expBuf = Buffer.from(expectedSignature);
+    if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) {
       return null;
     }
 
-    const payload: TokenPayload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString('utf-8'));
-    if (payload.exp < Date.now()) {
-      return null; // Expired
-    }
-
+    const payload: TokenPayload = JSON.parse(
+      Buffer.from(payloadB64, 'base64url').toString('utf-8')
+    );
+    if (payload.exp < Date.now()) return null;
     return payload;
   } catch {
     return null;
   }
 }
 
-// Extract authenticated user directly from NextRequest or standard Request
 export function getAuthenticatedUser(req: Request): TokenPayload | null {
   try {
     const authHeader = req.headers.get('authorization') || '';
     let token = '';
-
     if (authHeader.startsWith('Bearer ')) {
       token = authHeader.substring(7).trim();
     } else {
-      // Check cookies
       const cookieHeader = req.headers.get('cookie') || '';
       const match = cookieHeader.match(/kairos_admin_token=([^;]+)/);
-      if (match) {
-        token = match[1].trim();
-      }
+      if (match) token = match[1].trim();
     }
-
     if (!token) return null;
     return verifySessionToken(token);
   } catch {
@@ -292,14 +381,16 @@ export function getAuthenticatedUser(req: Request): TokenPayload | null {
   }
 }
 
-// Role-Based Access Control (RBAC) Permissions Matrix
+// ---------------------------------------------------------------------------
+// RBAC Permissions Matrix
+// ---------------------------------------------------------------------------
 export function checkPermission(
   role: UserRole,
   action: 'manage_users' | 'delete_record' | 'manage_finance' | 'edit_all_leads' | 'view_leads' | 'view_activity'
 ): boolean {
   switch (role) {
     case 'Owner/Admin':
-      return true; // Full administrative authority
+      return true;
     case 'Operations':
       return action !== 'manage_users' && action !== 'delete_record';
     case 'Development':

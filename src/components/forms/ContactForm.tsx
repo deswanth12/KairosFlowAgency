@@ -63,14 +63,31 @@ export const ContactForm: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const serviceParam = searchParams.get('service');
-    if (serviceParam) {
-      const matched = AVAILABLE_SERVICES.find(
-        (s) => s.toLowerCase() === serviceParam.toLowerCase() || s.toLowerCase().includes(serviceParam.toLowerCase())
+    const rawServices = searchParams.get('services') || searchParams.get('service');
+    const timelineParam = searchParams.get('timeline');
+    const budgetParam = searchParams.get('budget');
+
+    if (rawServices) {
+      const requested = rawServices.split(',').map((s) => s.trim().toLowerCase());
+      const matched = AVAILABLE_SERVICES.filter((svc) =>
+        requested.some((req) => svc.toLowerCase() === req || svc.toLowerCase().includes(req) || req.includes(svc.toLowerCase()))
       );
-      if (matched && !formData.services.includes(matched)) {
-        setFormData((prev) => ({ ...prev, services: [...prev.services, matched] }));
+      if (matched.length > 0) {
+        setFormData((prev) => {
+          const combined = Array.from(new Set([...prev.services, ...matched]));
+          return { ...prev, services: combined };
+        });
       }
+    }
+
+    if (timelineParam) {
+      const matchedTimeline = TIMELINE_OPTIONS.find((t) => t.toLowerCase().includes(timelineParam.toLowerCase())) || timelineParam;
+      setFormData((prev) => ({ ...prev, timeline: matchedTimeline }));
+    }
+
+    if (budgetParam) {
+      const matchedBudget = BUDGET_RANGES.find((b) => b.toLowerCase().includes(budgetParam.toLowerCase())) || budgetParam;
+      setFormData((prev) => ({ ...prev, budget: matchedBudget }));
     }
   }, [searchParams]);
 

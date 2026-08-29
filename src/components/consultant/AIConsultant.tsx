@@ -40,12 +40,6 @@ export const AIConsultant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
-  // Hide AI Consultant inside the private admin CRM
-  if (pathname && pathname.startsWith('/admin')) {
-    return null;
-  }
-
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome-1',
@@ -81,6 +75,11 @@ export const AIConsultant: React.FC = () => {
       scrollToBottom();
     }
   }, [messages, isOpen]);
+
+  // Hide AI Consultant inside the private admin CRM (evaluated AFTER all hooks)
+  if (pathname && pathname.startsWith('/admin')) {
+    return null;
+  }
 
   // Generate WhatsApp Handover URL containing the recent chat context
   const generateWhatsAppHandoverUrl = () => {

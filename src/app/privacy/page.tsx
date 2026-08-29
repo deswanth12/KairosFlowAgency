@@ -29,7 +29,7 @@ export default function PrivacyPage() {
           Privacy Policy & Client Data Standards
         </h1>
         <p className="text-[#5B6875] text-sm font-mono mb-12">
-          Effective Date: January 1, 2026 • Last Updated: Q1 2026
+          Effective Date: 2026 • Kairos Flow Agency Governance Standards
         </p>
 
         <div className="space-y-10 text-[#5B6875] text-sm sm:text-base leading-relaxed border-t border-[#D9E0E5] pt-10">

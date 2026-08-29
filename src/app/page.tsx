@@ -2,6 +2,8 @@ import { HeroSection } from '@/components/home/HeroSection';
 import { TrustStrip } from '@/components/home/TrustStrip';
 import { FeaturedProjects } from '@/components/home/FeaturedProjects';
 import { ServicesGrid } from '@/components/home/ServicesGrid';
+import { PricingSection } from '@/components/home/PricingSection';
+import { TestimonialsSection } from '@/components/home/TestimonialsSection';
 import { WhyKairos } from '@/components/home/WhyKairos';
 import { ProcessPreview } from '@/components/home/ProcessPreview';
 import { TeamPreview } from '@/components/home/TeamPreview';
@@ -11,31 +13,37 @@ import { FinalCTA } from '@/components/home/FinalCTA';
 export default function HomePage() {
   return (
     <>
-      {/* 1. Hero with 3 Core Trust Cards */}
+      {/* 1. Hero with Quick Intent Routing & Senior Team Agility */}
       <HeroSection />
 
       {/* 2. Trust Strip */}
       <TrustStrip />
 
-      {/* 3. Selected Work (Shown immediately after hero/trust) */}
+      {/* 3. Selected Work with Transparent Project Classification Badges */}
       <FeaturedProjects />
 
-      {/* 4. Six Core Capabilities / Services */}
+      {/* 4. Six Core Disciplines */}
       <ServicesGrid />
 
-      {/* 5. Why Kairos Flow (5 Practical Reasons) */}
+      {/* 5. Transparent Starting Pricing Anchors (INR / USD) */}
+      <PricingSection />
+
+      {/* 6. Verified Client Proof & Testimonials */}
+      <TestimonialsSection />
+
+      {/* 7. Why Kairos Flow (5 Practical Agility Reasons) */}
       <WhyKairos />
 
-      {/* 6. Process Roadmap (6 Stages) */}
+      {/* 8. Process Roadmap (6 Sprints) */}
       <ProcessPreview />
 
-      {/* 7. Founding Team (5 Specialists) */}
+      {/* 9. Founding Team (5 Specialists with Verified Credentials) */}
       <TeamPreview />
 
-      {/* 8. FAQ Section (Pricing, Timeline, Process, Revisions, Support, Payment) */}
+      {/* 10. FAQ Section (Pricing, Timeline, SLA, IP Ownership) */}
       <FAQSection />
 
-      {/* 9. Final Call to Action */}
+      {/* 11. Final High-Conversion Call to Action */}
       <FinalCTA />
     </>
   );

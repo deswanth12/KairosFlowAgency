@@ -69,6 +69,17 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
             <span className="px-3 py-1 rounded-full bg-white text-[#B8613A] text-xs font-semibold border border-[#D9E0E5] shadow-subtle-card">
               {project.category}
             </span>
+            {project.projectType && (
+              <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${
+                project.projectType === 'Client Project'
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  : project.projectType === 'Pilot System'
+                  ? 'bg-blue-50 text-blue-700 border-blue-200'
+                  : 'bg-amber-50 text-amber-700 border-amber-200'
+              }`}>
+                {project.projectType}
+              </span>
+            )}
             <span className="text-[#D9E0E5]">•</span>
             <span className="text-xs text-[#5B6875]">{project.industry}</span>
           </div>
