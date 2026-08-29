@@ -6,7 +6,7 @@ export const siteSettingsData: SiteSettings = {
   email: 'kairosflowagency@gmail.com',
   phone: '+91 77022 56073',
   whatsappNumber: '917702256073',
-  address: 'Hyderabad & Bangalore, India • Global Client Delivery',
+  address: 'Tirupati, Andhra Pradesh, India • Global Client Delivery',
   workingHours: 'Monday – Saturday: 9:00 AM – 7:00 PM IST',
   responseExpectation: 'Within 24 hours on business days',
   socials: {

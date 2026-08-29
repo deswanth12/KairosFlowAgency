@@ -103,8 +103,8 @@ const jsonLd = {
   email: siteSettingsData.email,
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Hyderabad',
-    addressRegion: 'Telangana',
+    addressLocality: 'Tirupati',
+    addressRegion: 'Andhra Pradesh',
     addressCountry: 'India'
   },
   description: 'Digital agency specializing in web development, mobile apps, AI automation, brand identity, and video production.',

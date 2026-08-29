@@ -143,7 +143,7 @@ Champagne     #B99A62   1%–2% visual budget for luxury badges, milestone metri
 
 - **Email**: [kairosflowagency@gmail.com](mailto:kairosflowagency@gmail.com)
 - **Phone / WhatsApp**: [+91 77022 56073](https://wa.me/917702256073)
-- **Location**: Hyderabad & Bangalore, India • Global Client Delivery
+- **Location**: Tirupati, Andhra Pradesh, India • Global Client Delivery
 - **Business Turnaround**: Inquiries reviewed within 24 hours on business days.
 
 ---

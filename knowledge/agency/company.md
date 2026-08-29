@@ -12,7 +12,7 @@
   - Rithesh (Development & Technical Support)
   - Sai Deep (Video Production Lead)
 - **operating_philosophy**: Trust first, premium second, sales third. One integrated team across all disciplines with zero junior handoffs.
-- **location**: Hyderabad & Bangalore, India • Global Client Delivery (US, UK, UAE, India)
+- **location**: Tirupati, Andhra Pradesh, India • Global Client Delivery (US, UK, UAE, India)
 - **email**: kairosflowagency@gmail.com
 - **phone**: +91 77022 56073
 - **whatsapp**: +91 77022 56073
