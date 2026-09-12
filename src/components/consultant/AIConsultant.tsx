@@ -20,6 +20,7 @@ import {
   Check
 } from 'lucide-react';
 import { ConsultantResponse } from '@/lib/rag';
+import { siteSettingsData } from '@/data/settings';
 
 interface ChatMessage {
   id: string;
@@ -98,7 +99,8 @@ export const AIConsultant: React.FC = () => {
     const text = encodeURIComponent(
       `Hi Desvanth & Kairos Flow Team,\n\nI was just chatting with your AI Consultant regarding:\n"${lastUserMsg}"\n\nI would like to discuss next steps and pricing with your team.`
     );
-    return `https://wa.me/917702256073?text=${text}`;
+    const num = siteSettingsData.whatsappNumber || '917702256073';
+    return `https://wa.me/${num}?text=${text}`;
   };
 
   const handleSend = async (overrideText?: string) => {

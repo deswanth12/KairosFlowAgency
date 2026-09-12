@@ -483,7 +483,15 @@ export const ContactForm: React.FC = () => {
               <div className="flex items-center gap-1 bg-[#F7F7F4] p-0.5 rounded-md border border-[#D9E0E5] text-[10px]">
                 <button
                   type="button"
-                  onClick={() => setCurrency('INR')}
+                  onClick={() => {
+                    if (currency !== 'INR') {
+                      setCurrency('INR');
+                      const idx = BUDGET_RANGES_USD.indexOf(formData.budget);
+                      if (idx !== -1 && BUDGET_RANGES_INR[idx]) {
+                        setFormData((prev) => ({ ...prev, budget: BUDGET_RANGES_INR[idx] }));
+                      }
+                    }
+                  }}
                   className={`px-2 py-0.5 rounded font-bold transition-all ${
                     currency === 'INR' ? 'bg-[#0B1F33] text-white shadow-xs' : 'text-[#5B6875] hover:text-[#0B1F33]'
                   }`}
@@ -492,7 +500,15 @@ export const ContactForm: React.FC = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setCurrency('USD')}
+                  onClick={() => {
+                    if (currency !== 'USD') {
+                      setCurrency('USD');
+                      const idx = BUDGET_RANGES_INR.indexOf(formData.budget);
+                      if (idx !== -1 && BUDGET_RANGES_USD[idx]) {
+                        setFormData((prev) => ({ ...prev, budget: BUDGET_RANGES_USD[idx] }));
+                      }
+                    }
+                  }}
                   className={`px-2 py-0.5 rounded font-bold transition-all ${
                     currency === 'USD' ? 'bg-[#0B1F33] text-white shadow-xs' : 'text-[#5B6875] hover:text-[#0B1F33]'
                   }`}
@@ -507,6 +523,12 @@ export const ContactForm: React.FC = () => {
               className="w-full px-4 py-3 text-xs rounded-xl bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
             >
               <option value="">Select target investment bracket...</option>
+              {Boolean(
+                formData.budget &&
+                !(currency === 'INR' ? BUDGET_RANGES_INR : BUDGET_RANGES_USD).includes(formData.budget)
+              ) && (
+                <option value={formData.budget}>{formData.budget} (Selected Scope)</option>
+              )}
               {(currency === 'INR' ? BUDGET_RANGES_INR : BUDGET_RANGES_USD).map((b) => (
                 <option key={b} value={b}>{b}</option>
               ))}

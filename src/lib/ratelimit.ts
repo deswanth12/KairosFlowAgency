@@ -48,12 +48,15 @@ const localStore = new Map<string, RateLimitRecord>();
 
 // Prune expired local entries every 5 minutes
 if (typeof setInterval !== 'undefined') {
-  setInterval(() => {
+  const timer = setInterval(() => {
     const now = Date.now();
     for (const [key, record] of localStore.entries()) {
       if (now > record.resetAt) localStore.delete(key);
     }
   }, 5 * 60 * 1000);
+  if (typeof (timer as any)?.unref === 'function') {
+    (timer as any).unref();
+  }
 }
 
 // ---------------------------------------------------------------------------

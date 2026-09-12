@@ -48,9 +48,12 @@ export function generateWhatsAppLink(
     timeline?: string;
   }
 ): string {
-  let cleanPhone = phoneNumber.replace(/[^0-9]/g, '');
+  let cleanPhone = String(phoneNumber || '917702256073').replace(/[^0-9]/g, '');
   if (cleanPhone.length === 10) {
     cleanPhone = '91' + cleanPhone;
+  }
+  if (!cleanPhone) {
+    cleanPhone = '917702256073';
   }
 
   if (!data || !data.name) {

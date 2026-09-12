@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
       console.error('Non-critical: Audit logging on login failed:', logErr);
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       token,
       user: {
@@ -140,6 +140,18 @@ export async function POST(request: NextRequest) {
         lastLogin: new Date().toISOString()
       }
     });
+
+    // Set session cookie for seamless server-side and browser authentication
+    response.cookies.set({
+      name: 'kairos_admin_token',
+      value: token,
+      httpOnly: false,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60 // 7 days
+    });
+
+    return response;
   } catch (error) {
     console.error('Authentication error:', error);
     return NextResponse.json(
@@ -172,7 +184,14 @@ export async function DELETE(request: NextRequest) {
         console.error('Non-critical: Audit logging on logout failed:', logErr);
       }
     }
-    return NextResponse.json({ success: true, message: 'Signed out successfully' });
+    const response = NextResponse.json({ success: true, message: 'Signed out successfully' });
+    response.cookies.set({
+      name: 'kairos_admin_token',
+      value: '',
+      path: '/',
+      maxAge: 0
+    });
+    return response;
   } catch (error) {
     console.error('Logout error:', error);
     return NextResponse.json({ success: false, message: 'Failed to sign out' }, { status: 500 });

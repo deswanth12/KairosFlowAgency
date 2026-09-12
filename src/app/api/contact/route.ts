@@ -67,15 +67,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 5. Save lead with only whitelisted, sanitized fields
+    // 5. Sanitize and validate services list
+    let sanitizedServices: string[] = [];
+    if (Array.isArray(services)) {
+      sanitizedServices = services
+        .map((s: unknown) => String(s).trim())
+        .filter((s) => ALLOWED_SERVICES.includes(s))
+        .slice(0, 10);
+    } else if (typeof services === 'string' && services.trim()) {
+      const trimmedSvc = services.trim();
+      if (ALLOWED_SERVICES.includes(trimmedSvc)) {
+        sanitizedServices = [trimmedSvc];
+      }
+    }
+
+    // Root Cause Protection: Never persist an empty service list
+    if (sanitizedServices.length === 0) {
+      sanitizedServices = ['Web Development'];
+    }
+
+    // 6. Save lead with only whitelisted, sanitized fields
     const lead = await saveLeadAsync({
       name: trim(name, MAX.name),
       company: company ? trim(company, MAX.company) : 'Not specified',
       email: trim(email, MAX.email).toLowerCase(),
       phone: trim(phone, MAX.phone),
-      services: Array.isArray(services)
-        ? services.map((s: unknown) => String(s).trim()).filter((s) => ALLOWED_SERVICES.includes(s)).slice(0, 10)
-        : (ALLOWED_SERVICES.includes(String(services).trim()) ? [String(services).trim()] : []),
+      services: sanitizedServices,
       description: trim(description, MAX.description),
       budget: budget ? trim(budget, MAX.budget) : 'Flexible',
       timeline: timeline ? trim(timeline, MAX.timeline) : 'Flexible',

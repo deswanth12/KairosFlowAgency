@@ -418,6 +418,10 @@ export default function AdminPage() {
   };
 
   const handleUpdateLead = async (id: string, updates: Partial<Lead>) => {
+    // Snapshot previous state for deterministic rollback on failure
+    const prevLeads = [...leads];
+    const prevActiveLead = activeLead ? { ...activeLead } : null;
+
     // 1. Optimistic Instant UI Update
     setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, ...updates, updatedAt: new Date().toISOString() } : l)));
     if (activeLead && activeLead.id === id) {
@@ -435,15 +439,24 @@ export default function AdminPage() {
         body: JSON.stringify({ id, ...updates })
       });
       const data = await res.json();
-      if (data.success && data.lead) {
+      if (res.ok && data.success && data.lead) {
         setLeads((prev) => prev.map((l) => (l.id === id ? data.lead : l)));
         if (activeLead && activeLead.id === id) {
           setActiveLead(data.lead);
         }
         fetchActivityLogs();
+      } else {
+        // Rollback on rejection
+        setLeads(prevLeads);
+        setActiveLead(prevActiveLead);
+        alert(data.message || 'Failed to save updates to server.');
       }
     } catch (err) {
       console.error('Error updating lead:', err);
+      // Rollback on network error
+      setLeads(prevLeads);
+      setActiveLead(prevActiveLead);
+      alert('Network connection error while updating lead.');
     }
   };
 
@@ -572,12 +585,15 @@ export default function AdminPage() {
 
   // Filtered Leads Calculation
   const filteredLeads = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
     return leads.filter((lead) => {
       const matchesSearch =
-        lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.phone.includes(searchQuery);
+        !q ||
+        String(lead.name || '').toLowerCase().includes(q) ||
+        String(lead.company || '').toLowerCase().includes(q) ||
+        String(lead.email || '').toLowerCase().includes(q) ||
+        String(lead.phone || '').includes(q) ||
+        (Array.isArray(lead.services) && lead.services.some((s) => String(s).toLowerCase().includes(q)));
 
       const matchesStage = selectedStageFilter === 'all' || lead.status === selectedStageFilter;
       const matchesPriority = selectedPriorityFilter === 'all' || lead.priority === selectedPriorityFilter;
@@ -589,15 +605,15 @@ export default function AdminPage() {
 
   // Filtered Activity Logs
   const filteredLogs = useMemo(() => {
+    const q = activitySearchQuery.toLowerCase().trim();
     return activityLogs.filter((log) => {
       const matchesCat = activityCategoryFilter === 'all' || log.category === activityCategoryFilter;
-      const q = activitySearchQuery.toLowerCase();
       const matchesSearch = 
         !q ||
-        log.userName.toLowerCase().includes(q) ||
-        log.action.toLowerCase().includes(q) ||
-        log.entityTitle.toLowerCase().includes(q) ||
-        log.details.summary.toLowerCase().includes(q);
+        String(log.userName || '').toLowerCase().includes(q) ||
+        String(log.action || '').toLowerCase().includes(q) ||
+        String(log.entityTitle || '').toLowerCase().includes(q) ||
+        String(log.details?.summary || '').toLowerCase().includes(q);
 
       return matchesCat && matchesSearch;
     });

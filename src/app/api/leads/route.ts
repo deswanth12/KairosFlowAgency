@@ -153,6 +153,11 @@ export async function PATCH(request: NextRequest) {
     if (updates.description) updates.description = truncateField(updates.description, LIMITS.description);
     if (updates.budget) updates.budget = truncateField(updates.budget, LIMITS.budget);
     if (updates.timeline) updates.timeline = truncateField(updates.timeline, LIMITS.timeline);
+    if (updates.estimatedValue) updates.estimatedValue = truncateField(updates.estimatedValue, 100);
+    if (updates.assignedTo) updates.assignedTo = truncateField(updates.assignedTo, 100);
+    if (updates.priority && !['High', 'Medium', 'Low'].includes(updates.priority)) {
+      delete updates.priority;
+    }
 
     const updater: UserAuditRef = {
       id: authUser.userId,
