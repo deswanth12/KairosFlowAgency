@@ -61,9 +61,20 @@ import {
   User, 
   UserRole, 
   ActivityLog, 
-  ActivityCategory 
+  ActivityCategory,
+  ServiceCategory
 } from '@/types';
 import { formatDate, formatTimeAgo, generateWhatsAppLink } from '@/lib/utils';
+
+const AVAILABLE_SERVICES: ServiceCategory[] = [
+  'Video & Content',
+  'Web Development',
+  'App Development',
+  'AI & Automation',
+  'UI/UX & Branding',
+  'Digital Marketing'
+];
+
 
 const PIPELINE_STAGES: LeadStatus[] = [
   'New Lead',
@@ -152,14 +163,15 @@ export default function AdminPage() {
     company: '',
     email: '',
     phone: '',
-    services: ['Web Development'],
+    services: ['Video & Content'],
     description: '',
-    budget: '$5,000 – $10,000',
-    timeline: '1 – 2 Months',
+    budget: '₹25,000 – ₹50,000',
+    timeline: '2 – 4 Weeks',
     priority: 'Medium' as LeadPriority,
     assignedTo: 'Desvanth',
     estimatedValue: '₹50,000'
   });
+
 
   // Check Session Token on Mount
   useEffect(() => {
@@ -369,6 +381,11 @@ export default function AdminPage() {
     }
     setIsScoringLead(true);
     setAiScoreError(null);
+
+    const effectiveBudget = (lead.estimatedValue && lead.estimatedValue.trim())
+      ? lead.estimatedValue
+      : (lead.budget && !lead.budget.includes('$') ? lead.budget : '₹50,000');
+
     try {
       const res = await fetch('/api/ai/score-lead', {
         method: 'POST',
@@ -380,7 +397,7 @@ export default function AdminPage() {
           name: lead.name,
           company: lead.company,
           description: lead.description,
-          budget: lead.budget || lead.estimatedValue,
+          budget: effectiveBudget,
           timeline: lead.timeline,
           services: lead.services
         })
@@ -408,6 +425,11 @@ export default function AdminPage() {
     }
     setIsGeneratingDrafts(true);
     setAiDraftsError(null);
+
+    const effectiveBudget = (lead.estimatedValue && lead.estimatedValue.trim())
+      ? lead.estimatedValue
+      : (lead.budget && !lead.budget.includes('$') ? lead.budget : '₹50,000');
+
     try {
       const res = await fetch('/api/ai/whatsapp-drafts', {
         method: 'POST',
@@ -419,7 +441,7 @@ export default function AdminPage() {
           name: lead.name,
           company: lead.company,
           description: lead.description,
-          budget: lead.budget || lead.estimatedValue,
+          budget: effectiveBudget,
           services: lead.services,
           assignedTo: lead.assignedTo || currentUser?.name
         })
@@ -439,6 +461,7 @@ export default function AdminPage() {
       setIsGeneratingDrafts(false);
     }
   };
+
 
 
   const handleUpdateLead = async (id: string, updates: Partial<Lead>) => {
@@ -555,14 +578,15 @@ export default function AdminPage() {
           company: '',
           email: '',
           phone: '',
-          services: ['Web Development'],
+          services: ['Video & Content'],
           description: '',
-          budget: '$5,000 – $10,000',
-          timeline: '1 – 2 Months',
+          budget: '₹25,000 – ₹50,000',
+          timeline: '2 – 4 Weeks',
           priority: 'Medium',
           assignedTo: availableUsers[0]?.name || 'Desvanth',
           estimatedValue: '₹50,000'
         });
+
         fetchLeads();
         fetchActivityLogs();
       } else {
@@ -1723,14 +1747,38 @@ export default function AdminPage() {
               <div className="p-4 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5] space-y-3">
                 <div className="text-xs font-mono uppercase text-[#5B6875] tracking-wider font-semibold">Project Brief</div>
                 <p className="text-xs text-[#111827] leading-relaxed whitespace-pre-wrap">{activeLead.description}</p>
-                <div className="flex flex-wrap gap-1.5 pt-2 border-t border-[#D9E0E5]">
-                  {activeLead.services.map((s) => (
-                    <span key={s} className="px-2 py-0.5 rounded bg-white text-[10px] font-mono text-[#0B1F33] border border-[#D9E0E5]">
-                      {s}
-                    </span>
-                  ))}
+                <div className="pt-2 border-t border-[#D9E0E5] space-y-1.5">
+                  <div className="flex items-center justify-between text-[10px] font-mono text-[#5B6875]">
+                    <span>Assigned Disciplines</span>
+                    <span className="text-[9px] text-[#B8613A]">Click to toggle</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {AVAILABLE_SERVICES.map((s) => {
+                      const isSelected = activeLead.services.includes(s);
+                      return (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => {
+                            const newServices = isSelected
+                              ? (activeLead.services.length > 1 ? activeLead.services.filter((x) => x !== s) : activeLead.services)
+                              : [...activeLead.services, s];
+                            handleUpdateLead(activeLead.id, { services: newServices });
+                          }}
+                          className={`px-2 py-0.5 rounded text-[10px] font-mono transition-all border ${
+                            isSelected
+                              ? 'bg-[#0B1F33] text-white border-[#0B1F33] shadow-xs'
+                              : 'bg-white text-[#5B6875] border-[#D9E0E5] hover:border-[#B8613A] hover:text-[#0B1F33]'
+                          }`}
+                        >
+                          {isSelected ? `✓ ${s}` : `+ ${s}`}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
+
 
               {/* Gemini AI Intelligence & Copilot Panel */}
               <div className="p-4 rounded-xl bg-gradient-to-br from-[#0B1F33] to-[#132B45] text-white space-y-3 font-mono shadow-md border border-white/10">
@@ -2073,10 +2121,61 @@ export default function AdminPage() {
                   rows={3}
                   required
                   value={manualFormData.description}
-                  onChange={(e) => setManualFormData({ ...manualFormData, description: e.target.value })}
-                  placeholder="Describe scope, features, and target outcomes..."
+                  onChange={(e) => {
+                    const desc = e.target.value;
+                    let detected = manualFormData.services;
+                    if (/\b(editor|editing|video|reels?|vlog|youtube|cinematography|shorts?)\b/i.test(desc)) {
+                      detected = ['Video & Content'];
+                    } else if (/\b(website|web app|nextjs|landing page|ecommerce)\b/i.test(desc)) {
+                      detected = ['Web Development'];
+                    } else if (/\b(app|ios|android|flutter|react native)\b/i.test(desc)) {
+                      detected = ['App Development'];
+                    }
+                    setManualFormData({ ...manualFormData, description: desc, services: detected });
+                  }}
+                  placeholder="Describe scope, e.g. need an editor for reels / custom web app..."
                   className="w-full px-3 py-2 rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
                 />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 font-mono">
+                <div>
+                  <label className="block text-[#5B6875] mb-1 font-semibold">Primary Discipline *</label>
+                  <select
+                    value={manualFormData.services[0] || 'Video & Content'}
+                    onChange={(e) => setManualFormData({ ...manualFormData, services: [e.target.value] })}
+                    className="w-full px-3 py-2 rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
+                  >
+                    <option value="Video & Content">Video & Content (Editing, Reels, Video)</option>
+                    <option value="Web Development">Web Development (Next.js, Full-Stack)</option>
+                    <option value="App Development">App Development (iOS, Android, React Native)</option>
+                    <option value="AI & Automation">AI & Automation (RAG, Agents, Pipelines)</option>
+                    <option value="UI/UX & Branding">UI/UX & Branding (Design Systems, Figma)</option>
+                    <option value="Digital Marketing">Digital Marketing (Growth, SEO)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[#5B6875] mb-1 font-semibold">Budget Range (INR ₹)</label>
+                  <select
+                    value={manualFormData.budget}
+                    onChange={(e) => {
+                      const b = e.target.value;
+                      const parts = b.match(/₹[\d,]+/);
+                      setManualFormData({
+                        ...manualFormData,
+                        budget: b,
+                        estimatedValue: parts ? parts[0] : manualFormData.estimatedValue
+                      });
+                    }}
+                    className="w-full px-3 py-2 rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5]"
+                  >
+                    <option value="₹15,000 – ₹25,000">₹15,000 – ₹25,000 (Starter)</option>
+                    <option value="₹25,000 – ₹50,000">₹25,000 – ₹50,000 (Growth)</option>
+                    <option value="₹50,000 – ₹1,00,000">₹50,000 – ₹1,00,000 (Scale)</option>
+                    <option value="₹1,00,000 – ₹2,50,000">₹1,00,000 – ₹2,50,000 (Flagship)</option>
+                    <option value="₹2,50,000+">₹2,50,000+ (Enterprise)</option>
+                  </select>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3 font-mono">
@@ -2093,16 +2192,17 @@ export default function AdminPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[#5B6875] mb-1 font-semibold">Estimated Value</label>
+                  <label className="block text-[#5B6875] mb-1 font-semibold">Estimated Value (INR ₹)</label>
                   <input
                     type="text"
                     value={manualFormData.estimatedValue}
                     onChange={(e) => setManualFormData({ ...manualFormData, estimatedValue: e.target.value })}
-                    placeholder="e.g. ₹75,000"
+                    placeholder="e.g. ₹50,000"
                     className="w-full px-3 py-2 rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5]"
                   />
                 </div>
               </div>
+
 
               <div className="pt-4 border-t border-[#D9E0E5] flex justify-end gap-2 font-mono">
                 <button

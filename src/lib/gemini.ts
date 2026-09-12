@@ -157,6 +157,132 @@ export interface LeadScore {
   confidence: 'high' | 'medium' | 'low';
 }
 
+export function normalizeInrBudget(budgetInput?: string): string {
+  if (!budgetInput) return '';
+  let str = budgetInput.trim();
+  if (!str || str === 'Flexible' || str === 'Not specified') return '';
+
+  // If old hardcoded USD range was present: '$5,000 – $10,000' or similar
+  if (str.includes('$5,000') || str.includes('$10,000') || str.includes('$2,500')) {
+    return '₹50,000';
+  }
+
+  // If any other '$' exists, convert '$' to '₹'
+  if (str.includes('$')) {
+    str = str.replace(/\$/g, '₹');
+  }
+
+  // Ensure '₹' prefix for numbers
+  if (/^\d[\d,]*(k|lakh|cr)?$/i.test(str)) {
+    return `₹${str}`;
+  }
+
+  return str.startsWith('₹') ? str : `₹${str}`;
+}
+
+export function detectServiceFromBrief(description: string, existingServices: string[] = []): {
+  serviceTitle: string;
+  isVideo: boolean;
+  isApp: boolean;
+  isAi: boolean;
+  isDesign: boolean;
+  isWeb: boolean;
+} {
+  const text = (description || '').toLowerCase();
+
+  // Video & Editing keywords
+  if (/\b(editor|editing|video|reels?|vlog|youtube|cinematography|post-production|colour grading|color grading|motion graphics|clip|shorts?)\b/i.test(text)) {
+    return {
+      serviceTitle: 'Video Editing & Content Production',
+      isVideo: true,
+      isApp: false,
+      isAi: false,
+      isDesign: false,
+      isWeb: false
+    };
+  }
+
+  // Mobile App keywords
+  if (/\b(mobile app|ios app|android app|flutter|react native|app store|play store)\b/i.test(text)) {
+    return {
+      serviceTitle: 'Mobile App Development',
+      isVideo: false,
+      isApp: true,
+      isAi: false,
+      isDesign: false,
+      isWeb: false
+    };
+  }
+
+  // AI & Automation keywords
+  if (/\b(ai|automation|agent|bot|rag|llm|workflow|chatgpt|claude|gemini|scraper|pipeline)\b/i.test(text)) {
+    return {
+      serviceTitle: 'AI & Automation Pipelines',
+      isVideo: false,
+      isApp: false,
+      isAi: true,
+      isDesign: false,
+      isWeb: false
+    };
+  }
+
+  // Design & Branding keywords
+  if (/\b(logo|branding|brand identity|ui\/ux|figma|graphic design|redesign|typography)\b/i.test(text)) {
+    return {
+      serviceTitle: 'UI/UX & Brand Identity',
+      isVideo: false,
+      isApp: false,
+      isAi: false,
+      isDesign: true,
+      isWeb: false
+    };
+  }
+
+  // Web Development keywords
+  if (/\b(website|web app|landing page|ecommerce|shopify|nextjs|react|frontend|backend)\b/i.test(text)) {
+    return {
+      serviceTitle: 'Web Development',
+      isVideo: false,
+      isApp: false,
+      isAi: false,
+      isDesign: false,
+      isWeb: true
+    };
+  }
+
+  // Fall back to existing services or default
+  if (existingServices && existingServices.length > 0) {
+    const first = existingServices[0];
+    if (first === 'Video & Content') {
+      return {
+        serviceTitle: 'Video Editing & Content Production',
+        isVideo: true,
+        isApp: false,
+        isAi: false,
+        isDesign: false,
+        isWeb: false
+      };
+    }
+    return {
+      serviceTitle: first,
+      isVideo: false,
+      isApp: first === 'App Development',
+      isAi: first === 'AI & Automation',
+      isDesign: first === 'UI/UX & Branding',
+      isWeb: first === 'Web Development'
+    };
+  }
+
+  return {
+    serviceTitle: 'Digital Solutions',
+    isVideo: false,
+    isApp: false,
+    isAi: false,
+    isDesign: false,
+    isWeb: false
+  };
+}
+
 export function generateFallbackDrafts(lead: {
   name: string;
   company?: string;
@@ -172,13 +298,25 @@ export function generateFallbackDrafts(lead: {
   const companyContext = lead.company && lead.company !== 'Not specified' && lead.company.trim()
     ? `for ${lead.company}`
     : 'for your venture';
-  const serviceText = lead.services && lead.services.length > 0
-    ? lead.services.slice(0, 2).join(' & ')
-    : 'digital product development';
-  const budgetText = lead.budget && lead.budget !== 'Flexible' && lead.budget.trim()
-    ? ` within your ${lead.budget} budget`
-    : '';
+
+  const inrBudget = normalizeInrBudget(lead.budget);
+  const budgetText = inrBudget ? ` within your ${inrBudget} budget` : '';
+
   const rawBrief = (lead.description || '').replace(/\(test\)/gi, '').trim();
+  const detection = detectServiceFromBrief(rawBrief, lead.services);
+
+  if (detection.isVideo) {
+    const pitch1 = `Hi ${clientName}, ${founder} here from Kairos Flow Agency. Thanks for reaching out regarding video editing & post-production ${companyContext}. We edit high-retention social content, YouTube productions, and brand commercials${budgetText}. Are you free for a quick 10-minute discovery call this week to review your raw footage and style requirements?`;
+
+    const pitch2 = `Hey ${clientName}! ${founder} from Kairos Flow here. Saw your note that you're looking for a video editor ${companyContext}. We craft sharp, engaging video edits with cinematic color grading and fast turnaround${budgetText}. Do you have reference links or sample edits in mind?`;
+
+    const pitch3 = `Hi ${clientName}, ${founder} from Kairos Flow. To ensure maximum retention and visual polish for your video content${budgetText}, we can set up a dedicated editing sprint or ongoing monthly package. Would you like me to share our recent editing portfolio and turnaround timeline?`;
+
+    return [pitch1, pitch2, pitch3];
+  }
+
+  // Non-video fallback with detected service & INR budget
+  const serviceText = detection.serviceTitle;
   const briefSummary = rawBrief.length > 5 ? rawBrief.substring(0, 60) : '';
 
   // 1. Direct & Scope-focused
@@ -187,7 +325,7 @@ export function generateFallbackDrafts(lead: {
   // 2. Consultative & Vision-focused
   const pitch2 = briefSummary
     ? `Hey ${clientName}! ${founder} from Kairos Flow here. Saw your note regarding "${briefSummary}". We love crafting clean, impactful digital experiences and I'd be glad to help bring this to life${budgetText}. Do you have any reference designs or an ideal timeline?`
-    : `Hey ${clientName}! ${founder} from Kairos Flow here. Saw your inquiry regarding ${serviceText}. We love crafting clean, high-impact digital experiences and I'd be glad to help bring this to life. Do you have reference designs or an ideal launch timeline?`;
+    : `Hey ${clientName}! ${founder} from Kairos Flow here. Saw your inquiry regarding ${serviceText}. We love crafting clean, high-impact digital experiences and I'd be glad to help bring this to life${budgetText}. Do you have reference designs or an ideal launch timeline?`;
 
   // 3. Value & ROI-focused
   const pitch3 = `Hi ${clientName}, ${founder} from Kairos Flow. To ensure you get the highest ROI on your ${serviceText}${budgetText}, we can structure a phased delivery focusing on your core deliverables first. Would you like me to share our relevant case studies and a quick scope outline?`;
@@ -203,30 +341,27 @@ export function scoreLeadFallback(lead: {
   timeline?: string;
   services?: string[];
 }): LeadScore {
-  const hasBudget = Boolean(lead.budget && lead.budget !== 'Flexible' && lead.budget !== 'Not specified' && lead.budget.trim());
+  const inrBudget = normalizeInrBudget(lead.budget);
+  const hasBudget = Boolean(inrBudget);
   const descLen = (lead.description || '').trim().length;
-  const hasServices = Boolean(lead.services && lead.services.length > 0);
+  const detection = detectServiceFromBrief(lead.description || '', lead.services);
 
   let score = 7;
   let intent: 'Hot 🔥' | 'Warm 🌤' | 'Exploring 🔍' = 'Warm 🌤';
-  let summary = 'Active inbound inquiry; qualified for discovery call and scope consultation.';
+  let summary = `Active inquiry for ${detection.serviceTitle}; qualified for discovery call.`;
 
-  if (hasBudget && descLen >= 15) {
+  if (hasBudget && descLen >= 10) {
     score = 9;
     intent = 'Hot 🔥';
-    summary = `High priority lead with defined scope and budget (${lead.budget}); recommend immediate outreach.`;
-  } else if (hasBudget || descLen >= 25) {
+    summary = `High priority ${detection.serviceTitle} lead with defined scope and budget (${inrBudget}); recommend immediate outreach.`;
+  } else if (hasBudget || descLen >= 20) {
     score = 8;
     intent = 'Hot 🔥';
-    summary = `Strong buyer signals with clear ${hasServices ? lead.services?.[0] : 'service'} requirements.`;
-  } else if (!hasBudget && descLen < 12) {
+    summary = `Strong buyer signals for ${detection.serviceTitle}; ready for scope review.`;
+  } else if (!hasBudget && descLen < 10) {
     score = 5;
     intent = 'Exploring 🔍';
-    summary = 'Early discovery stage with brief requirements; qualification call recommended.';
-  } else {
-    score = 7;
-    intent = 'Warm 🌤';
-    summary = `Prospective client interested in ${lead.services?.join(', ') || 'digital services'}; high conversion potential.`;
+    summary = 'Initial inquiry with brief scope; qualification call recommended.';
   }
 
   return {
@@ -247,8 +382,9 @@ export async function scoreLeadWithAI(lead: {
   timeline?: string;
   services?: string[];
 }): Promise<{ score: LeadScore; source: 'gemini' | 'offline_copilot' }> {
-  const servicesStr = (lead.services || []).join(', ') || 'Digital Products';
-  const desc = lead.description || `Inquiry for ${servicesStr}`;
+  const desc = lead.description || '';
+  const detection = detectServiceFromBrief(desc, lead.services);
+  const inrBudget = normalizeInrBudget(lead.budget) || '₹50,000';
 
   const prompt = `You are a business development analyst for Kairos Flow Agency (a digital product studio in Tirupati, India).
 
@@ -257,16 +393,18 @@ Analyze this inbound client lead and return a JSON object ONLY — no explanatio
 Lead Details:
 - Name: ${lead.name}
 - Company: ${lead.company || 'Not specified'}
-- Services Requested: ${servicesStr}
-- Budget: ${lead.budget || 'Not specified'}
+- Detected Service: ${detection.serviceTitle}
+- Budget: ${inrBudget} (Indian Rupees)
 - Timeline: ${lead.timeline || 'Not specified'}
 - Project Description: "${desc}"
+
+CRITICAL: All monetary references must be in Indian Rupees (INR / ₹) — NEVER USD ($).
 
 Return this exact JSON structure:
 {
   "score": <integer 1-10 where 10 = highest priority, ideal client>,
   "intent": <one of exactly: "Hot 🔥" | "Warm 🌤" | "Exploring 🔍">,
-  "summary": <one sharp sentence, max 16 words, describing the lead value>,
+  "summary": <one sharp sentence, max 16 words, describing the lead value in INR>,
   "confidence": <one of: "high" | "medium" | "low">
 }
 
@@ -312,19 +450,25 @@ export async function generateWhatsAppDrafts(lead: {
   assignedTo?: string;
 }): Promise<{ drafts: string[]; source: 'gemini' | 'offline_copilot' }> {
   const founder = (lead.assignedTo || 'Desvanth').split(' ')[0];
-  const servicesStr = (lead.services || []).join(', ') || 'digital product design & development';
-  const desc = lead.description || `Inquiry for ${servicesStr}`;
+  const brief = lead.description || '';
+  const detection = detectServiceFromBrief(brief, lead.services);
+  const inrBudget = normalizeInrBudget(lead.budget) || '₹50,000';
 
-  const prompt = `You are ${founder}, founder of Kairos Flow Agency — a premium digital product studio in Tirupati, India. You build web apps, mobile apps, AI pipelines, and brand design.
+  const prompt = `You are ${founder}, founder of Kairos Flow Agency — a premium digital product and creative studio in Tirupati, India. You build web apps, mobile apps, AI pipelines, brand design, and commercial video editing & production.
 
 Write exactly 3 different WhatsApp opening messages for this inbound client lead. Each message should feel genuine, personal, and professional — not salesy. Keep each under 60 words.
 
 Lead:
 - Name: ${lead.name}
 - Company: ${lead.company || 'their venture'}
-- Services: ${servicesStr}
-- Budget: ${lead.budget || 'not specified'}
-- Description: "${desc}"
+- Detected Service: ${detection.serviceTitle}
+- Budget: ${inrBudget} (Indian Rupees)
+- Description: "${brief}"
+
+CRITICAL INSTRUCTIONS:
+1. SERVICE ACCURACY: If the client asks for an "editor", "video editing", or "reels", tailor the pitch specifically to VIDEO EDITING & POST-PRODUCTION (DO NOT pitch web development if they need an editor).
+2. CURRENCY IN INR: ALL currency amounts MUST be in Indian Rupees (INR / ₹) — NEVER mention USD or '$'. If mentioning budget, write in ₹ (e.g. ${inrBudget}).
+3. FOUNDER TONE: Sound natural, direct, and professional. Offer a quick 10-minute discovery call or portfolio review.
 
 Return a JSON array of exactly 3 strings (the 3 messages). No code fences. No extra text. Just the raw JSON array.
 
@@ -350,4 +494,5 @@ Vary tone: [1] Direct & professional, [2] Warm & curious, [3] Value-led with a q
     source: 'offline_copilot'
   };
 }
+
 
