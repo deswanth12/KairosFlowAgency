@@ -4,7 +4,6 @@ import { FeaturedProjects } from '@/components/home/FeaturedProjects';
 import { ServicesGrid } from '@/components/home/ServicesGrid';
 import { PricingSection } from '@/components/home/PricingSection';
 import { CostEstimator } from '@/components/home/CostEstimator';
-import { TestimonialsSection } from '@/components/home/TestimonialsSection';
 import { WhyKairos } from '@/components/home/WhyKairos';
 import { ProcessPreview } from '@/components/home/ProcessPreview';
 import { TeamPreview } from '@/components/home/TeamPreview';
@@ -12,7 +11,6 @@ import { FAQSection } from '@/components/home/FAQSection';
 import { FinalCTA } from '@/components/home/FinalCTA';
 import { AgencyComparison } from '@/components/home/AgencyComparison';
 import { MobileConversionBar } from '@/components/layout/MobileConversionBar';
-import { TestimonialsMarquee } from '@/components/home/TestimonialsMarquee';
 
 export default function HomePage() {
   return (
@@ -35,13 +33,7 @@ export default function HomePage() {
       {/* 6. Transparent Starting Pricing Anchors (INR / USD) */}
       <PricingSection />
 
-      {/* 6. Verified Client Proof & Testimonials */}
-      <TestimonialsSection />
-
-      {/* 6b. Infinite Real-Time Testimonials Wall */}
-      <TestimonialsMarquee />
-
-      {/* 7. Why Kairos Flow (5 Practical Agility Reasons) */}
+      {/* 6. Why Kairos Flow (5 Practical Agility Reasons) */}
       <WhyKairos />
 
       {/* 8. The Engineering Difference: Traditional vs Kairos Flow Matrix */}
