@@ -45,9 +45,13 @@ import {
   Printer,
   Copy,
   Check,
-  Zap
+  Zap,
+  Bot,
+  BrainCircuit,
+  Wand2
 } from 'lucide-react';
 import { Logo } from '@/components/brand/Logo';
+import { RevenueDashboard } from '@/components/admin/RevenueDashboard';
 import { 
   Lead, 
   LeadStatus, 
@@ -105,7 +109,14 @@ export default function AdminPage() {
   const [isAuthLoading, setIsAuthLoading] = useState<boolean>(false);
 
   // Active Main Navigation Tab
-  const [activeTab, setActiveTab] = useState<'pipeline' | 'activity' | 'team'>('pipeline');
+  const [activeTab, setActiveTab] = useState<'pipeline' | 'activity' | 'team' | 'finance'>('pipeline');
+
+  // Gemini AI Intelligence & Copilot State
+  const [aiScore, setAiScore] = useState<{ score: number; intent: string; summary: string } | null>(null);
+  const [isScoringLead, setIsScoringLead] = useState<boolean>(false);
+  const [aiDrafts, setAiDrafts] = useState<string[] | null>(null);
+  const [isGeneratingDrafts, setIsGeneratingDrafts] = useState<boolean>(false);
+  const [copiedDraftIdx, setCopiedDraftIdx] = useState<number | null>(null);
 
   // CRM State
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -335,6 +346,74 @@ export default function AdminPage() {
       console.error('Failed to fetch activity logs:', err);
     } finally {
       setIsLoadingLogs(false);
+    }
+  };
+
+  useEffect(() => {
+    setAiScore(null);
+    setAiDrafts(null);
+    setCopiedDraftIdx(null);
+  }, [activeLead?.id]);
+
+  const handleScoreLead = async (lead: Lead) => {
+    const activeToken = authToken || (typeof window !== 'undefined' ? sessionStorage.getItem('kairos_admin_token') : null);
+    if (!activeToken || !lead) return;
+    setIsScoringLead(true);
+    try {
+      const res = await fetch('/api/ai/score-lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${activeToken}`
+        },
+        body: JSON.stringify({
+          name: lead.name,
+          company: lead.company,
+          description: lead.description,
+          budget: lead.budget || lead.estimatedValue,
+          timeline: lead.timeline,
+          services: lead.services
+        })
+      });
+      const data = await res.json();
+      if (data.success && data.score) {
+        setAiScore(data.score);
+      }
+    } catch (err) {
+      console.error('Failed to score lead with AI:', err);
+    } finally {
+      setIsScoringLead(false);
+    }
+  };
+
+  const handleGenerateDrafts = async (lead: Lead) => {
+    const activeToken = authToken || (typeof window !== 'undefined' ? sessionStorage.getItem('kairos_admin_token') : null);
+    if (!activeToken || !lead) return;
+    setIsGeneratingDrafts(true);
+    try {
+      const res = await fetch('/api/ai/whatsapp-drafts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${activeToken}`
+        },
+        body: JSON.stringify({
+          name: lead.name,
+          company: lead.company,
+          description: lead.description,
+          budget: lead.budget || lead.estimatedValue,
+          services: lead.services,
+          assignedTo: lead.assignedTo || currentUser?.name
+        })
+      });
+      const data = await res.json();
+      if (data.success && data.drafts) {
+        setAiDrafts(data.drafts);
+      }
+    } catch (err) {
+      console.error('Failed to generate AI WhatsApp drafts:', err);
+    } finally {
+      setIsGeneratingDrafts(false);
     }
   };
 
@@ -791,6 +870,18 @@ export default function AdminPage() {
             >
               <Users className="w-3.5 h-3.5" />
               <span>Team & Roles</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('finance')}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                activeTab === 'finance'
+                  ? 'bg-[#0B1F33] text-white shadow-sm'
+                  : 'text-[#5B6875] hover:text-[#0B1F33]'
+              }`}
+            >
+              <TrendingUp className="w-3.5 h-3.5" />
+              <span>Revenue & Stats</span>
             </button>
           </div>
 
@@ -1386,6 +1477,15 @@ export default function AdminPage() {
             </div>
           </div>
         )}
+
+        {/* ==================================================== */}
+        {/* TAB 4: REVENUE PIPELINE & FINANCIAL ANALYTICS        */}
+        {/* ==================================================== */}
+        {activeTab === 'finance' && (
+          <div className="animate-in fade-in duration-200">
+            <RevenueDashboard leads={leads} />
+          </div>
+        )}
       </main>
 
       {/* LEAD OPERATIONS DRAWER / MODAL */}
@@ -1590,6 +1690,118 @@ export default function AdminPage() {
                     </span>
                   ))}
                 </div>
+              </div>
+
+              {/* Gemini AI Intelligence & Copilot Panel */}
+              <div className="p-4 rounded-xl bg-gradient-to-br from-[#0B1F33] to-[#132B45] text-white space-y-3 font-mono shadow-md border border-white/10">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-lg bg-[#B8613A] flex items-center justify-center text-white">
+                      <BrainCircuit className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold font-display">Gemini AI Lead Copilot</span>
+                      <span className="text-[9px] text-slate-300 ml-2">gemini-2.0-flash</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      disabled={isScoringLead}
+                      onClick={() => handleScoreLead(activeLead)}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[10px] font-bold text-white transition-all disabled:opacity-50"
+                    >
+                      {isScoringLead ? <Loader2 className="w-3 h-3 animate-spin text-[#B8613A]" /> : <Sparkles className="w-3 h-3 text-[#B8613A]" />}
+                      <span>{isScoringLead ? 'Scoring...' : 'Score Lead'}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={isGeneratingDrafts}
+                      onClick={() => handleGenerateDrafts(activeLead)}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#B8613A] hover:bg-[#a25330] text-[10px] font-bold text-white transition-all disabled:opacity-50 shadow-xs"
+                    >
+                      {isGeneratingDrafts ? <Loader2 className="w-3 h-3 animate-spin" /> : <Wand2 className="w-3 h-3" />}
+                      <span>{isGeneratingDrafts ? 'Drafting...' : 'AI Pitches'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* AI Score Display */}
+                {aiScore && (
+                  <div className="p-3 rounded-lg bg-white/5 border border-white/10 space-y-2 animate-in fade-in duration-200">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-slate-300">Quality Score:</span>
+                        <span className="text-sm font-bold text-[#B8613A]">{aiScore.score}/10</span>
+                        <div className="w-20 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-[#B8613A] rounded-full"
+                            style={{ width: `${aiScore.score * 10}%` }}
+                          />
+                        </div>
+                      </div>
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-white/10 text-white border border-white/15">
+                        {aiScore.intent}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-200 font-sans leading-relaxed">
+                      &ldquo;{aiScore.summary}&rdquo;
+                    </p>
+                  </div>
+                )}
+
+                {/* AI WhatsApp Drafts Display */}
+                {aiDrafts && aiDrafts.length > 0 && (
+                  <div className="space-y-2 pt-2 border-t border-white/10 animate-in fade-in duration-200">
+                    <div className="text-[10px] text-slate-300 uppercase tracking-wider font-semibold flex items-center justify-between">
+                      <span>3 Tailored WhatsApp Pitches</span>
+                      <span className="text-[9px] text-[#B8613A]">Click to send or copy</span>
+                    </div>
+                    <div className="space-y-2">
+                      {aiDrafts.map((draft, idx) => {
+                        const cleanPhone = activeLead.phone.replace(/[^0-9]/g, '').replace(/^(\d{10})$/, '91$1');
+                        const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(draft)}`;
+                        const isCopied = copiedDraftIdx === idx;
+
+                        return (
+                          <div key={idx} className="p-2.5 rounded-lg bg-white/5 border border-white/10 text-xs space-y-2">
+                            <p className="text-[11px] text-slate-200 font-sans leading-relaxed whitespace-pre-wrap">
+                              {draft}
+                            </p>
+                            <div className="flex items-center justify-between pt-1 border-t border-white/5">
+                              <span className="text-[9px] text-slate-400">Option 0{idx + 1}</span>
+                              <div className="flex items-center gap-1.5">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(draft);
+                                    setCopiedDraftIdx(idx);
+                                    setTimeout(() => setCopiedDraftIdx(null), 2000);
+                                  }}
+                                  className="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-[9px] text-white flex items-center gap-1 transition-colors"
+                                >
+                                  {isCopied ? <Check className="w-2.5 h-2.5 text-emerald-400" /> : <Copy className="w-2.5 h-2.5" />}
+                                  <span>{isCopied ? 'Copied' : 'Copy'}</span>
+                                </button>
+                                <a
+                                  href={waUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="px-2 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-[9px] font-bold text-white flex items-center gap-1 transition-colors"
+                                >
+                                  <MessageCircle className="w-2.5 h-2.5" />
+                                  <span>WhatsApp</span>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Internal Notes */}

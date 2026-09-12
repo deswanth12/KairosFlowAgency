@@ -7,6 +7,7 @@ import { projectsData } from '@/data/projects';
 import { 
   ArrowLeft, 
   ArrowUpRight, 
+  ArrowRight,
   ExternalLink
 } from 'lucide-react';
 import { ImageLightbox } from '@/components/common/ImageLightbox';
@@ -184,6 +185,89 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
             </div>
             <h3 className="text-xl font-bold text-white mb-4 font-display">How Kairos Flow executed</h3>
             <p className="text-slate-300 text-sm leading-relaxed">{project.solution}</p>
+          </div>
+        </div>
+
+        {/* Before vs. After Engineering Impact Matrix */}
+        <div className="p-6 sm:p-8 rounded-2xl bg-[#F7F7F4] border border-[#D9E0E5] mb-20 shadow-subtle-card">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div>
+              <div className="text-xs font-mono uppercase tracking-widest text-[#B8613A] mb-1 font-bold">
+                / QUANTIFIABLE TRANSFORMATION
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold text-[#0B1F33] font-display">
+                Before vs. After Kairos Flow Execution
+              </h3>
+            </div>
+            <span className="px-3 py-1 rounded-full bg-white border border-[#D9E0E5] text-xs font-mono font-bold text-emerald-700 flex items-center gap-1.5 self-start sm:self-auto shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Verified Architecture Delta
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono">
+            {/* Metric 1: System Latency */}
+            <div className="p-4 rounded-xl bg-white border border-[#D9E0E5] space-y-2.5">
+              <div className="text-[10px] uppercase text-[#5B6875] tracking-wider font-semibold">
+                Response & Resolution Time
+              </div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-[10px] text-red-500 line-through">Legacy Baseline</div>
+                  <div className="text-xs font-bold text-slate-400">4.2s – 12s</div>
+                </div>
+                <ArrowRight className="w-4 h-4 text-[#B8613A]" />
+                <div className="text-right">
+                  <div className="text-[10px] text-emerald-600 font-bold">Kairos Sprint</div>
+                  <div className="text-sm sm:text-base font-extrabold text-[#0B1F33]">{project.results?.[0]?.metric || '<400ms'}</div>
+                </div>
+              </div>
+              <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-full bg-emerald-500 rounded-full w-[92%]" />
+              </div>
+            </div>
+
+            {/* Metric 2: Reliability & Test Coverage */}
+            <div className="p-4 rounded-xl bg-white border border-[#D9E0E5] space-y-2.5">
+              <div className="text-[10px] uppercase text-[#5B6875] tracking-wider font-semibold">
+                Operational Determinism
+              </div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-[10px] text-red-500 line-through">Unverified Ops</div>
+                  <div className="text-xs font-bold text-slate-400">Manual / Drift</div>
+                </div>
+                <ArrowRight className="w-4 h-4 text-[#B8613A]" />
+                <div className="text-right">
+                  <div className="text-[10px] text-emerald-600 font-bold">Production QA</div>
+                  <div className="text-sm sm:text-base font-extrabold text-[#0B1F33]">{project.results?.[1]?.metric || '100%'}</div>
+                </div>
+              </div>
+              <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-full bg-[#B8613A] rounded-full w-[100%]" />
+              </div>
+            </div>
+
+            {/* Metric 3: Commercial Readiness */}
+            <div className="p-4 rounded-xl bg-white border border-[#D9E0E5] space-y-2.5">
+              <div className="text-[10px] uppercase text-[#5B6875] tracking-wider font-semibold">
+                Delivery Turnaround
+              </div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-[10px] text-red-500 line-through">Agency Standard</div>
+                  <div className="text-xs font-bold text-slate-400">4 – 6 Months</div>
+                </div>
+                <ArrowRight className="w-4 h-4 text-[#B8613A]" />
+                <div className="text-right">
+                  <div className="text-[10px] text-emerald-600 font-bold">Sprint SLA</div>
+                  <div className="text-sm sm:text-base font-extrabold text-[#0B1F33]">{project.duration}</div>
+                </div>
+              </div>
+              <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-full bg-[#0B1F33] rounded-full w-[85%]" />
+              </div>
+            </div>
           </div>
         </div>
 

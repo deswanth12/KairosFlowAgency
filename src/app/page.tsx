@@ -12,6 +12,7 @@ import { FAQSection } from '@/components/home/FAQSection';
 import { FinalCTA } from '@/components/home/FinalCTA';
 import { AgencyComparison } from '@/components/home/AgencyComparison';
 import { MobileConversionBar } from '@/components/layout/MobileConversionBar';
+import { TestimonialsMarquee } from '@/components/home/TestimonialsMarquee';
 
 export default function HomePage() {
   return (
@@ -36,6 +37,9 @@ export default function HomePage() {
 
       {/* 6. Verified Client Proof & Testimonials */}
       <TestimonialsSection />
+
+      {/* 6b. Infinite Real-Time Testimonials Wall */}
+      <TestimonialsMarquee />
 
       {/* 7. Why Kairos Flow (5 Practical Agility Reasons) */}
       <WhyKairos />

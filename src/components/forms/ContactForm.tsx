@@ -13,6 +13,7 @@ import {
   Sparkles,
   ShieldCheck,
   Clock,
+  Calendar,
   ArrowRight,
   ArrowLeft,
   Check
@@ -256,9 +257,50 @@ export const ContactForm: React.FC = () => {
         <h3 className="text-2xl sm:text-3xl font-bold text-[#0B1F33] tracking-tight mb-3 font-display">
           Thanks, {formData.name}.
         </h3>
-        <p className="text-[#5B6875] text-sm sm:text-base max-w-md mx-auto leading-relaxed mb-8">
+        <p className="text-[#5B6875] text-sm sm:text-base max-w-md mx-auto leading-relaxed mb-6">
           Your project brief has been received. Our founding leads will review it and get back to you within <strong className="text-[#0B1F33]">4 business hours</strong>.
         </p>
+
+        {/* Instant Discovery Sprint Booking Box */}
+        <div className="p-6 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5] text-left max-w-lg mx-auto mb-8 font-mono">
+          <div className="flex items-center gap-2 mb-2">
+            <Calendar className="w-4 h-4 text-[#B8613A]" />
+            <span className="text-xs font-bold text-[#0B1F33] uppercase tracking-wider">Fast-Track: Lock a 15-Min Scope Call</span>
+          </div>
+          <p className="text-xs text-[#5B6875] font-sans mb-4 leading-relaxed">
+            Skip the async back-and-forth. Pick a slot to review technical architecture & budget feasibility directly with Founder Desvanth.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-4">
+            <a
+              href={`https://wa.me/917702256073?text=${encodeURIComponent(`Hi Desvanth, I just submitted a project brief for ${formData.company || formData.name}. I'd like to schedule a 15-min discovery call tomorrow between 10 AM - 1 PM IST.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 rounded-lg bg-white hover:bg-emerald-50 border border-[#D9E0E5] hover:border-emerald-500 text-center transition-all group shadow-2xs"
+            >
+              <div className="text-[11px] font-bold text-[#0B1F33] group-hover:text-emerald-700 flex items-center justify-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-[#B8613A]" />
+                <span>Morning Window</span>
+              </div>
+              <div className="text-[10px] text-[#5B6875] mt-1">10:00 AM – 1:00 PM IST</div>
+            </a>
+            <a
+              href={`https://wa.me/917702256073?text=${encodeURIComponent(`Hi Desvanth, I just submitted a project brief for ${formData.company || formData.name}. I'd like to schedule a 15-min discovery call tomorrow between 3 PM - 7 PM IST.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 rounded-lg bg-white hover:bg-emerald-50 border border-[#D9E0E5] hover:border-emerald-500 text-center transition-all group shadow-2xs"
+            >
+              <div className="text-[11px] font-bold text-[#0B1F33] group-hover:text-emerald-700 flex items-center justify-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-[#B8613A]" />
+                <span>Afternoon Window</span>
+              </div>
+              <div className="text-[10px] text-[#5B6875] mt-1">3:00 PM – 7:00 PM IST</div>
+            </a>
+          </div>
+          <div className="text-[10px] text-[#5B6875] flex items-center justify-between pt-2 border-t border-[#D9E0E5]/80">
+            <span>⚡ Tirupati Studio (IST)</span>
+            <span className="text-emerald-700 font-semibold">• 100% Free Technical Feasibility</span>
+          </div>
+        </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-6 border-t border-[#D9E0E5] max-w-md mx-auto font-mono">
           <a
