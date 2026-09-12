@@ -140,7 +140,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { id, ...updates } = body;
+    const { id, currentLead, ...updates } = body;
 
     if (!id || typeof id !== 'string') {
       return NextResponse.json({ success: false, message: 'Lead ID is required' }, { status: 400 });
@@ -166,10 +166,11 @@ export async function PATCH(request: NextRequest) {
       role: authUser.role
     };
 
-    const result = await updateLeadWithAuditAsync(id, updates, updater);
+    const result = await updateLeadWithAuditAsync(id, updates, updater, currentLead);
     if (!result) {
       return NextResponse.json({ success: false, message: 'Lead not found' }, { status: 404 });
     }
+
 
     const { before, updated } = result;
     const fieldChanges = computeFieldDiffs(

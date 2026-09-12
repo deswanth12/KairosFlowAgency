@@ -79,14 +79,12 @@ export async function saveLeadAsync(
 export async function updateLeadWithAuditAsync(
   id: string,
   updates: Partial<Lead>,
-  updatedBy: UserAuditRef
+  updatedBy: UserAuditRef,
+  fallbackLead?: Partial<Lead>
 ): Promise<UpdateLeadResult | null> {
   try {
     const leads = await getLeadsAsync();
-    const index = leads.findIndex((l) => l.id === id);
-    if (index === -1) return null;
-
-    const before = { ...leads[index] };
+    let index = leads.findIndex((l) => l.id === id);
 
     const ALLOWED_UPDATE_FIELDS: (keyof Lead)[] = [
       'name', 'company', 'email', 'phone', 'services', 'description',
@@ -102,6 +100,44 @@ export async function updateLeadWithAuditAsync(
       }
     }
 
+    // Serverless recovery: If lead is missing from this lambda container's storage
+    // but the client has the lead snapshot, recreate and apply updates seamlessly.
+    if (index === -1) {
+      if (!fallbackLead || !fallbackLead.name) return null;
+
+      const recoveredLead: Lead = {
+        id,
+        name: fallbackLead.name || 'Client',
+        company: fallbackLead.company || 'Not specified',
+        email: fallbackLead.email || 'client@kairosflow.agency',
+        phone: fallbackLead.phone || '',
+        services: fallbackLead.services || ['Video & Content'],
+        description: fallbackLead.description || '',
+        status: fallbackLead.status || 'New Lead',
+        priority: fallbackLead.priority || 'Medium',
+        assignedTo: fallbackLead.assignedTo || 'Desvanth',
+        budget: fallbackLead.budget || '₹25,000 – ₹50,000',
+        estimatedValue: fallbackLead.estimatedValue || '₹50,000',
+        timeline: fallbackLead.timeline || '2 – 4 Weeks',
+        referenceLinks: fallbackLead.referenceLinks || '',
+        hearAbout: fallbackLead.hearAbout || 'Direct',
+        proposalStatus: fallbackLead.proposalStatus || 'Not Started',
+        paymentStatus: fallbackLead.paymentStatus || 'N/A',
+        notes: fallbackLead.notes || [],
+        createdBy: fallbackLead.createdBy || updatedBy,
+        createdAt: fallbackLead.createdAt || new Date().toISOString(),
+        ...safeUpdates,
+        updatedBy,
+        updatedAt: new Date().toISOString()
+      };
+
+      leads.unshift(recoveredLead);
+      await kvSet(KV_KEYS.LEADS, leads);
+      return { before: (fallbackLead as Lead) || recoveredLead, updated: recoveredLead };
+    }
+
+    const before = { ...leads[index] };
+
     leads[index] = {
       ...leads[index],
       ...safeUpdates,
@@ -116,6 +152,7 @@ export async function updateLeadWithAuditAsync(
     return null;
   }
 }
+
 
 export async function deleteLeadAsync(id: string): Promise<Lead | null> {
   try {

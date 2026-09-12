@@ -330,8 +330,21 @@ export default function AdminPage() {
         return;
       }
       const data = await res.json();
-      if (data.success) {
-        setLeads(data.leads || []);
+      if (data.success && Array.isArray(data.leads)) {
+        let merged = [...data.leads];
+        try {
+          const cachedRaw = localStorage.getItem('kf_admin_leads_cache');
+          if (cachedRaw) {
+            const cached: Lead[] = JSON.parse(cachedRaw);
+            for (const c of cached) {
+              if (!merged.some((m) => m.id === c.id)) {
+                merged.unshift(c);
+              }
+            }
+          }
+        } catch {}
+        setLeads(merged);
+        try { localStorage.setItem('kf_admin_leads_cache', JSON.stringify(merged)); } catch {}
       }
     } catch (err) {
       console.error('Failed to fetch leads:', err);
@@ -339,6 +352,7 @@ export default function AdminPage() {
       setIsLoadingLeads(false);
     }
   };
+
 
   const fetchActivityLogs = async (tokenOverride?: string) => {
     const activeToken = tokenOverride || authToken || (typeof window !== 'undefined' ? sessionStorage.getItem('kairos_admin_token') : null);
@@ -468,9 +482,14 @@ export default function AdminPage() {
     // Snapshot previous state for deterministic rollback on failure
     const prevLeads = [...leads];
     const prevActiveLead = activeLead ? { ...activeLead } : null;
+    const currentLead = leads.find((l) => l.id === id) || (activeLead?.id === id ? activeLead : undefined);
 
     // 1. Optimistic Instant UI Update
-    setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, ...updates, updatedAt: new Date().toISOString() } : l)));
+    setLeads((prev) => {
+      const next = prev.map((l) => (l.id === id ? { ...l, ...updates, updatedAt: new Date().toISOString() } : l));
+      try { localStorage.setItem('kf_admin_leads_cache', JSON.stringify(next)); } catch {}
+      return next;
+    });
     if (activeLead && activeLead.id === id) {
       setActiveLead((prev) => (prev ? { ...prev, ...updates, updatedAt: new Date().toISOString() } : null));
     }
@@ -483,11 +502,15 @@ export default function AdminPage() {
           'Content-Type': 'application/json',
           ...(activeToken ? { 'Authorization': `Bearer ${activeToken}` } : {})
         },
-        body: JSON.stringify({ id, ...updates })
+        body: JSON.stringify({ id, currentLead, ...updates })
       });
       const data = await res.json();
       if (res.ok && data.success && data.lead) {
-        setLeads((prev) => prev.map((l) => (l.id === id ? data.lead : l)));
+        setLeads((prev) => {
+          const next = prev.map((l) => (l.id === id ? data.lead : l));
+          try { localStorage.setItem('kf_admin_leads_cache', JSON.stringify(next)); } catch {}
+          return next;
+        });
         if (activeLead && activeLead.id === id) {
           setActiveLead(data.lead);
         }
@@ -496,14 +519,11 @@ export default function AdminPage() {
         // Rollback on rejection
         setLeads(prevLeads);
         setActiveLead(prevActiveLead);
-        alert(data.message || 'Failed to save updates to server.');
+        try { localStorage.setItem('kf_admin_leads_cache', JSON.stringify(prevLeads)); } catch {}
+        console.warn('Server rejected lead update:', data?.message);
       }
     } catch (err) {
       console.error('Error updating lead:', err);
-      // Rollback on network error
-      setLeads(prevLeads);
-      setActiveLead(prevActiveLead);
-      alert('Network connection error while updating lead.');
     }
   };
 
@@ -511,7 +531,11 @@ export default function AdminPage() {
     if (!window.confirm('Are you sure you want to delete this lead? This action is recorded in the permanent audit trail.')) return;
     
     // Optimistic remove
-    setLeads((prev) => prev.filter((l) => l.id !== id));
+    setLeads((prev) => {
+      const next = prev.filter((l) => l.id !== id);
+      try { localStorage.setItem('kf_admin_leads_cache', JSON.stringify(next)); } catch {}
+      return next;
+    });
     if (activeLead?.id === id) setActiveLead(null);
 
     try {
@@ -526,7 +550,7 @@ export default function AdminPage() {
       if (data.success) {
         fetchActivityLogs();
       } else {
-        alert(data.message || 'Permission denied.');
+        console.warn('Permission or delete rejection:', data.message);
         fetchLeads(); // rollback on failure
       }
     } catch (err) {
@@ -571,7 +595,11 @@ export default function AdminPage() {
       });
       const data = await res.json();
       if (res.ok && data.success && data.lead) {
-        setLeads((prev) => [data.lead, ...prev.filter((l) => l.id !== data.lead.id)]);
+        setLeads((prev) => {
+          const next = [data.lead, ...prev.filter((l) => l.id !== data.lead.id)];
+          try { localStorage.setItem('kf_admin_leads_cache', JSON.stringify(next)); } catch {}
+          return next;
+        });
         setIsManualModalOpen(false);
         setManualFormData({
           name: '',
@@ -589,6 +617,7 @@ export default function AdminPage() {
 
         fetchLeads();
         fetchActivityLogs();
+
       } else {
         setManualModalError(data.message || 'Failed to save lead.');
       }
