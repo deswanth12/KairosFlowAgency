@@ -145,10 +145,10 @@ export const Footer: React.FC = () => {
           <p>© {new Date().getFullYear()} Kairos Flow Agency. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <Link href="/privacy" className="hover:text-white transition-colors">
-              Privacy Policy
+              Privacy & Standards
             </Link>
-            <Link href="/contact" className="hover:text-white transition-colors">
-              Project Terms
+            <Link href="/process" className="hover:text-white transition-colors">
+              Delivery Process & SLAs
             </Link>
             <Link href="/sitemap.xml" className="hover:text-white transition-colors">
               Sitemap

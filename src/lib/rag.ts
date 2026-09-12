@@ -490,20 +490,20 @@ export function queryConsultant(userQuery: string, conversationHistory?: Array<{
 
   // 4. SPECIFIC SCENARIO: CASE STUDIES & PORTFOLIO
   if (query.includes('evalmesh') || query.includes('janai') || query.includes('signlang') || query.includes('ember') || query.includes('sagiro') || query.includes('work') || query.includes('portfolio') || query.includes('case study') || query.includes('examples')) {
-    let highlightedCase = 'EvalMesh (High-performance AI proxy gateway with sub-80ms latency) and JanAI (State citizen welfare platform serving 500,000+ citizens).';
+    let highlightedCase = 'EvalMesh (AI Security & Proxy Gateway with <5ms semantic caching in Python & FastAPI) and JanAI (Citizen welfare platform with multilingual assistance).';
     let targetLink = '/work';
 
     if (query.includes('evalmesh')) {
-      highlightedCase = '**EvalMesh**: AI Proxy Gateway engineered in Next.js & TypeScript, handling 1.2M+ monthly queries with sub-80ms routing latency and zero downtime.';
+      highlightedCase = '**EvalMesh**: AI Security & Proxy Gateway engineered in Python & FastAPI, featuring a <5ms vector semantic cache, real-time prompt injection WAF, and 100% deterministic PII redaction.';
       targetLink = '/work/evalmesh-ai-proxy-gateway';
     } else if (query.includes('janai')) {
-      highlightedCase = '**JanAI**: Citizen welfare platform supporting 500k+ users across multilingual voice & text AI pipelines with 99.98% uptime.';
+      highlightedCase = '**JanAI**: Modular citizen welfare and public assistance platform supporting multilingual regional voice and text assistance with dynamic scheme eligibility matching.';
       targetLink = '/work/janai-citizen-welfare-platform';
     } else if (query.includes('signlang')) {
-      highlightedCase = '**SignLang AI**: Computer vision translation engine achieving 94.2% real-time accuracy across 120+ gestures.';
+      highlightedCase = '**SignLang AI**: Real-time computer vision translation engine powered by Google MediaPipe and Web Speech, tracking 42 3D hand landmarks at 30+ FPS with 96.4% gesture accuracy.';
       targetLink = '/work/signlang-ai-computer-vision-translator';
     } else if (query.includes('ember') || query.includes('restaurant')) {
-      highlightedCase = '**Ember & Oak**: Destination culinary brand & web reservation platform driving +180% online bookings in 60 days.';
+      highlightedCase = '**Ember & Oak**: Destination culinary web application engineered with Next.js & TypeScript, achieving 0.6s page loads and direct commission-free WhatsApp table reservations.';
       targetLink = '/work/ember-oak-destination-restaurant';
     }
 
