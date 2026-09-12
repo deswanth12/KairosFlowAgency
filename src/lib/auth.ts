@@ -85,7 +85,7 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
     lastLogin: null,
-    passwordHash: '' // Set via TEAM_PASSWORD_HASHES env var
+    passwordHash: '$2b$12$JrHkJu22kcwJKeX6rtZayOa1ArCZ6/K8QF46g98eYJgii5AwcoW6i'
   },
   {
     id: 'usr-basha',
@@ -96,7 +96,7 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
     lastLogin: null,
-    passwordHash: '' // Set via TEAM_PASSWORD_HASHES env var
+    passwordHash: '$2b$12$y5SGpDCOZh0XAaKvViZSquUfTRpgxPU6LPisx0DHeoc6g6tn8uqci'
   },
   {
     id: 'usr-siddiq',
@@ -107,7 +107,7 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
     lastLogin: null,
-    passwordHash: '' // Set via TEAM_PASSWORD_HASHES env var
+    passwordHash: '$2b$12$ZBitys20YqxKbjrS1lr7nuRv9uN.Ln4CODZBpDR2eUt063Um604sK'
   },
   {
     id: 'usr-rithesh',
@@ -118,7 +118,7 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
     lastLogin: null,
-    passwordHash: '' // Set via TEAM_PASSWORD_HASHES env var
+    passwordHash: '$2b$12$bjgAjgf/OWdvwruGVwAJIOkcbNCda8Y78JVYkjRFxCsG75iIYHZgW'
   },
   {
     id: 'usr-saideep',
@@ -129,7 +129,7 @@ export const DEFAULT_TEAM_USERS: StoredUser[] = [
     isOnline: false,
     createdAt: '2026-08-20T00:00:00.000Z',
     lastLogin: null,
-    passwordHash: '' // Set via TEAM_PASSWORD_HASHES env var
+    passwordHash: '$2b$12$oPRAD.7k4I7gVJIDHW1BiOMkM1eP/rEq27wxv.PZaHRLsDN0q.Exy'
   }
 ];
 
