@@ -68,6 +68,7 @@ export const AIConsultant: React.FC = () => {
   ]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -78,6 +79,13 @@ export const AIConsultant: React.FC = () => {
       scrollToBottom();
     }
   }, [messages, isOpen]);
+
+  // BUG-02: Cleanup the copy feedback timeout on unmount to prevent setState leak
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
+    };
+  }, []);
 
   // Hide AI Consultant inside the private admin CRM (evaluated AFTER all hooks)
   if (pathname && pathname.startsWith('/admin')) {
@@ -161,9 +169,10 @@ export const AIConsultant: React.FC = () => {
     try {
       navigator.clipboard.writeText(text);
       setCopiedMessageId(id);
-      setTimeout(() => setCopiedMessageId(null), 2000);
+      if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
+      copyTimeoutRef.current = setTimeout(() => setCopiedMessageId(null), 2000);
     } catch {
-      // fallback
+      // fallback: clipboard not available
     }
   };
 

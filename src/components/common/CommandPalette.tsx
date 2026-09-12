@@ -56,14 +56,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
     }
   }, [isOpen]);
 
-  // Global shortcut to open/close (Cmd+K / Ctrl+K)
+  // Escape key to close (Ctrl+K open/close is handled by the parent Navbar)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        if (isOpen) onClose();
-        else onClose(); // parent handles toggle if passed, or listens
-      }
       if (e.key === 'Escape' && isOpen) {
         onClose();
       }
@@ -71,6 +66,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
+
+  // SUG-05: Reset selectedIndex to 0 whenever the search query changes
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [query]);
 
   // Build items catalog
   const items: CommandItem[] = [

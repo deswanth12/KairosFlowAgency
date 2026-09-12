@@ -15,6 +15,16 @@ const MAX = {
   hearAbout: 200,
 };
 
+// SUG-07: Allowlist services to prevent arbitrary strings in CRM
+const ALLOWED_SERVICES = [
+  'Web Development',
+  'App Development',
+  'AI & Automation',
+  'UI/UX & Branding',
+  'Digital Marketing',
+  'Video & Content'
+];
+
 function trim(value: unknown, max: number): string {
   return String(value ?? '').trim().substring(0, max);
 }
@@ -63,7 +73,9 @@ export async function POST(request: NextRequest) {
       company: company ? trim(company, MAX.company) : 'Not specified',
       email: trim(email, MAX.email).toLowerCase(),
       phone: trim(phone, MAX.phone),
-      services: Array.isArray(services) ? services.map((s: unknown) => String(s).substring(0, 100)).slice(0, 10) : [String(services).substring(0, 100)],
+      services: Array.isArray(services)
+        ? services.map((s: unknown) => String(s).trim()).filter((s) => ALLOWED_SERVICES.includes(s)).slice(0, 10)
+        : (ALLOWED_SERVICES.includes(String(services).trim()) ? [String(services).trim()] : []),
       description: trim(description, MAX.description),
       budget: budget ? trim(budget, MAX.budget) : 'Flexible',
       timeline: timeline ? trim(timeline, MAX.timeline) : 'Flexible',

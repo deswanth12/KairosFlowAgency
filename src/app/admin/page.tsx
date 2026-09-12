@@ -171,16 +171,39 @@ export default function AdminPage() {
     }
   }, []);
 
-  // Real-time Presence Poller (every 4 seconds)
+  // Real-time Presence Poller (every 4 seconds, paused when tab is hidden)
   useEffect(() => {
     if (!currentUser) return;
-    const interval = setInterval(() => {
-      fetchUsersList();
-    }, 4000);
-    return () => clearInterval(interval);
+
+    let interval: ReturnType<typeof setInterval> | null = null;
+
+    const startPolling = () => {
+      if (interval) return;
+      interval = setInterval(() => {
+        // BUG-05 FIX: Pass authToken explicitly so the heartbeat is authenticated
+        fetchUsersList(authToken || undefined);
+      }, 4000);
+    };
+
+    const stopPolling = () => {
+      if (interval) { clearInterval(interval); interval = null; }
+    };
+
+    // SUG-06: Pause polling when browser tab is hidden to avoid unnecessary background requests
+    const handleVisibilityChange = () => {
+      if (document.hidden) stopPolling();
+      else startPolling();
+    };
+
+    startPolling();
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      stopPolling();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [currentUser, authToken]);
 
-  // Tab switch sync
+  // Tab switch sync — BUG-06 FIX: Add authToken to dependency array to avoid stale closure
   useEffect(() => {
     if (!currentUser) return;
     if (activeTab === 'team') {
@@ -190,7 +213,7 @@ export default function AdminPage() {
     } else if (activeTab === 'pipeline') {
       fetchLeads();
     }
-  }, [activeTab, currentUser]);
+  }, [activeTab, currentUser, authToken]);
 
   const fetchUsersList = async (tokenOverride?: string) => {
     try {

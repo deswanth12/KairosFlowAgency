@@ -37,7 +37,8 @@ export const StudioClock: React.FC<StudioClockProps> = ({ compact = false }) => 
     };
 
     updateTime();
-    const interval = setInterval(updateTime, 15000);
+    // SUG-04: Update every 60s (not 15s) — display is HH:MM so per-minute is sufficient
+    const interval = setInterval(updateTime, 60000);
     return () => clearInterval(interval);
   }, []);
 

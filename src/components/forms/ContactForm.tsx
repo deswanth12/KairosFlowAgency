@@ -131,7 +131,7 @@ export const ContactForm: React.FC = () => {
     if (formData.services.length === 0) {
       newErrors.services = 'Please select at least one capability';
     }
-    setErrors(newErrors);
+    setErrors((prev) => ({ ...prev, ...newErrors }));
     return Object.keys(newErrors).length === 0;
   };
 
@@ -142,7 +142,7 @@ export const ContactForm: React.FC = () => {
     } else if (formData.description.trim().length < 15) {
       newErrors.description = 'Please provide at least 15 characters describing your project';
     }
-    setErrors(newErrors);
+    setErrors((prev) => ({ ...prev, ...newErrors }));
     return Object.keys(newErrors).length === 0;
   };
 
@@ -162,26 +162,43 @@ export const ContactForm: React.FC = () => {
     } else if (formData.phone.replace(/[^0-9]/g, '').length < 8) {
       newErrors.phone = 'Please provide a valid phone number with country code';
     }
-    setErrors(newErrors);
+    setErrors((prev) => ({ ...prev, ...newErrors }));
     return Object.keys(newErrors).length === 0;
   };
 
   const validateAll = () => {
-    const s1 = validateStep1();
-    if (!s1) {
-      setCurrentStep(1);
-      return false;
-    }
-    const s2 = validateStep2();
-    if (!s2) {
-      setCurrentStep(2);
-      return false;
-    }
-    const s3 = validateStep3();
-    if (!s3) {
-      setCurrentStep(3);
-      return false;
-    }
+    // Clear all errors first, then re-validate each step cleanly
+    setErrors({});
+    const s1 = (() => {
+      const newErrors: Record<string, string> = {};
+      if (formData.services.length === 0) newErrors.services = 'Please select at least one capability';
+      setErrors((prev) => ({ ...prev, ...newErrors }));
+      return Object.keys(newErrors).length === 0;
+    })();
+    if (!s1) { setCurrentStep(1); return false; }
+
+    const s2 = (() => {
+      const newErrors: Record<string, string> = {};
+      if (!formData.description.trim()) newErrors.description = 'Please outline your project goals and scope';
+      else if (formData.description.trim().length < 15) newErrors.description = 'Please provide at least 15 characters describing your project';
+      setErrors((prev) => ({ ...prev, ...newErrors }));
+      return Object.keys(newErrors).length === 0;
+    })();
+    if (!s2) { setCurrentStep(2); return false; }
+
+    const s3 = (() => {
+      const newErrors: Record<string, string> = {};
+      if (!formData.name.trim()) newErrors.name = 'Full name is required';
+      if (!formData.company.trim()) newErrors.company = 'Company or venture name is required';
+      if (!formData.email.trim()) newErrors.email = 'Email address is required';
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Please enter a valid email address';
+      if (!formData.phone.trim()) newErrors.phone = 'Phone / WhatsApp number is required';
+      else if (formData.phone.replace(/[^0-9]/g, '').length < 8) newErrors.phone = 'Please provide a valid phone number with country code';
+      setErrors((prev) => ({ ...prev, ...newErrors }));
+      return Object.keys(newErrors).length === 0;
+    })();
+    if (!s3) { setCurrentStep(3); return false; }
+
     return true;
   };
 

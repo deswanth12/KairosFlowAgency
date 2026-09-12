@@ -1,10 +1,15 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { AIConsultant } from '@/components/consultant/AIConsultant';
 import { siteSettingsData } from '@/data/settings';
+
+// SUG-03: theme-color in viewport export (Next.js 15 requirement) — matches dark navy Navbar on mobile browsers
+export const viewport: Viewport = {
+  themeColor: '#0B1F33'
+};
 
 const inter = Inter({
   subsets: ['latin'],

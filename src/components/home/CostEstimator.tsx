@@ -146,12 +146,73 @@ export const CostEstimator: React.FC = () => {
 
   const estimatedTimeline = activeProject.timelines[selectedScale];
 
-  const contactHref = `/contact?service=${encodeURIComponent(activeProject.serviceCategory)}&budget=${encodeURIComponent(
-    currency === 'INR' ? `₹${estimatedCost.toLocaleString('en-IN')}` : `$${estimatedCost.toLocaleString('en-US')}`
-  )}&timeline=${encodeURIComponent(estimatedTimeline)}`;
+  // BUG-04 FIX: Map project+scale to a matching budget RANGE label so ContactForm can pre-fill the <select>.
+  // Raw prices like "₹18,000" never match entries like "₹15,000 – ₹40,000 (Rapid Web & Brand Sprint)".
+  const BUDGET_LABEL_MAP: Record<string, Record<ScaleLevel, string>> = {
+    web: {
+      mvp:        '₹15,000 – ₹40,000 (Rapid Web & Brand Sprint)',
+      growth:     '₹40,000 – ₹1,00,000 (Custom Web Portal & AI)',
+      enterprise: '₹1,00,000 – ₹2,50,000 (Full-Stack Web / Mobile App)'
+    },
+    saas: {
+      mvp:        '₹40,000 – ₹1,00,000 (Custom Web Portal & AI)',
+      growth:     '₹1,00,000 – ₹2,50,000 (Full-Stack Web / Mobile App)',
+      enterprise: '₹2,50,000+ (Enterprise Digital Transformation)'
+    },
+    mobile: {
+      mvp:        '₹40,000 – ₹1,00,000 (Custom Web Portal & AI)',
+      growth:     '₹1,00,000 – ₹2,50,000 (Full-Stack Web / Mobile App)',
+      enterprise: '₹2,50,000+ (Enterprise Digital Transformation)'
+    },
+    ai: {
+      mvp:        '₹15,000 – ₹40,000 (Rapid Web & Brand Sprint)',
+      growth:     '₹40,000 – ₹1,00,000 (Custom Web Portal & AI)',
+      enterprise: '₹1,00,000 – ₹2,50,000 (Full-Stack Web / Mobile App)'
+    },
+    brand: {
+      mvp:        '₹15,000 – ₹40,000 (Rapid Web & Brand Sprint)',
+      growth:     '₹40,000 – ₹1,00,000 (Custom Web Portal & AI)',
+      enterprise: '₹1,00,000 – ₹2,50,000 (Full-Stack Web / Mobile App)'
+    }
+  };
+
+  const BUDGET_LABEL_MAP_USD: Record<string, Record<ScaleLevel, string>> = {
+    web: {
+      mvp:        'Under $1,000 (Rapid Web & Brand Sprint)',
+      growth:     '$1,000 – $2,500 (Custom Web Portal & AI)',
+      enterprise: '$2,500 – $5,000 (Full-Stack Web / Mobile App)'
+    },
+    saas: {
+      mvp:        '$1,000 – $2,500 (Custom Web Portal & AI)',
+      growth:     '$2,500 – $5,000 (Full-Stack Web / Mobile App)',
+      enterprise: '$5,000+ (Enterprise Scale)'
+    },
+    mobile: {
+      mvp:        '$1,000 – $2,500 (Custom Web Portal & AI)',
+      growth:     '$2,500 – $5,000 (Full-Stack Web / Mobile App)',
+      enterprise: '$5,000+ (Enterprise Scale)'
+    },
+    ai: {
+      mvp:        'Under $1,000 (Rapid Web & Brand Sprint)',
+      growth:     '$1,000 – $2,500 (Custom Web Portal & AI)',
+      enterprise: '$2,500 – $5,000 (Full-Stack Web / Mobile App)'
+    },
+    brand: {
+      mvp:        'Under $1,000 (Rapid Web & Brand Sprint)',
+      growth:     '$1,000 – $2,500 (Custom Web Portal & AI)',
+      enterprise: '$2,500 – $5,000 (Full-Stack Web / Mobile App)'
+    }
+  };
+
+  const budgetLabel = currency === 'INR'
+    ? (BUDGET_LABEL_MAP[selectedType]?.[selectedScale] ?? `₹${estimatedCost.toLocaleString('en-IN')}`)
+    : (BUDGET_LABEL_MAP_USD[selectedType]?.[selectedScale] ?? `$${estimatedCost.toLocaleString('en-US')}`);
+
+  const contactHref = `/contact?service=${encodeURIComponent(activeProject.serviceCategory)}&budget=${encodeURIComponent(budgetLabel)}&timeline=${encodeURIComponent(estimatedTimeline)}`;
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white border-y border-[#D9E0E5]">
+    // BUG-07 FIX: Add id="cost-estimator" so hash-link /#cost-estimator scrolls here correctly
+    <section id="cost-estimator" className="py-20 px-4 sm:px-6 lg:px-8 bg-white border-y border-[#D9E0E5]">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
