@@ -3,6 +3,7 @@ import { TrustStrip } from '@/components/home/TrustStrip';
 import { FeaturedProjects } from '@/components/home/FeaturedProjects';
 import { ServicesGrid } from '@/components/home/ServicesGrid';
 import { PricingSection } from '@/components/home/PricingSection';
+import { CostEstimator } from '@/components/home/CostEstimator';
 import { TestimonialsSection } from '@/components/home/TestimonialsSection';
 import { WhyKairos } from '@/components/home/WhyKairos';
 import { ProcessPreview } from '@/components/home/ProcessPreview';
@@ -25,7 +26,10 @@ export default function HomePage() {
       {/* 4. Six Core Disciplines */}
       <ServicesGrid />
 
-      {/* 5. Transparent Starting Pricing Anchors (INR / USD) */}
+      {/* 5. Interactive Scope & Cost Estimator */}
+      <CostEstimator />
+
+      {/* 6. Transparent Starting Pricing Anchors (INR / USD) */}
       <PricingSection />
 
       {/* 6. Verified Client Proof & Testimonials */}

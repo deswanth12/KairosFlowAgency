@@ -159,6 +159,32 @@ export const AIConsultant: React.FC = () => {
       {/* Floating Toggle Button */}
       {!isOpen && (
         <div className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5">
+          {/* Floating WhatsApp Quick-Chat with Founder */}
+          <a
+            href="https://wa.me/917702256073?text=Hi%20Desvanth%2C%20I'm%20looking%20to%20discuss%20a%20project%20with%20Kairos%20Flow%20Agency."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-elevated-card transition-all duration-300 hover:scale-105"
+            title="Chat with Founder Desvanth on WhatsApp"
+            aria-label="Chat with Founder Desvanth on WhatsApp"
+          >
+            <div className="relative flex items-center justify-center">
+              <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-white fill-white/20" />
+              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-white animate-ping" />
+              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-white" />
+            </div>
+            <div className="text-left font-mono">
+              <div className="text-xs font-bold leading-none tracking-wide text-white flex items-center gap-1">
+                <span>WhatsApp</span>
+                <ArrowUpRight className="w-3 h-3 opacity-80 group-hover:translate-x-0.5 transition-transform" />
+              </div>
+              <div className="text-[10px] text-white/90 font-medium mt-0.5 hidden sm:block">
+                Founder Direct • &lt;15m
+              </div>
+            </div>
+          </a>
+
+          {/* AI Consultant Trigger */}
           <button
             onClick={() => setIsOpen(true)}
             className="group flex items-center gap-3 px-4 py-3 rounded-full bg-[#0B1F33] hover:bg-[#132B45] text-white border border-[#0B1F33] shadow-elevated-card transition-all duration-300 hover:scale-105"

@@ -41,7 +41,11 @@ import {
   Key,
   Terminal,
   Radio,
-  RefreshCw
+  RefreshCw,
+  Printer,
+  Copy,
+  Check,
+  Zap
 } from 'lucide-react';
 import { Logo } from '@/components/brand/Logo';
 import { 
@@ -125,6 +129,8 @@ export default function AdminPage() {
   const [isSubmittingLead, setIsSubmittingLead] = useState<boolean>(false);
   const [manualModalError, setManualModalError] = useState<string>('');
   const [newNoteContent, setNewNoteContent] = useState<string>('');
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState<boolean>(false);
+  const [copiedQuote, setCopiedQuote] = useState<boolean>(false);
 
   // Manual Lead Form State
   const [manualFormData, setManualFormData] = useState({
@@ -951,16 +957,40 @@ export default function AdminPage() {
                                 <span>History</span>
                               </button>
 
-                              <a
-                                href={generateWhatsAppLink(lead.phone.replace(/[^0-9]/g, ''))}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={(e) => e.stopPropagation()}
-                                className="p-1 text-[#5B6875] hover:text-emerald-600 transition-colors"
-                                title="Chat on WhatsApp"
-                              >
-                                <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
-                              </a>
+                              <div className="flex items-center gap-1.5">
+                                {(() => {
+                                  const stageIdx = PIPELINE_STAGES.indexOf(lead.status);
+                                  const nextStage = stageIdx >= 0 && stageIdx < PIPELINE_STAGES.length - 1 && !['Completed', 'Lost / Closed'].includes(lead.status)
+                                    ? PIPELINE_STAGES[stageIdx + 1]
+                                    : null;
+
+                                  if (!nextStage) return null;
+                                  return (
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleUpdateLead(lead.id, { status: nextStage });
+                                      }}
+                                      className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded bg-white hover:bg-[#FBF4F0] text-[9px] font-bold text-[#B8613A] border border-[#D9E0E5] hover:border-[#B8613A] transition-colors shadow-xs"
+                                      title={`Advance to ${nextStage}`}
+                                    >
+                                      <span>→ {nextStage}</span>
+                                    </button>
+                                  );
+                                })()}
+
+                                <a
+                                  href={generateWhatsAppLink(lead.phone.replace(/[^0-9]/g, ''))}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="p-1 text-[#5B6875] hover:text-emerald-600 transition-colors"
+                                  title="Chat on WhatsApp"
+                                >
+                                  <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                                </a>
+                              </div>
                             </div>
                           </div>
                         ))}
@@ -1288,6 +1318,15 @@ export default function AdminPage() {
 
                 <div className="flex items-center gap-2">
                   <button
+                    onClick={() => setIsQuoteModalOpen(true)}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#FBF4F0] border border-[#B8613A]/40 text-xs font-mono font-bold text-[#B8613A] hover:bg-[#B8613A] hover:text-white transition-all shadow-xs"
+                    title="Generate Branded Proposal Quote"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>Proposal Sheet</span>
+                  </button>
+
+                  <button
                     onClick={() => setLeadHistoryModalId(activeLead.id)}
                     className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#F7F7F4] border border-[#D9E0E5] text-xs font-mono text-[#0B1F33] hover:border-[#B8613A]"
                     title="View Change History"
@@ -1333,6 +1372,63 @@ export default function AdminPage() {
                   <Mail className="w-4 h-4 text-[#B8613A]" />
                   <span>Send Email</span>
                 </a>
+              </div>
+
+              {/* WhatsApp Quick Response Templates */}
+              <div className="p-3.5 rounded-xl bg-[#FBF4F0] border border-[#B8613A]/25 space-y-2.5 font-mono">
+                <div className="flex items-center justify-between text-[11px] text-[#B8613A] font-bold">
+                  <span className="flex items-center gap-1.5">
+                    <Zap className="w-3.5 h-3.5" />
+                    <span>1-Click WhatsApp Quick Templates</span>
+                  </span>
+                  <span className="text-[9px] text-[#5B6875]">Personalized & Ready</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <a
+                    href={`https://wa.me/${activeLead.phone.replace(/[^0-9]/g, '').replace(/^(\d{10})$/, '91$1')}?text=${encodeURIComponent(
+                      `Hi ${activeLead.name}, this is ${currentUser?.name || 'Desvanth'} from Kairos Flow Agency! Thank you for inquiring about your ${Array.isArray(activeLead.services) ? activeLead.services.join(' & ') : activeLead.services} project. Would you be open for a quick 15-minute discovery call this week to align on technical scope and milestones?`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 rounded-lg bg-white hover:bg-emerald-50 border border-[#D9E0E5] hover:border-emerald-500 text-left transition-colors group shadow-2xs"
+                  >
+                    <div className="text-[10px] font-bold text-[#0B1F33] group-hover:text-emerald-700 flex items-center gap-1">
+                      <span>📞 Discovery</span>
+                      <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                    <div className="text-[9px] text-[#5B6875] mt-0.5">Book 15-min scope call</div>
+                  </a>
+
+                  <a
+                    href={`https://wa.me/${activeLead.phone.replace(/[^0-9]/g, '').replace(/^(\d{10})$/, '91$1')}?text=${encodeURIComponent(
+                      `Hi ${activeLead.name}, to prepare an accurate milestone estimate and architecture for ${activeLead.company || 'your project'}, could you share any design references, specific feature requirements, or target launch dates?`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 rounded-lg bg-white hover:bg-emerald-50 border border-[#D9E0E5] hover:border-emerald-500 text-left transition-colors group shadow-2xs"
+                  >
+                    <div className="text-[10px] font-bold text-[#0B1F33] group-hover:text-emerald-700 flex items-center gap-1">
+                      <span>📋 Specs</span>
+                      <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                    <div className="text-[9px] text-[#5B6875] mt-0.5">Request tech references</div>
+                  </a>
+
+                  <a
+                    href={`https://wa.me/${activeLead.phone.replace(/[^0-9]/g, '').replace(/^(\d{10})$/, '91$1')}?text=${encodeURIComponent(
+                      `Hi ${activeLead.name}, following up from Kairos Flow Agency regarding the project proposal we prepared for ${activeLead.company || 'you'}. Let me know if you have any questions or would like to adjust the sprint schedule!`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 rounded-lg bg-white hover:bg-emerald-50 border border-[#D9E0E5] hover:border-emerald-500 text-left transition-colors group shadow-2xs"
+                  >
+                    <div className="text-[10px] font-bold text-[#0B1F33] group-hover:text-emerald-700 flex items-center gap-1">
+                      <span>🚀 Follow-up</span>
+                      <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                    <div className="text-[9px] text-[#5B6875] mt-0.5">Check proposal status</div>
+                  </a>
+                </div>
               </div>
 
               {/* Operations Stage & Business Controls */}
@@ -1664,6 +1760,184 @@ export default function AdminPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {/* BRANDED PROPOSAL & SCOPE SHEET MODAL */}
+      {isQuoteModalOpen && activeLead && (
+        <div className="fixed inset-0 z-[70] bg-[#0B1F33]/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="w-full max-w-2xl bg-white border border-[#D9E0E5] rounded-2xl shadow-2xl overflow-hidden my-8">
+            {/* Action Bar (hidden on print) */}
+            <div className="p-4 bg-[#0B1F33] text-white flex items-center justify-between font-mono text-xs print:hidden">
+              <div className="flex items-center gap-2">
+                <FileText className="w-4 h-4 text-[#B8613A]" />
+                <span className="font-bold uppercase tracking-wider">Kairos Flow • Scope & Quote Sheet</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const text = `================================================
+KAIROS FLOW AGENCY • COMMERCIAL PROPOSAL & SCOPE SHEET
+================================================
+Client: ${activeLead.name}
+Company: ${activeLead.company || 'Direct Client'}
+Date: ${formatDate(new Date().toISOString())}
+Email: ${activeLead.email}
+Phone: ${activeLead.phone}
+Disciplines: ${Array.isArray(activeLead.services) ? activeLead.services.join(', ') : activeLead.services}
+Estimated Budget: ${activeLead.estimatedValue || activeLead.budget || 'TBD'}
+Sprint Timeline: ${activeLead.timeline || '2 – 4 Weeks'}
+
+DELIVERABLE SPECIFICATIONS:
+${Array.isArray(activeLead.services) ? activeLead.services.map((s, i) => `${i + 1}. ${s} Sprint Architecture & Delivery`).join('\n') : `1. ${activeLead.services}`}
+• 30-Day Post-Launch Bug Warranty Included
+• 100% Full IP Ownership & Source Code Assignment
+• Direct Founder-Led Architectural Communication
+
+MILESTONE PAYMENT SCHEDULE:
+• Milestone 1 (40%): Discovery & Architecture Sign-Off
+• Milestone 2 (40%): Staging Build Review & QA Approval
+• Milestone 3 (20%): Production Deployment & Final IP Handover
+
+Agency Contacts:
+• Primary Contact: ${currentUser.name} (${currentUser.role})
+• Founder Lead: Desvanth (desvanth@kairosflow.agency / +91 77022 56073)
+• Office: Tirupati, Andhra Pradesh, India • Global Client Delivery
+================================================`;
+                    navigator.clipboard.writeText(text);
+                    setCopiedQuote(true);
+                    setTimeout(() => setCopiedQuote(false), 2500);
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium transition-colors"
+                >
+                  {copiedQuote ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedQuote ? 'Copied!' : 'Copy Text'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#B8613A] hover:bg-[#A3522E] text-white font-bold transition-colors shadow-sm"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Print / PDF</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsQuoteModalOpen(false)}
+                  className="p-1.5 text-white/70 hover:text-white transition-colors ml-1"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Printable Branded Document Content */}
+            <div className="p-6 sm:p-10 space-y-8 print:p-0">
+              {/* Document Header */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-[#D9E0E5] gap-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Logo size={28} variant="mark" theme="light" />
+                    <span className="font-display font-bold text-lg text-[#0B1F33]">Kairos Flow Agency</span>
+                  </div>
+                  <p className="text-xs font-mono text-[#5B6875]">Tirupati, Andhra Pradesh, India • Global Client Delivery</p>
+                  <p className="text-xs font-mono text-[#5B6875]">kairosflowagency@gmail.com • +91 77022 56073</p>
+                </div>
+                <div className="text-left sm:text-right font-mono">
+                  <span className="px-2.5 py-1 rounded bg-[#FBF4F0] border border-[#B8613A]/20 text-[10px] font-bold text-[#B8613A] uppercase tracking-wider">
+                    Commercial Proposal
+                  </span>
+                  <div className="text-xs text-[#5B6875] mt-1">Date: {formatDate(new Date().toISOString())}</div>
+                  <div className="text-xs font-bold text-[#0B1F33]">Ref: {activeLead.id}</div>
+                </div>
+              </div>
+
+              {/* Client & Project Overview */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5] text-xs font-mono">
+                <div>
+                  <div className="text-[10px] uppercase tracking-wider text-[#5B6875] font-semibold mb-1">Prepared For</div>
+                  <div className="font-bold text-[#0B1F33] text-sm">{activeLead.name}</div>
+                  <div className="text-[#5B6875]">{activeLead.company || 'Direct Engagement'}</div>
+                  <div className="text-[#5B6875] mt-1">{activeLead.email}</div>
+                  <div className="text-[#5B6875]">{activeLead.phone}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] uppercase tracking-wider text-[#5B6875] font-semibold mb-1">Scope Parameters</div>
+                  <div>Investment: <strong className="text-[#B8613A]">{activeLead.estimatedValue || activeLead.budget || 'Custom Scope'}</strong></div>
+                  <div>Sprint Timeline: <strong className="text-[#0B1F33]">{activeLead.timeline || '2 – 4 Weeks'}</strong></div>
+                  <div>Lead Assigned: <strong className="text-[#0B1F33]">{activeLead.assignedTo || currentUser.name}</strong></div>
+                  <div>Engagement: <strong className="text-[#0B1F33]">Milestone-Based Fixed Scope</strong></div>
+                </div>
+              </div>
+
+              {/* Deliverable Disciplines */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-mono uppercase tracking-wider text-[#5B6875] font-bold">
+                  Proposed Disciplines & Technical Sprints
+                </h4>
+                <div className="space-y-2">
+                  {(Array.isArray(activeLead.services) ? activeLead.services : [activeLead.services]).map((s, idx) => (
+                    <div key={idx} className="p-3 rounded-xl border border-[#D9E0E5] bg-white flex items-start gap-3">
+                      <div className="w-5 h-5 rounded-full bg-[#0B1F33] text-white text-[10px] font-mono font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
+                        {idx + 1}
+                      </div>
+                      <div className="space-y-0.5">
+                        <div className="text-xs font-bold text-[#0B1F33]">{s}</div>
+                        <p className="text-[11px] text-[#5B6875]">
+                          Full sprint architecture, implementation, automated testing, and responsive quality validation.
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Milestone Schedule */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-mono uppercase tracking-wider text-[#5B6875] font-bold">
+                  Structured Milestone Schedule
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
+                  <div className="p-3 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5]">
+                    <div className="text-[#B8613A] font-bold text-sm">40% Milestone 1</div>
+                    <div className="font-bold text-[#0B1F33] mt-0.5">Discovery & Design</div>
+                    <p className="text-[10px] text-[#5B6875] mt-1">Wireframes, technical architecture & design prototype sign-off.</p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5]">
+                    <div className="text-[#B8613A] font-bold text-sm">40% Milestone 2</div>
+                    <div className="font-bold text-[#0B1F33] mt-0.5">Staging Review</div>
+                    <p className="text-[10px] text-[#5B6875] mt-1">Live staging environment build review & client QA sign-off.</p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5]">
+                    <div className="text-[#B8613A] font-bold text-sm">20% Milestone 3</div>
+                    <div className="font-bold text-[#0B1F33] mt-0.5">Launch & Handover</div>
+                    <p className="text-[10px] text-[#5B6875] mt-1">Production deployment, DNS handover, and 100% IP transfer.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Commercial Terms & Guarantees */}
+              <div className="p-4 rounded-xl bg-[#FBF4F0] border border-[#B8613A]/20 space-y-2 text-xs font-mono">
+                <div className="font-bold text-[#B8613A] text-xs uppercase tracking-wider flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Agency Commitments Included</span>
+                </div>
+                <ul className="space-y-1 text-[11px] text-[#111827]">
+                  <li>• <strong>30-Day Post-Launch Warranty:</strong> Zero-cost bug remediation after deployment.</li>
+                  <li>• <strong>Complete Intellectual Property Assignment:</strong> 100% code, designs, and domain assets transferred.</li>
+                  <li>• <strong>Founder-Led Oversight:</strong> Direct access to senior specialists with zero junior handoffs.</li>
+                </ul>
+              </div>
+
+              {/* Document Sign-off Footer */}
+              <div className="pt-6 border-t border-[#D9E0E5] flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs font-mono text-[#5B6875] gap-2">
+                <div>Prepared by <strong>{currentUser.name}</strong> • Kairos Flow Agency</div>
+                <div>Authorized Sign-off • {new Date().getFullYear()}</div>
+              </div>
+            </div>
           </div>
         </div>
       )}

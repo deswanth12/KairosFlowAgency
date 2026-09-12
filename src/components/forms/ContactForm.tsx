@@ -25,13 +25,23 @@ const AVAILABLE_SERVICES = [
   'Video & Content'
 ];
 
-const BUDGET_RANGES = [
-  'Under $5,000',
-  '$5,000 – $10,000',
-  '$10,000 – $25,000',
-  '$25,000 – $50,000',
-  '$50,000+'
+const BUDGET_RANGES_INR = [
+  '₹15,000 – ₹40,000 (Rapid Web & Brand Sprint)',
+  '₹40,000 – ₹1,00,000 (Custom Web Portal & AI)',
+  '₹1,00,000 – ₹2,50,000 (Full-Stack Web / Mobile App)',
+  '₹2,50,000+ (Enterprise Digital Transformation)',
+  'Flexible / Exploring'
 ];
+
+const BUDGET_RANGES_USD = [
+  'Under $1,000 (Rapid Web & Brand Sprint)',
+  '$1,000 – $2,500 (Custom Web Portal & AI)',
+  '$2,500 – $5,000 (Full-Stack Web / Mobile App)',
+  '$5,000+ (Enterprise Scale)',
+  'Flexible / Exploring'
+];
+
+const ALL_BUDGET_RANGES = [...BUDGET_RANGES_INR, ...BUDGET_RANGES_USD];
 
 const TIMELINE_OPTIONS = [
   'Urgent (< 1 month)',
@@ -57,6 +67,7 @@ export const ContactForm: React.FC = () => {
     hearAbout: ''
   });
 
+  const [currency, setCurrency] = useState<'INR' | 'USD'>('INR');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -86,7 +97,12 @@ export const ContactForm: React.FC = () => {
     }
 
     if (budgetParam) {
-      const matchedBudget = BUDGET_RANGES.find((b) => b.toLowerCase().includes(budgetParam.toLowerCase())) || budgetParam;
+      if (budgetParam.includes('$') || budgetParam.toLowerCase().includes('usd')) {
+        setCurrency('USD');
+      } else if (budgetParam.includes('₹') || budgetParam.toLowerCase().includes('inr')) {
+        setCurrency('INR');
+      }
+      const matchedBudget = ALL_BUDGET_RANGES.find((b) => b.toLowerCase().includes(budgetParam.toLowerCase())) || budgetParam;
       setFormData((prev) => ({ ...prev, budget: matchedBudget }));
     }
   }, [searchParams]);
@@ -376,25 +392,49 @@ export const ContactForm: React.FC = () => {
       {/* Step 4: Budget & Timeline */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8 font-mono">
         <div>
-          <label className="block text-xs uppercase tracking-wider text-[#5B6875] mb-2 font-semibold">
-            BUDGET RANGE (OPTIONAL)
-          </label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-xs uppercase tracking-wider text-[#5B6875] font-semibold">
+              BUDGET RANGE (OPTIONAL)
+            </label>
+            <div className="flex items-center gap-1 bg-[#F7F7F4] p-0.5 rounded-md border border-[#D9E0E5] text-[10px]">
+              <button
+                type="button"
+                onClick={() => setCurrency('INR')}
+                className={`px-2 py-0.5 rounded font-bold transition-all ${
+                  currency === 'INR' ? 'bg-[#0B1F33] text-white shadow-xs' : 'text-[#5B6875] hover:text-[#0B1F33]'
+                }`}
+              >
+                ₹ INR
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrency('USD')}
+                className={`px-2 py-0.5 rounded font-bold transition-all ${
+                  currency === 'USD' ? 'bg-[#0B1F33] text-white shadow-xs' : 'text-[#5B6875] hover:text-[#0B1F33]'
+                }`}
+              >
+                $ USD
+              </button>
+            </div>
+          </div>
           <select
             value={formData.budget}
             onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
             className="w-full px-4 py-3 text-xs rounded-lg bg-[#F7F7F4] text-[#111827] border border-[#D9E0E5] focus:outline-none focus:border-[#B8613A]"
           >
             <option value="">Select budget range...</option>
-            {BUDGET_RANGES.map((b) => (
+            {(currency === 'INR' ? BUDGET_RANGES_INR : BUDGET_RANGES_USD).map((b) => (
               <option key={b} value={b}>{b}</option>
             ))}
           </select>
         </div>
 
         <div>
-          <label className="block text-xs uppercase tracking-wider text-[#5B6875] mb-2 font-semibold">
-            TARGET TIMELINE (OPTIONAL)
-          </label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-xs uppercase tracking-wider text-[#5B6875] font-semibold">
+              TARGET TIMELINE (OPTIONAL)
+            </label>
+          </div>
           <select
             value={formData.timeline}
             onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
