@@ -10,6 +10,8 @@ import { ProcessPreview } from '@/components/home/ProcessPreview';
 import { TeamPreview } from '@/components/home/TeamPreview';
 import { FAQSection } from '@/components/home/FAQSection';
 import { FinalCTA } from '@/components/home/FinalCTA';
+import { AgencyComparison } from '@/components/home/AgencyComparison';
+import { MobileConversionBar } from '@/components/layout/MobileConversionBar';
 
 export default function HomePage() {
   return (
@@ -38,17 +40,23 @@ export default function HomePage() {
       {/* 7. Why Kairos Flow (5 Practical Agility Reasons) */}
       <WhyKairos />
 
-      {/* 8. Process Roadmap (6 Sprints) */}
+      {/* 8. The Engineering Difference: Traditional vs Kairos Flow Matrix */}
+      <AgencyComparison />
+
+      {/* 9. Process Roadmap (6 Sprints) */}
       <ProcessPreview />
 
-      {/* 9. Founding Team (5 Specialists with Verified Credentials) */}
+      {/* 10. Founding Team (5 Specialists with Verified Credentials) */}
       <TeamPreview />
 
-      {/* 10. FAQ Section (Pricing, Timeline, SLA, IP Ownership) */}
+      {/* 11. FAQ Section (Pricing, Timeline, SLA, IP Ownership) */}
       <FAQSection />
 
-      {/* 11. Final High-Conversion Call to Action */}
+      {/* 12. Final High-Conversion Call to Action */}
       <FinalCTA />
+
+      {/* Sticky Mobile Conversion Bar (md:hidden) */}
+      <MobileConversionBar />
     </>
   );
 }

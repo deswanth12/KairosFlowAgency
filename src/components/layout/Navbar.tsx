@@ -6,12 +6,15 @@ import { usePathname } from 'next/navigation';
 import { Logo } from '@/components/brand/Logo';
 import { navLinks, siteSettingsData } from '@/data/settings';
 import { generateWhatsAppLink } from '@/lib/utils';
-import { MessageCircle, Menu, X, ArrowUpRight } from 'lucide-react';
+import { MessageCircle, Menu, X, ArrowUpRight, Search } from 'lucide-react';
+import { StudioClock } from '@/components/layout/StudioClock';
+import { CommandPalette } from '@/components/common/CommandPalette';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,6 +22,17 @@ export const Navbar: React.FC = () => {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   useEffect(() => {
@@ -72,7 +86,26 @@ export const Navbar: React.FC = () => {
             </nav>
 
             {/* Right Action Buttons */}
-            <div className="hidden sm:flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-2.5">
+              {/* Live Studio Clock */}
+              <div className="hidden xl:block mr-1">
+                <StudioClock compact={false} />
+              </div>
+
+              {/* Command Palette Trigger */}
+              <button
+                type="button"
+                onClick={() => setIsCommandPaletteOpen(true)}
+                className="inline-flex items-center gap-2 px-2.5 py-1.5 text-xs font-mono text-[#5B6875] hover:text-[#0B1F33] bg-white hover:bg-[#FBF4F0] border border-[#D9E0E5] rounded-md transition-all shadow-xs"
+                title="Search agency resources (⌘K / Ctrl+K)"
+              >
+                <Search className="w-3.5 h-3.5 text-[#B8613A]" />
+                <span className="hidden lg:inline text-[11px]">Search</span>
+                <kbd className="px-1.5 py-0.5 text-[10px] bg-[#F7F7F4] border border-[#D9E0E5] rounded font-semibold text-[#5B6875]">
+                  ⌘K
+                </kbd>
+              </button>
+
               {/* WhatsApp Quick Action */}
               <a
                 href={whatsappUrl}
@@ -97,6 +130,15 @@ export const Navbar: React.FC = () => {
 
             {/* Mobile Menu Toggle */}
             <div className="flex sm:hidden items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setIsCommandPaletteOpen(true)}
+                className="p-2 text-[#111827] hover:text-[#B8613A] bg-white border border-[#D9E0E5] rounded-md focus:outline-none"
+                aria-label="Open search"
+                title="Search"
+              >
+                <Search className="w-4 h-4 text-[#B8613A]" />
+              </button>
               <Link
                 href="/contact"
                 className="px-3 py-1.5 text-xs font-semibold text-white bg-[#0B1F33] rounded-md"
@@ -123,7 +165,26 @@ export const Navbar: React.FC = () => {
         }`}
       >
         <div className="flex flex-col gap-2">
-          <div className="text-[11px] font-mono font-semibold tracking-widest text-[#5B6875] uppercase mb-2">/ NAVIGATION</div>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[11px] font-mono font-semibold tracking-widest text-[#5B6875] uppercase">/ NAVIGATION</span>
+            <StudioClock compact={true} />
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              setIsCommandPaletteOpen(true);
+            }}
+            className="flex items-center justify-between py-2.5 px-4 mb-2 text-xs font-mono rounded-lg bg-white border border-[#D9E0E5] text-[#5B6875]"
+          >
+            <div className="flex items-center gap-2">
+              <Search className="w-3.5 h-3.5 text-[#B8613A]" />
+              <span>Search systems & services...</span>
+            </div>
+            <kbd className="px-1.5 py-0.5 text-[10px] bg-[#F7F7F4] border border-[#D9E0E5] rounded">⌘K</kbd>
+          </button>
+
           {navLinks.map((link) => {
             const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
             return (
@@ -167,6 +228,12 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Global Command Palette */}
+      <CommandPalette 
+        isOpen={isCommandPaletteOpen} 
+        onClose={() => setIsCommandPaletteOpen(false)} 
+      />
     </>
   );
 };

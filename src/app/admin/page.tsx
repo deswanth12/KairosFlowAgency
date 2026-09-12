@@ -517,6 +517,61 @@ export default function AdminPage() {
     return { total, newCount, activePipeline, wonCount };
   }, [leads]);
 
+  // Global Keyboard Shortcuts for Founder Efficiency
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger if typing in an input, textarea, or select
+      const activeTag = (document.activeElement?.tagName || '').toLowerCase();
+      if (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select') {
+        if (e.key === 'Escape') {
+          (document.activeElement as HTMLElement)?.blur();
+        }
+        return;
+      }
+
+      if (e.key === 'Escape') {
+        setActiveLead(null);
+        setIsQuoteModalOpen(false);
+        setIsManualModalOpen(false);
+        setLeadHistoryModalId(null);
+        return;
+      }
+
+      // 'j' to select next lead, 'k' to select previous lead
+      if (e.key === 'j' || e.key === 'J') {
+        if (filteredLeads.length === 0) return;
+        const currentIndex = activeLead ? filteredLeads.findIndex((l) => l.id === activeLead.id) : -1;
+        const nextIndex = (currentIndex + 1) % filteredLeads.length;
+        setActiveLead(filteredLeads[nextIndex]);
+      } else if (e.key === 'k' || e.key === 'K') {
+        if (filteredLeads.length === 0) return;
+        const currentIndex = activeLead ? filteredLeads.findIndex((l) => l.id === activeLead.id) : 0;
+        const prevIndex = (currentIndex - 1 + filteredLeads.length) % filteredLeads.length;
+        setActiveLead(filteredLeads[prevIndex]);
+      } else if ((e.key === 'n' || e.key === 'N') && activeLead) {
+        // Advance stage
+        const currentIndex = PIPELINE_STAGES.indexOf(activeLead.status);
+        if (currentIndex !== -1 && currentIndex < PIPELINE_STAGES.length - 1) {
+          handleUpdateLead(activeLead.id, { status: PIPELINE_STAGES[currentIndex + 1] });
+        }
+      } else if ((e.key === 'w' || e.key === 'W') && activeLead && activeLead.phone) {
+        // Open WhatsApp
+        const cleanPhone = activeLead.phone.replace(/[^0-9]/g, '');
+        if (cleanPhone) {
+          window.open(`https://wa.me/${cleanPhone}`, '_blank');
+        }
+      } else if ((e.key === 'p' || e.key === 'P') && activeLead) {
+        // Open proposal modal
+        setIsQuoteModalOpen(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentUser, activeLead, filteredLeads]);
+
   // ==========================================
   // 1. MULTI-USER LOGIN SCREEN
   // ==========================================
@@ -848,6 +903,15 @@ export default function AdminPage() {
                     <option key={u.id} value={u.name}>{u.name}</option>
                   ))}
                 </select>
+
+                {/* Keyboard Shortcuts Helper */}
+                <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] font-mono text-[#5B6875] bg-[#F7F7F4] rounded-lg border border-[#D9E0E5]">
+                  <span className="font-bold text-[#0B1F33]">Shortcuts:</span>
+                  <span><kbd className="px-1 bg-white border border-[#D9E0E5] rounded">J</kbd>/<kbd className="px-1 bg-white border border-[#D9E0E5] rounded">K</kbd> Nav</span>
+                  <span><kbd className="px-1 bg-white border border-[#D9E0E5] rounded">N</kbd> Next</span>
+                  <span><kbd className="px-1 bg-white border border-[#D9E0E5] rounded">W</kbd> WhatsApp</span>
+                  <span><kbd className="px-1 bg-white border border-[#D9E0E5] rounded">P</kbd> Quote</span>
+                </div>
               </div>
             </div>
 

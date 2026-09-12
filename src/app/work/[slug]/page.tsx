@@ -9,6 +9,7 @@ import {
   ArrowUpRight, 
   ExternalLink
 } from 'lucide-react';
+import { ImageLightbox } from '@/components/common/ImageLightbox';
 
 interface CaseStudyPageProps {
   params: Promise<{ slug: string }>;
@@ -126,18 +127,24 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
         </div>
       </section>
 
-      {/* Featured Cover Image */}
+      {/* Featured Cover Image with Interactive Lightbox */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
-        <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden shadow-elevated-card border border-[#D9E0E5] bg-[#0B1F33]">
-          <Image
-            src={project.heroImage}
-            alt={project.title}
-            fill
-            priority
-            sizes="(max-width: 1200px) 100vw, 1200px"
-            className="object-cover"
-          />
-        </div>
+        <ImageLightbox
+          src={project.heroImage}
+          alt={project.title}
+          caption={`${project.title} — ${project.tagline}`}
+        >
+          <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden shadow-elevated-card border border-[#D9E0E5] bg-[#0B1F33]">
+            <Image
+              src={project.heroImage}
+              alt={project.title}
+              fill
+              priority
+              sizes="(max-width: 1200px) 100vw, 1200px"
+              className="object-cover"
+            />
+          </div>
+        </ImageLightbox>
       </div>
 
       {/* Main Editorial Content Body */}

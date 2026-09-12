@@ -15,7 +15,9 @@ import {
   Sparkles,
   CheckCircle2,
   BookOpen,
-  ArrowUpRight
+  ArrowUpRight,
+  Copy,
+  Check
 } from 'lucide-react';
 import { ConsultantResponse } from '@/lib/rag';
 
@@ -40,6 +42,7 @@ export const AIConsultant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome-1',
@@ -154,11 +157,21 @@ export const AIConsultant: React.FC = () => {
     }
   };
 
+  const copyAnswer = (id: string, text: string) => {
+    try {
+      navigator.clipboard.writeText(text);
+      setCopiedMessageId(id);
+      setTimeout(() => setCopiedMessageId(null), 2000);
+    } catch {
+      // fallback
+    }
+  };
+
   return (
     <>
       {/* Floating Toggle Button */}
       {!isOpen && (
-        <div className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5">
+        <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40 flex items-center gap-2.5">
           {/* Floating WhatsApp Quick-Chat with Founder */}
           <a
             href="https://wa.me/917702256073?text=Hi%20Desvanth%2C%20I'm%20looking%20to%20discuss%20a%20project%20with%20Kairos%20Flow%20Agency."
@@ -209,7 +222,7 @@ export const AIConsultant: React.FC = () => {
 
       {/* Floating Chat Modal */}
       {isOpen && (
-        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[460px] h-[640px] max-h-[88vh] bg-white border border-[#D9E0E5] rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200 text-[#111827]">
+        <div className="fixed bottom-2 sm:bottom-6 right-2 sm:right-6 z-50 w-[calc(100vw-1rem)] sm:w-[460px] h-[640px] max-h-[92vh] sm:max-h-[88vh] bg-white border border-[#D9E0E5] rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200 text-[#111827]">
           {/* Top Header */}
           <div className="flex items-center justify-between p-4 bg-[#0B1F33] text-white border-b border-[#0B1F33]">
             <div className="flex items-center gap-3">
@@ -309,6 +322,30 @@ export const AIConsultant: React.FC = () => {
                       ))}
                     </div>
                   )}
+
+                  {/* Copy Answer Button */}
+                  {msg.sender === 'consultant' && (
+                    <div className="mt-2.5 pt-2 border-t border-[#D9E0E5]/60 flex items-center justify-end">
+                      <button
+                        type="button"
+                        onClick={() => copyAnswer(msg.id, msg.text)}
+                        className="inline-flex items-center gap-1 text-[10px] text-[#5B6875] hover:text-[#0B1F33] font-mono transition-colors"
+                        title="Copy answer to clipboard"
+                      >
+                        {copiedMessageId === msg.id ? (
+                          <>
+                            <Check className="w-3 h-3 text-emerald-600" />
+                            <span className="text-emerald-600 font-bold">Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3 h-3 text-[#5B6875]" />
+                            <span>Copy Answer</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Suggested Follow-Up Quick Pills */}
@@ -344,20 +381,38 @@ export const AIConsultant: React.FC = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Starter Prompts */}
-          {messages.length === 1 && (
-            <div className="p-3 bg-white border-t border-[#D9E0E5] overflow-x-auto whitespace-nowrap flex gap-1.5 font-mono">
-              {STARTER_PROMPTS.map((p, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => handleSend(p)}
-                  className="px-2.5 py-1 text-[10px] bg-[#F7F7F4] hover:bg-[#FBF4F0] text-[#0B1F33] hover:text-[#B8613A] rounded-md border border-[#D9E0E5] transition-colors flex-shrink-0"
-                >
-                  {p}
-                </button>
-              ))}
-            </div>
-          )}
+          {/* Quick Action Suggestion Chips Bar */}
+          <div className="p-2.5 bg-white border-t border-[#D9E0E5] overflow-x-auto whitespace-nowrap flex gap-1.5 font-mono text-[10px]">
+            <button
+              type="button"
+              onClick={() => handleSend('What is your typical web engineering tech stack?')}
+              className="px-2.5 py-1 rounded-md bg-[#F7F7F4] hover:bg-[#FBF4F0] text-[#0B1F33] hover:text-[#B8613A] border border-[#D9E0E5] transition-colors flex-shrink-0"
+            >
+              💻 Tech Stack
+            </button>
+            <button
+              type="button"
+              onClick={() => handleSend('How does your 14-day agile sprint deliver?')}
+              className="px-2.5 py-1 rounded-md bg-[#F7F7F4] hover:bg-[#FBF4F0] text-[#0B1F33] hover:text-[#B8613A] border border-[#D9E0E5] transition-colors flex-shrink-0"
+            >
+              ⚡ 14-Day Sprints
+            </button>
+            <button
+              type="button"
+              onClick={() => handleSend('Who owns the IP rights and source code repositories?')}
+              className="px-2.5 py-1 rounded-md bg-[#F7F7F4] hover:bg-[#FBF4F0] text-[#0B1F33] hover:text-[#B8613A] border border-[#D9E0E5] transition-colors flex-shrink-0"
+            >
+              🔒 100% IP Rights
+            </button>
+            <a
+              href="https://wa.me/917702256073?text=Hi%20Desvanth%2C%20I'm%20chatting%20with%20your%20AI%20Consultant%20and%20want%20to%20speak%20directly."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-2.5 py-1 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition-colors flex-shrink-0 font-bold"
+            >
+              💬 WhatsApp Founder
+            </a>
+          </div>
 
           {/* Bottom WhatsApp Handover & Input Bar */}
           <div className="p-3 bg-white border-t border-[#D9E0E5] space-y-2">
