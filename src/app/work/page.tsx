@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import { projectsData } from '@/data/projects';
 import { ProjectCategory } from '@/types';
 import { Layers, Search, ArrowUpRight, Filter, Terminal } from 'lucide-react';
@@ -17,9 +18,25 @@ const CATEGORIES: Array<'All' | ProjectCategory> = [
   'Content'
 ];
 
-export default function WorkPage() {
-  const [activeCategory, setActiveCategory] = useState<'All' | ProjectCategory>('All');
+function WorkContent() {
+  const searchParams = useSearchParams();
+  const catParam = searchParams.get('category');
+
+  const resolvedCategory = useMemo<'All' | ProjectCategory>(() => {
+    if (!catParam) return 'All';
+    const found = CATEGORIES.find(
+      (c) => c.toLowerCase() === catParam.trim().toLowerCase()
+    );
+    return found || 'All';
+  }, [catParam]);
+
+  const [activeCategory, setActiveCategory] = useState<'All' | ProjectCategory>(resolvedCategory);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Keep state in sync if URL query parameter changes
+  useEffect(() => {
+    setActiveCategory(resolvedCategory);
+  }, [resolvedCategory]);
 
   const filteredProjects = projectsData.filter((project) => {
     const matchesCat = activeCategory === 'All' || project.category === activeCategory;
@@ -35,25 +52,7 @@ export default function WorkPage() {
   });
 
   return (
-    <div className="bg-[#F7F7F4] text-[#111827] min-h-screen">
-      {/* Top Hero Section */}
-      <section className="bg-[#F7F7F4] text-[#111827] pt-32 pb-16 px-4 sm:px-6 lg:px-8 border-b border-[#D9E0E5]">
-        <div className="max-w-7xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#D9E0E5] text-xs font-mono uppercase tracking-widest text-[#B8613A] mb-4 font-semibold shadow-subtle-card">
-            <Terminal className="w-3.5 h-3.5 text-[#B8613A]" />
-            <span>/ CURATED REPOSITORIES & CASE STUDIES</span>
-          </div>
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#0B1F33] font-display max-w-3xl mb-6">
-            Work engineered for <span className="text-[#B8613A]">commercial scale.</span>
-          </h1>
-          <p className="text-[#5B6875] text-base sm:text-lg max-w-2xl font-normal leading-relaxed">
-            Explore how we partner with enterprise teams and high-growth founders to design, build, and deploy production-ready digital products.
-          </p>
-        </div>
-      </section>
-
-      {/* Main Content Area */}
-      <div className="bg-[#F7F7F4] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 border-b border-[#D9E0E5]">
+    <div className="bg-[#F7F7F4] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 border-b border-[#D9E0E5]">
         <div className="max-w-7xl mx-auto">
           {/* Controls: Search + Filter Tabs */}
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-12 pb-8 border-b border-[#D9E0E5]">
@@ -198,6 +197,38 @@ export default function WorkPage() {
           )}
         </div>
       </div>
+  );
+}
+
+export default function WorkPage() {
+  return (
+    <div className="bg-[#F7F7F4] text-[#111827] min-h-screen">
+      {/* Top Hero Section */}
+      <section className="bg-[#F7F7F4] text-[#111827] pt-32 pb-16 px-4 sm:px-6 lg:px-8 border-b border-[#D9E0E5]">
+        <div className="max-w-7xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#D9E0E5] text-xs font-mono uppercase tracking-widest text-[#B8613A] mb-4 font-semibold shadow-subtle-card">
+            <Terminal className="w-3.5 h-3.5 text-[#B8613A]" />
+            <span>/ CURATED REPOSITORIES & CASE STUDIES</span>
+          </div>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#0B1F33] font-display max-w-3xl mb-6">
+            Work engineered for <span className="text-[#B8613A]">commercial scale.</span>
+          </h1>
+          <p className="text-[#5B6875] text-base sm:text-lg max-w-2xl font-normal leading-relaxed">
+            Explore how we partner with enterprise teams and high-growth founders to design, build, and deploy production-ready digital products.
+          </p>
+        </div>
+      </section>
+
+      {/* Main Content Area with Suspense boundary for useSearchParams */}
+      <Suspense
+        fallback={
+          <div className="bg-[#F7F7F4] py-24 text-center text-[#5B6875] font-mono text-xs">
+            Loading repositories...
+          </div>
+        }
+      >
+        <WorkContent />
+      </Suspense>
     </div>
   );
 }

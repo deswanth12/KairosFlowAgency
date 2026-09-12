@@ -20,6 +20,7 @@ import {
   Video
 } from 'lucide-react';
 import { projectsData } from '@/data/projects';
+import { servicesData } from '@/data/services';
 import { generateWhatsAppLink } from '@/lib/utils';
 import { siteSettingsData } from '@/data/settings';
 
@@ -111,72 +112,27 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
     },
 
     // Services
-    {
-      id: 'svc-web',
-      category: 'Services',
-      title: 'Web Engineering & Portals',
-      description: 'Next.js 15, TypeScript, Tailwind, Sub-second performance',
-      icon: Code2,
-      action: () => {
-        onClose();
-        router.push('/services#web');
-      }
-    },
-    {
-      id: 'svc-apps',
-      category: 'Services',
-      title: 'Mobile Applications (iOS & Android)',
-      description: 'React Native, Flutter, offline-first sync engines',
-      icon: Smartphone,
-      action: () => {
-        onClose();
-        router.push('/services#apps');
-      }
-    },
-    {
-      id: 'svc-ai',
-      category: 'Services',
-      title: 'AI Systems & Autonomous Pipelines',
-      description: 'RAG pipelines, custom LLM fine-tuning, voice agents',
-      icon: Cpu,
-      action: () => {
-        onClose();
-        router.push('/services#ai');
-      }
-    },
-    {
-      id: 'svc-branding',
-      category: 'Services',
-      title: 'UI/UX & Brand Architecture',
-      description: 'Design systems, tokens, conversion design',
-      icon: Palette,
-      action: () => {
-        onClose();
-        router.push('/services#branding');
-      }
-    },
-    {
-      id: 'svc-marketing',
-      category: 'Services',
-      title: 'Full-Funnel Growth & Performance Marketing',
-      description: 'Technical SEO, tracking, attribution analytics',
-      icon: TrendingUp,
-      action: () => {
-        onClose();
-        router.push('/services#marketing');
-      }
-    },
-    {
-      id: 'svc-video',
-      category: 'Services',
-      title: 'Commercial Video & Motion Production',
-      description: 'Founder stories, 3D product reels, UI animations',
-      icon: Video,
-      action: () => {
-        onClose();
-        router.push('/services#video');
-      }
-    },
+    ...servicesData.map((service) => {
+      const iconMap: Record<string, React.ElementType> = {
+        Globe: Code2,
+        Smartphone,
+        Cpu,
+        Palette,
+        TrendingUp,
+        Video
+      };
+      return {
+        id: `svc-${service.slug}`,
+        category: 'Services' as const,
+        title: service.title,
+        description: service.tagline,
+        icon: iconMap[service.iconName] || Code2,
+        action: () => {
+          onClose();
+          router.push(`/services#${service.slug}`);
+        }
+      };
+    }),
 
     // Case Studies
     ...projectsData.map((project) => ({

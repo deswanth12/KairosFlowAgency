@@ -25,6 +25,15 @@ const ICON_MAP: Record<string, React.ElementType> = {
   Video
 };
 
+const SERVICE_TO_PROJECT_CATEGORY: Record<string, string> = {
+  'Web Development': 'Web',
+  'App Development': 'App',
+  'AI & Automation': 'AI',
+  'UI/UX & Branding': 'Branding',
+  'Digital Marketing': 'Marketing',
+  'Video & Content': 'Content',
+};
+
 export const metadata = {
   title: 'Services & Disciplines | Kairos Flow Agency',
   description: 'Explore Kairos Flow Agency services: Web Development, App Development, AI & Automation, UI/UX & Branding, Digital Marketing, and Video Production.'
@@ -176,7 +185,7 @@ export default function ServicesPage() {
                   </div>
 
                   <Link
-                    href={`/work?category=${service.category.split(' ')[0]}`}
+                    href={`/work?category=${SERVICE_TO_PROJECT_CATEGORY[service.category] || 'All'}`}
                     className="text-xs font-bold text-[#B8613A] hover:text-[#0B1F33] transition-colors inline-flex items-center gap-1"
                   >
                     <span>/ VIEW {service.title.toUpperCase()} REPOSITORIES</span>

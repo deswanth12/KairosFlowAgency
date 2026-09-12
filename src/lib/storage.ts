@@ -27,6 +27,11 @@ export function getLeadById(id: string): Lead | null {
   return getLeads().find((l) => l.id === id) || null;
 }
 
+export async function getLeadByIdAsync(id: string): Promise<Lead | null> {
+  const leads = await getLeadsAsync();
+  return leads.find((l) => l.id === id) || null;
+}
+
 export async function saveLeadAsync(
   leadData: Omit<Lead, 'id' | 'createdAt' | 'updatedAt' | 'status'> & {
     status?: LeadStatus;
