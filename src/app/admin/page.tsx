@@ -114,8 +114,11 @@ export default function AdminPage() {
   // Gemini AI Intelligence & Copilot State
   const [aiScore, setAiScore] = useState<{ score: number; intent: string; summary: string } | null>(null);
   const [isScoringLead, setIsScoringLead] = useState<boolean>(false);
+  const [aiScoreError, setAiScoreError] = useState<string | null>(null);
   const [aiDrafts, setAiDrafts] = useState<string[] | null>(null);
   const [isGeneratingDrafts, setIsGeneratingDrafts] = useState<boolean>(false);
+  const [aiDraftsSource, setAiDraftsSource] = useState<'gemini' | 'offline_copilot' | null>(null);
+  const [aiDraftsError, setAiDraftsError] = useState<string | null>(null);
   const [copiedDraftIdx, setCopiedDraftIdx] = useState<number | null>(null);
 
   // CRM State
@@ -353,12 +356,19 @@ export default function AdminPage() {
     setAiScore(null);
     setAiDrafts(null);
     setCopiedDraftIdx(null);
+    setAiDraftsSource(null);
+    setAiDraftsError(null);
+    setAiScoreError(null);
   }, [activeLead?.id]);
 
   const handleScoreLead = async (lead: Lead) => {
     const activeToken = authToken || (typeof window !== 'undefined' ? sessionStorage.getItem('kairos_admin_token') : null);
-    if (!activeToken || !lead) return;
+    if (!activeToken || !lead) {
+      setAiScoreError('Please log in again to score leads.');
+      return;
+    }
     setIsScoringLead(true);
+    setAiScoreError(null);
     try {
       const res = await fetch('/api/ai/score-lead', {
         method: 'POST',
@@ -378,9 +388,13 @@ export default function AdminPage() {
       const data = await res.json();
       if (data.success && data.score) {
         setAiScore(data.score);
+        setAiScoreError(null);
+      } else {
+        setAiScoreError(data.message || 'Unable to score lead. Please try again.');
       }
     } catch (err) {
       console.error('Failed to score lead with AI:', err);
+      setAiScoreError('Network error while scoring lead. Please try again.');
     } finally {
       setIsScoringLead(false);
     }
@@ -388,8 +402,12 @@ export default function AdminPage() {
 
   const handleGenerateDrafts = async (lead: Lead) => {
     const activeToken = authToken || (typeof window !== 'undefined' ? sessionStorage.getItem('kairos_admin_token') : null);
-    if (!activeToken || !lead) return;
+    if (!activeToken || !lead) {
+      setAiDraftsError('Please log in again to generate pitches.');
+      return;
+    }
     setIsGeneratingDrafts(true);
+    setAiDraftsError(null);
     try {
       const res = await fetch('/api/ai/whatsapp-drafts', {
         method: 'POST',
@@ -409,13 +427,19 @@ export default function AdminPage() {
       const data = await res.json();
       if (data.success && data.drafts) {
         setAiDrafts(data.drafts);
+        setAiDraftsSource(data.source || 'gemini');
+        setAiDraftsError(null);
+      } else {
+        setAiDraftsError(data.message || 'Unable to generate drafts. Please try again.');
       }
     } catch (err) {
       console.error('Failed to generate AI WhatsApp drafts:', err);
+      setAiDraftsError('Network error while generating pitches. Please try again.');
     } finally {
       setIsGeneratingDrafts(false);
     }
   };
+
 
   const handleUpdateLead = async (id: string, updates: Partial<Lead>) => {
     // Snapshot previous state for deterministic rollback on failure
@@ -1744,6 +1768,20 @@ export default function AdminPage() {
                   </div>
                 </div>
 
+                {/* AI Error Notifications */}
+                {aiScoreError && (
+                  <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-[11px] text-rose-200 flex items-center justify-between animate-in fade-in">
+                    <span>{aiScoreError}</span>
+                    <button type="button" onClick={() => setAiScoreError(null)} className="text-rose-400 hover:text-white text-xs ml-2">✕</button>
+                  </div>
+                )}
+                {aiDraftsError && (
+                  <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-[11px] text-rose-200 flex items-center justify-between animate-in fade-in">
+                    <span>{aiDraftsError}</span>
+                    <button type="button" onClick={() => setAiDraftsError(null)} className="text-rose-400 hover:text-white text-xs ml-2">✕</button>
+                  </div>
+                )}
+
                 {/* AI Score Display */}
                 {aiScore && (
                   <div className="p-3 rounded-lg bg-white/5 border border-white/10 space-y-2 animate-in fade-in duration-200">
@@ -1772,13 +1810,23 @@ export default function AdminPage() {
                 {aiDrafts && aiDrafts.length > 0 && (
                   <div className="space-y-2 pt-2 border-t border-white/10 animate-in fade-in duration-200">
                     <div className="text-[10px] text-slate-300 uppercase tracking-wider font-semibold flex items-center justify-between">
-                      <span>3 Tailored WhatsApp Pitches</span>
+                      <div className="flex items-center gap-1.5">
+                        <span>3 Tailored WhatsApp Pitches</span>
+                        {aiDraftsSource === 'offline_copilot' && (
+                          <span className="text-[8px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">
+                            ⚡ Copilot
+                          </span>
+                        )}
+                      </div>
                       <span className="text-[9px] text-[#B8613A]">Click to send or copy</span>
                     </div>
                     <div className="space-y-2">
                       {aiDrafts.map((draft, idx) => {
-                        const cleanPhone = activeLead.phone.replace(/[^0-9]/g, '').replace(/^(\d{10})$/, '91$1');
-                        const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(draft)}`;
+                        const rawPhone = activeLead.phone || '';
+                        const cleanPhone = rawPhone.replace(/[^0-9]/g, '').replace(/^(\d{10})$/, '91$1');
+                        const waUrl = cleanPhone
+                          ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(draft)}`
+                          : `https://wa.me/?text=${encodeURIComponent(draft)}`;
                         const isCopied = copiedDraftIdx === idx;
 
                         return (
