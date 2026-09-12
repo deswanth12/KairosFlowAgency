@@ -92,6 +92,7 @@ export async function POST(request: NextRequest) {
       hearAbout: body.hearAbout ? truncateField(body.hearAbout, LIMITS.hearAbout) : 'Admin Entry',
       priority: body.priority || 'Medium',
       assignedTo: body.assignedTo || 'Unassigned',
+      estimatedValue: body.estimatedValue ? truncateField(body.estimatedValue, 100) : undefined,
       createdBy: creator
     });
 
