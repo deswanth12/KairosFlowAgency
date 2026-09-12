@@ -3,9 +3,11 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 import { projectsData } from '@/data/projects';
 import { ProjectCategory } from '@/types';
 import { ArrowUpRight, Sparkles, Layers, ArrowRight, Terminal } from 'lucide-react';
+import { FadeIn, EASE_OUT } from '@/components/ui/motion';
 
 const CATEGORIES: Array<'All' | ProjectCategory> = ['All', 'Web', 'App', 'AI', 'Branding', 'Marketing', 'Content'];
 
@@ -20,7 +22,7 @@ export const FeaturedProjects: React.FC = () => {
     <section id="selected-work" className="bg-[#F7F7F4] text-[#111827] py-20 sm:py-28 px-4 sm:px-6 lg:px-8 border-b border-[#D9E0E5]">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 gap-6">
+        <FadeIn direction="up" distance={20} className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 gap-6">
           <div>
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#D9E0E5] text-xs font-mono uppercase tracking-widest text-[#B8613A] mb-4 font-semibold shadow-subtle-card">
               <Terminal className="w-3.5 h-3.5 text-[#B8613A]" />
@@ -41,10 +43,10 @@ export const FeaturedProjects: React.FC = () => {
             <span>/ VIEW ALL PROJECTS ({projectsData.length})</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
-        </div>
+        </FadeIn>
 
         {/* Category Filter Pills */}
-        <div className="flex flex-wrap items-center gap-2 mb-12 font-mono">
+        <FadeIn direction="up" delay={0.1} distance={15} className="flex flex-wrap items-center gap-2 mb-12 font-mono">
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
@@ -59,15 +61,21 @@ export const FeaturedProjects: React.FC = () => {
               {cat === 'All' ? `/ ALL (${projectsData.length})` : `/ ${cat.toUpperCase()}`}
             </button>
           ))}
-        </div>
+        </FadeIn>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-          {filteredProjects.map((project) => (
-            <article
-              key={project.id}
-              className="group flex flex-col bg-white border border-[#D9E0E5] rounded-2xl overflow-hidden shadow-subtle-card hover:shadow-hover-card transition-all duration-300 hover:border-[#B8613A]/40"
-            >
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project) => (
+              <motion.article
+                layout
+                key={project.id}
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.35, ease: EASE_OUT }}
+                className="group flex flex-col bg-white border border-[#D9E0E5] rounded-2xl overflow-hidden shadow-subtle-card hover:shadow-hover-card transition-all duration-300 hover:border-[#B8613A]/40"
+              >
               {/* Image Thumbnail Container */}
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#0B1F33]">
                 <Image
@@ -158,9 +166,10 @@ export const FeaturedProjects: React.FC = () => {
                   </Link>
                 </div>
               </div>
-            </article>
+            </motion.article>
           ))}
-        </div>
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );

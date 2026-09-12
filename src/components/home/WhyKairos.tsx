@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import { Compass, Users, Clock, Cpu, PenTool } from 'lucide-react';
+import { FadeIn, FadeInStagger, FadeInItem, SpotlightCard } from '@/components/ui/motion';
 
 const VALUES = [
   {
@@ -39,7 +42,7 @@ export const WhyKairos: React.FC = () => {
     <section className="bg-ivory text-softblack py-20 sm:py-28 px-4 sm:px-6 lg:px-8 border-b border-ivory-border">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="max-w-3xl mb-16">
+        <FadeIn direction="up" distance={20} className="max-w-3xl mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-ivory-muted border border-ivory-border text-xs font-mono uppercase tracking-widest text-slate mb-3">
             <span>Our Philosophy</span>
           </div>
@@ -49,58 +52,66 @@ export const WhyKairos: React.FC = () => {
           <p className="text-slate text-base sm:text-lg mt-4 leading-relaxed">
             Named after the Greek concept of the opportune moment (*Kairos*) and seamless progress (*Flow*), we combine deep technical rigor with creative agility.
           </p>
-        </div>
+        </FadeIn>
 
         {/* 5 Value Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <FadeInStagger staggerDelay={0.08} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {VALUES.map((val) => {
             const Icon = val.icon;
             return (
-              <div
-                key={val.number}
-                className="flex flex-col justify-between p-7 rounded-xl bg-ivory-card border border-ivory-border shadow-subtle-ivory hover:shadow-elevated-ivory transition-all duration-300"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="w-10 h-10 rounded-lg bg-ivory-muted border border-ivory-border flex items-center justify-center text-teal">
-                      <Icon className="w-5 h-5" />
+              <FadeInItem key={val.number} className="h-full">
+                <SpotlightCard
+                  spotlightColor="rgba(184, 97, 58, 0.12)"
+                  className="h-full flex flex-col justify-between p-7 rounded-xl bg-ivory-card border border-ivory-border shadow-subtle-ivory hover:shadow-elevated-ivory transition-all duration-300"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="w-10 h-10 rounded-lg bg-ivory-muted border border-ivory-border flex items-center justify-center text-teal">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <span className="font-mono text-xs font-bold text-champagne">
+                        {val.number}
+                      </span>
                     </div>
-                    <span className="font-mono text-xs font-bold text-champagne">
-                      {val.number}
-                    </span>
+
+                    <h3 className="text-lg sm:text-xl font-bold text-softblack tracking-tight mb-3">
+                      {val.title}
+                    </h3>
+
+                    <p className="text-slate text-sm leading-relaxed">
+                      {val.description}
+                    </p>
                   </div>
-
-                  <h3 className="text-lg sm:text-xl font-bold text-softblack tracking-tight mb-3">
-                    {val.title}
-                  </h3>
-
-                  <p className="text-slate text-sm leading-relaxed">
-                    {val.description}
-                  </p>
-                </div>
-              </div>
+                </SpotlightCard>
+              </FadeInItem>
             );
           })}
 
           {/* 6th Card: Direct Commitment */}
-          <div className="flex flex-col justify-between p-7 rounded-xl bg-ink text-ivory border border-navy-border shadow-card-dark">
-            <div>
-              <div className="text-xs font-mono text-champagne uppercase tracking-widest mb-4">
-                Our Guarantee
+          <FadeInItem className="h-full">
+            <SpotlightCard
+              spotlightColor="rgba(184, 97, 58, 0.2)"
+              className="h-full flex flex-col justify-between p-7 rounded-xl bg-ink text-ivory border border-navy-border shadow-card-dark"
+            >
+              <div>
+                <div className="text-xs font-mono text-champagne uppercase tracking-widest mb-4">
+                  Our Guarantee
+                </div>
+                <h3 className="text-xl font-bold text-ivory tracking-tight mb-3">
+                  100% Code & Asset Ownership
+                </h3>
+                <p className="text-slate-light text-sm leading-relaxed mb-6">
+                  All IP, source code, Figma files, raw 4K video footage, and cloud accounts remain 100% yours upon milestone completion. No proprietary lock-in.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-ivory tracking-tight mb-3">
-                100% Code & Asset Ownership
-              </h3>
-              <p className="text-slate-light text-sm leading-relaxed mb-6">
-                All IP, source code, Figma files, raw 4K video footage, and cloud accounts remain 100% yours upon milestone completion. No proprietary lock-in.
-              </p>
-            </div>
-            <div className="text-xs font-mono text-teal">
-              Clean TypeScript • Zero Vendor Lock-in
-            </div>
-          </div>
-        </div>
+              <div className="text-xs font-mono text-teal">
+                Clean TypeScript • Zero Vendor Lock-in
+              </div>
+            </SpotlightCard>
+          </FadeInItem>
+        </FadeInStagger>
       </div>
     </section>
   );
 };
+

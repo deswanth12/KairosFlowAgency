@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Check, 
   X, 
@@ -14,6 +15,7 @@ import {
   Code2, 
   Sparkles 
 } from 'lucide-react';
+import { FadeIn, EASE_OUT } from '@/components/ui/motion';
 
 interface ComparisonRow {
   dimension: string;
@@ -68,7 +70,7 @@ export const AgencyComparison: React.FC = () => {
     <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-[#F7F7F4] border-b border-[#D9E0E5]">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
+        <FadeIn direction="up" distance={20} className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-[#D9E0E5] text-xs font-mono uppercase tracking-widest text-[#B8613A] mb-4 font-semibold shadow-subtle-card">
             <Sparkles className="w-3.5 h-3.5 text-[#B8613A]" />
             <span>/ THE ENGINEERING DIFFERENCE</span>
@@ -79,7 +81,7 @@ export const AgencyComparison: React.FC = () => {
           <p className="text-[#5B6875] text-base sm:text-lg mt-3 leading-relaxed">
             Why high-growth founders and serious brands choose our direct senior engineering model over bloated agency retainers.
           </p>
-        </div>
+        </FadeIn>
 
         {/* Mobile View: Clean Toggle between Kairos and Traditional */}
         <div className="block md:hidden">
@@ -106,51 +108,60 @@ export const AgencyComparison: React.FC = () => {
             </button>
           </div>
 
-          <div className="space-y-3">
-            {COMPARISON_DATA.map((row, idx) => (
-              <div 
-                key={idx}
-                className={`p-5 rounded-2xl border ${
-                  mobileTab === 'kairos'
-                    ? 'bg-white border-[#B8613A]/30 shadow-subtle-card'
-                    : 'bg-red-50/50 border-red-200'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-mono font-bold text-[#5B6875] uppercase tracking-wider">
-                    {row.dimension}
-                  </span>
-                  {mobileTab === 'kairos' ? (
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#FBF4F0] text-[#B8613A] border border-[#B8613A]/30">
-                      {row.highlight}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={mobileTab}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: EASE_OUT }}
+              className="space-y-3"
+            >
+              {COMPARISON_DATA.map((row, idx) => (
+                <div 
+                  key={idx}
+                  className={`p-5 rounded-2xl border ${
+                    mobileTab === 'kairos'
+                      ? 'bg-white border-[#B8613A]/30 shadow-subtle-card'
+                      : 'bg-red-50/50 border-red-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-mono font-bold text-[#5B6875] uppercase tracking-wider">
+                      {row.dimension}
                     </span>
-                  ) : (
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-100 text-red-700">
-                      Common Pitfall
-                    </span>
-                  )}
+                    {mobileTab === 'kairos' ? (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#FBF4F0] text-[#B8613A] border border-[#B8613A]/30">
+                        {row.highlight}
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-100 text-red-700">
+                        Common Pitfall
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    {mobileTab === 'kairos' ? (
+                      <div className="p-1 rounded bg-[#B8613A]/10 text-[#B8613A] flex-shrink-0 mt-0.5">
+                        <Check className="w-3.5 h-3.5 stroke-[3]" />
+                      </div>
+                    ) : (
+                      <div className="p-1 rounded bg-red-100 text-red-600 flex-shrink-0 mt-0.5">
+                        <X className="w-3.5 h-3.5 stroke-[3]" />
+                      </div>
+                    )}
+                    <p className="text-xs text-[#111827] leading-relaxed">
+                      {mobileTab === 'kairos' ? row.kairos : row.traditional}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex items-start gap-2.5">
-                  {mobileTab === 'kairos' ? (
-                    <div className="p-1 rounded bg-[#B8613A]/10 text-[#B8613A] flex-shrink-0 mt-0.5">
-                      <Check className="w-3.5 h-3.5 stroke-[3]" />
-                    </div>
-                  ) : (
-                    <div className="p-1 rounded bg-red-100 text-red-600 flex-shrink-0 mt-0.5">
-                      <X className="w-3.5 h-3.5 stroke-[3]" />
-                    </div>
-                  )}
-                  <p className="text-xs text-[#111827] leading-relaxed">
-                    {mobileTab === 'kairos' ? row.kairos : row.traditional}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* Desktop View: Comprehensive Comparison Matrix */}
-        <div className="hidden md:block bg-white rounded-2xl border border-[#D9E0E5] shadow-elevated-card overflow-hidden">
+        <FadeIn direction="up" delay={0.1} className="hidden md:block bg-white rounded-2xl border border-[#D9E0E5] shadow-elevated-card overflow-hidden">
           {/* Header Row */}
           <div className="grid grid-cols-12 border-b border-[#D9E0E5] bg-[#F7F7F4] text-xs font-mono font-bold">
             <div className="col-span-4 p-5 text-[#5B6875] uppercase tracking-wider">
@@ -223,7 +234,7 @@ export const AgencyComparison: React.FC = () => {
               <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>
-        </div>
+        </FadeIn>
       </div>
     </section>
   );

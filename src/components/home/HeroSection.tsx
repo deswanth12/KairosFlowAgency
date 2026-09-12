@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { 
   ArrowUpRight, 
   ShieldCheck, 
@@ -16,6 +19,7 @@ import {
 import { HourglassStream } from './HourglassStream';
 import { generateWhatsAppLink } from '@/lib/utils';
 import { siteSettingsData } from '@/data/settings';
+import { FadeIn, FadeInStagger, FadeInItem, SpotlightCard, SpringCounter, EASE_OUT } from '@/components/ui/motion';
 
 export const HeroSection: React.FC = () => {
   const whatsappUrl = generateWhatsAppLink(siteSettingsData.whatsappNumber);
@@ -39,27 +43,56 @@ export const HeroSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
           
           {/* Left Column: Core Positioning & Headlines */}
-          <div className="lg:col-span-7 space-y-8">
+          <motion.div 
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: { staggerChildren: 0.08, delayChildren: 0.1 }
+              }
+            }}
+            className="lg:col-span-7 space-y-8"
+          >
             {/* Positioning Live Status Pill */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white border border-[#D9E0E5] text-xs font-mono tracking-wide shadow-subtle-card">
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0, y: 15 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE_OUT } }
+              }}
+              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white border border-[#D9E0E5] text-xs font-mono tracking-wide shadow-subtle-card"
+            >
               <span className="w-2 h-2 rounded-full bg-[#B8613A] animate-pulse" />
               <span className="text-[#0B1F33] font-bold tracking-wider">DESIGN + ENGINEERING + AI + GROWTH</span>
               <span className="text-[#D9E0E5] hidden sm:inline">•</span>
               <span className="text-[#5B6875] font-medium hidden sm:inline">NOW ACCEPTING SELECT PROJECTS</span>
-            </div>
+            </motion.div>
 
             {/* Main Headline */}
-            <div className="space-y-5">
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_OUT } }
+              }}
+              className="space-y-5"
+            >
               <h1 className="text-4xl sm:text-6xl lg:text-[70px] font-extrabold tracking-[-0.04em] text-[#0B1F33] font-display leading-[1.04]">
                 We build digital experiences that move businesses <span className="text-[#B8613A]">forward.</span>
               </h1>
               <p className="text-[#5B6875] text-lg sm:text-xl font-normal leading-[1.65] max-w-2xl">
                 Small senior team. Direct communication. Fast execution. Websites, mobile apps, AI pipelines, and brand systems built with zero junior handoffs.
               </p>
-            </div>
+            </motion.div>
 
             {/* Dual CTAs + WhatsApp Direct */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_OUT } }
+              }}
+              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2"
+            >
               {/* Primary Button: Deep Navy #0B1F33 */}
               <Link
                 href="/contact"
@@ -88,10 +121,16 @@ export const HeroSection: React.FC = () => {
                 <MessageCircle className="w-4 h-4 text-emerald-600" />
                 <span className="font-semibold text-xs">WhatsApp</span>
               </a>
-            </div>
+            </motion.div>
 
             {/* Quick Intent Selector Pills */}
-            <div className="pt-2">
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_OUT } }
+              }}
+              className="pt-2"
+            >
               <div className="text-[11px] font-mono text-[#5B6875] uppercase tracking-wider font-semibold mb-2.5 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-[#B8613A]" />
                 <span>Quick Inquiry Tracks:</span>
@@ -133,10 +172,16 @@ export const HeroSection: React.FC = () => {
                   <ArrowUpRight className="w-3 h-3 text-[#B8613A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Link>
               </div>
-            </div>
+            </motion.div>
 
             {/* Micro Technical Trust Indicators */}
-            <div className="flex flex-wrap items-center gap-6 pt-2 text-xs font-mono text-[#5B6875]">
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1, transition: { duration: 0.6, ease: EASE_OUT } }
+              }}
+              className="flex flex-wrap items-center gap-6 pt-2 text-xs font-mono text-[#5B6875]"
+            >
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-[#B8613A]" />
                 <span>5 Founding Leads</span>
@@ -149,12 +194,17 @@ export const HeroSection: React.FC = () => {
                 <ShieldCheck className="w-3.5 h-3.5 text-[#B8613A]" />
                 <span>100% Code & IP Ownership</span>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Right Column: Architectural Telemetry Card */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative rounded-2xl bg-white border border-[#D9E0E5] p-6 sm:p-8 shadow-elevated-card overflow-hidden">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.96, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.25, ease: EASE_OUT }}
+            className="lg:col-span-5 relative"
+          >
+            <SpotlightCard className="relative rounded-2xl bg-white border border-[#D9E0E5] p-6 sm:p-8 shadow-elevated-card overflow-hidden">
               {/* Card Header */}
               <div className="flex items-center justify-between pb-5 border-b border-[#D9E0E5] mb-6">
                 <div className="flex items-center gap-2.5">
@@ -176,7 +226,13 @@ export const HeroSection: React.FC = () => {
                     <span className="text-[#0B1F33] font-bold">Opportune Leverage</span>
                   </div>
                   <div className="h-1.5 w-full bg-[#F7F7F4] rounded-full overflow-hidden border border-[#D9E0E5]">
-                    <div className="h-full w-4/5 bg-gradient-to-r from-[#0B1F33] to-[#B8613A] rounded-full" />
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      whileInView={{ width: '80%' }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1.1, delay: 0.35, ease: EASE_OUT }}
+                      className="h-full bg-gradient-to-r from-[#0B1F33] to-[#B8613A] rounded-full" 
+                    />
                   </div>
                 </div>
 
@@ -186,7 +242,13 @@ export const HeroSection: React.FC = () => {
                     <span className="text-[#B8613A] font-bold">Relentless Execution</span>
                   </div>
                   <div className="h-1.5 w-full bg-[#F7F7F4] rounded-full overflow-hidden border border-[#D9E0E5]">
-                    <div className="h-full w-full bg-gradient-to-r from-[#B8613A] to-[#3E5C76] rounded-full" />
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      whileInView={{ width: '100%' }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1.3, delay: 0.45, ease: EASE_OUT }}
+                      className="h-full bg-gradient-to-r from-[#B8613A] to-[#3E5C76] rounded-full" 
+                    />
                   </div>
                 </div>
               </div>
@@ -194,63 +256,75 @@ export const HeroSection: React.FC = () => {
               {/* 3 Telemetry Pillars */}
               <div className="grid grid-cols-3 gap-3 pt-5 border-t border-[#D9E0E5] text-center font-mono">
                 <div className="p-3.5 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5]">
-                  <div className="text-xl font-bold text-[#0B1F33]">5</div>
+                  <div className="text-xl font-bold text-[#0B1F33]">
+                    <SpringCounter value={5} />
+                  </div>
                   <div className="text-[9px] text-[#5B6875] uppercase font-semibold mt-0.5">Founders</div>
                 </div>
                 <div className="p-3.5 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5]">
-                  <div className="text-xl font-bold text-[#B8613A]">0.6s</div>
+                  <div className="text-xl font-bold text-[#B8613A]">
+                    <SpringCounter value={0.6} decimals={1} suffix="s" />
+                  </div>
                   <div className="text-[9px] text-[#5B6875] uppercase font-semibold mt-0.5">Ember & Oak</div>
                 </div>
                 <div className="p-3.5 rounded-xl bg-[#F7F7F4] border border-[#D9E0E5]">
-                  <div className="text-xl font-bold text-[#0B1F33]">100%</div>
+                  <div className="text-xl font-bold text-[#0B1F33]">
+                    <SpringCounter value={100} suffix="%" />
+                  </div>
                   <div className="text-[9px] text-[#5B6875] uppercase font-semibold mt-0.5">In-House</div>
                 </div>
               </div>
-            </div>
-          </div>
+            </SpotlightCard>
+          </motion.div>
         </div>
 
         {/* 3 Primary Pillars with Editorial Hierarchy */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 pt-12 border-t border-[#D9E0E5]">
-          <div className="p-7 rounded-2xl bg-white border border-[#D9E0E5] hover:border-[#B8613A]/50 hover:shadow-hover-card transition-all duration-300">
-            <div className="flex items-center justify-between mb-5">
-              <div className="w-11 h-11 rounded-xl bg-[#FBF4F0] text-[#B8613A] flex items-center justify-center border border-[#B8613A]/20">
-                <Zap className="w-5 h-5" />
+        <FadeInStagger staggerDelay={0.12} className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 pt-12 border-t border-[#D9E0E5]">
+          <FadeInItem>
+            <SpotlightCard className="h-full p-7 rounded-2xl bg-white border border-[#D9E0E5] hover:border-[#B8613A]/50 hover:shadow-hover-card transition-all duration-300">
+              <div className="flex items-center justify-between mb-5">
+                <div className="w-11 h-11 rounded-xl bg-[#FBF4F0] text-[#B8613A] flex items-center justify-center border border-[#B8613A]/20">
+                  <Zap className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] font-mono font-bold text-[#5B6875] tracking-wider">/ ARCHITECTURE</span>
               </div>
-              <span className="text-[10px] font-mono font-bold text-[#5B6875] tracking-wider">/ ARCHITECTURE</span>
-            </div>
-            <h3 className="text-lg font-bold text-[#0B1F33] mb-2 font-display">Engineering First</h3>
-            <p className="text-sm text-[#5B6875] leading-relaxed">
-              We architect the system schema, API contracts, and commercial logic before writing production code.
-            </p>
-          </div>
+              <h3 className="text-lg font-bold text-[#0B1F33] mb-2 font-display">Engineering First</h3>
+              <p className="text-sm text-[#5B6875] leading-relaxed">
+                We architect the system schema, API contracts, and commercial logic before writing production code.
+              </p>
+            </SpotlightCard>
+          </FadeInItem>
 
-          <div className="p-7 rounded-2xl bg-white border border-[#D9E0E5] hover:border-[#B8613A]/50 hover:shadow-hover-card transition-all duration-300">
-            <div className="flex items-center justify-between mb-5">
-              <div className="w-11 h-11 rounded-xl bg-[#FBF4F0] text-[#0B1F33] flex items-center justify-center border border-[#B8613A]/20">
-                <Layers className="w-5 h-5" />
+          <FadeInItem>
+            <SpotlightCard className="h-full p-7 rounded-2xl bg-white border border-[#D9E0E5] hover:border-[#B8613A]/50 hover:shadow-hover-card transition-all duration-300">
+              <div className="flex items-center justify-between mb-5">
+                <div className="w-11 h-11 rounded-xl bg-[#FBF4F0] text-[#0B1F33] flex items-center justify-center border border-[#B8613A]/20">
+                  <Layers className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] font-mono font-bold text-[#5B6875] tracking-wider">/ MULTIDISCIPLINARY</span>
               </div>
-              <span className="text-[10px] font-mono font-bold text-[#5B6875] tracking-wider">/ MULTIDISCIPLINARY</span>
-            </div>
-            <h3 className="text-lg font-bold text-[#0B1F33] mb-2 font-display">One Unified Team</h3>
-            <p className="text-sm text-[#5B6875] leading-relaxed">
-              Web, apps, AI pipelines, brand systems, and video delivered by 5 dedicated leads. Zero vendor fragmentation.
-            </p>
-          </div>
+              <h3 className="text-lg font-bold text-[#0B1F33] mb-2 font-display">One Unified Team</h3>
+              <p className="text-sm text-[#5B6875] leading-relaxed">
+                Web, apps, AI pipelines, brand systems, and video delivered by 5 dedicated leads. Zero vendor fragmentation.
+              </p>
+            </SpotlightCard>
+          </FadeInItem>
 
-          <div className="p-7 rounded-2xl bg-white border border-[#D9E0E5] hover:border-[#B8613A]/50 hover:shadow-hover-card transition-all duration-300">
-            <div className="flex items-center justify-between mb-5">
-              <div className="w-11 h-11 rounded-xl bg-[#FBF4F0] text-[#B8613A] flex items-center justify-center border border-[#B8613A]/20">
-                <MessageSquareCheck className="w-5 h-5" />
+          <FadeInItem>
+            <SpotlightCard className="h-full p-7 rounded-2xl bg-white border border-[#D9E0E5] hover:border-[#B8613A]/50 hover:shadow-hover-card transition-all duration-300">
+              <div className="flex items-center justify-between mb-5">
+                <div className="w-11 h-11 rounded-xl bg-[#FBF4F0] text-[#B8613A] flex items-center justify-center border border-[#B8613A]/20">
+                  <MessageSquareCheck className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] font-mono font-bold text-[#5B6875] tracking-wider">/ ACCOUNTABILITY</span>
               </div>
-              <span className="text-[10px] font-mono font-bold text-[#5B6875] tracking-wider">/ ACCOUNTABILITY</span>
-            </div>
-            <h3 className="text-lg font-bold text-[#0B1F33] mb-2 font-display">Transparent Sprints</h3>
-            <p className="text-sm text-[#5B6875] leading-relaxed">
-              Weekly live staging walkthroughs, dedicated communications channel, and direct founder accountability.
-            </p>
-          </div>
-        </div>
+              <h3 className="text-lg font-bold text-[#0B1F33] mb-2 font-display">Transparent Sprints</h3>
+              <p className="text-sm text-[#5B6875] leading-relaxed">
+                Weekly live staging walkthroughs, dedicated communications channel, and direct founder accountability.
+              </p>
+            </SpotlightCard>
+          </FadeInItem>
+        </FadeInStagger>
       </div>
     </section>
   );

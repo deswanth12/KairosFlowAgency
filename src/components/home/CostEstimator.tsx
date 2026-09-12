@@ -16,6 +16,7 @@ import {
   Cpu,
   Video
 } from 'lucide-react';
+import { FadeIn, SpotlightCard, SpringCounter } from '@/components/ui/motion';
 
 interface ProjectTypeOption {
   id: string;
@@ -211,11 +212,10 @@ export const CostEstimator: React.FC = () => {
   const contactHref = `/contact?service=${encodeURIComponent(activeProject.serviceCategory)}&budget=${encodeURIComponent(budgetLabel)}&timeline=${encodeURIComponent(estimatedTimeline)}`;
 
   return (
-    // BUG-07 FIX: Add id="cost-estimator" so hash-link /#cost-estimator scrolls here correctly
     <section id="cost-estimator" className="py-20 px-4 sm:px-6 lg:px-8 bg-white border-y border-[#D9E0E5]">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <FadeIn direction="up" distance={20} className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FBF4F0] border border-[#B8613A]/20 text-[11px] font-mono text-[#B8613A] uppercase tracking-widest mb-3 font-semibold">
               <Calculator className="w-3.5 h-3.5" />
@@ -255,7 +255,7 @@ export const CostEstimator: React.FC = () => {
               $ USD
             </button>
           </div>
-        </div>
+        </FadeIn>
 
         {/* Interactive Estimator Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -336,7 +336,10 @@ export const CostEstimator: React.FC = () => {
 
           {/* Right Column: Live Estimate Card */}
           <div className="lg:col-span-5 sticky top-24">
-            <div className="p-6 sm:p-8 rounded-2xl bg-[#0B1F33] text-white border border-[#0B1F33] shadow-elevated-card space-y-6">
+            <SpotlightCard 
+              spotlightColor="rgba(184, 97, 58, 0.22)"
+              className="p-6 sm:p-8 rounded-2xl bg-[#0B1F33] text-white border border-[#0B1F33] shadow-elevated-card space-y-6"
+            >
               <div className="flex items-center justify-between pb-4 border-b border-white/10">
                 <div className="inline-flex items-center gap-2 text-xs font-mono text-[#B8613A] font-semibold">
                   <Zap className="w-3.5 h-3.5" />
@@ -354,7 +357,10 @@ export const CostEstimator: React.FC = () => {
                     Starting From
                   </div>
                   <div className="text-2xl sm:text-3xl font-bold font-display text-white tracking-tight">
-                    {formattedCost}
+                    <SpringCounter
+                      value={estimatedCost}
+                      prefix={currency === 'INR' ? '₹' : '$'}
+                    />
                   </div>
                   <div className="text-[10px] font-mono text-[#B8613A] mt-0.5">
                     Transparent milestone billing
@@ -409,7 +415,7 @@ export const CostEstimator: React.FC = () => {
                   Transfers directly to our intake form with pre-filled scope.
                 </p>
               </div>
-            </div>
+            </SpotlightCard>
           </div>
         </div>
       </div>

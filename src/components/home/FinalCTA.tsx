@@ -2,9 +2,11 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { generateWhatsAppLink } from '@/lib/utils';
 import { siteSettingsData } from '@/data/settings';
 import { ArrowUpRight, MessageCircle, Mail, Clock, Check, Terminal } from 'lucide-react';
+import { FadeIn, FadeInStagger, FadeInItem, EASE_OUT } from '@/components/ui/motion';
 
 export const FinalCTA: React.FC = () => {
   const [copied, setCopied] = useState(false);
@@ -33,10 +35,21 @@ export const FinalCTA: React.FC = () => {
 
   return (
     <section className="bg-[#0B1F33] text-white py-24 sm:py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background Copper ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#B8613A]/15 blur-[140px] rounded-full pointer-events-none" />
+      {/* Background Copper ambient glow with subtle breathing motion */}
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.15, 1],
+          opacity: [0.15, 0.22, 0.15]
+        }}
+        transition={{ 
+          duration: 7, 
+          repeat: Infinity, 
+          ease: 'easeInOut' 
+        }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#B8613A] blur-[140px] rounded-full pointer-events-none" 
+      />
 
-      <div className="relative max-w-4xl mx-auto text-center z-10 flex flex-col items-center">
+      <FadeIn direction="up" distance={25} className="relative max-w-4xl mx-auto text-center z-10 flex flex-col items-center">
         {/* Availability Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-mono text-slate-200 mb-8 backdrop-blur-sm shadow-sm">
           <span className="w-2 h-2 rounded-full bg-[#B8613A] animate-pulse" />
@@ -135,7 +148,7 @@ export const FinalCTA: React.FC = () => {
         <div className="text-[11px] font-mono text-slate-400">
           Direct inbox: <span className="text-white font-semibold">{siteSettingsData.email}</span>
         </div>
-      </div>
+      </FadeIn>
     </section>
   );
 };
