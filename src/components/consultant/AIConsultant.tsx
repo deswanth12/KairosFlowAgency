@@ -40,6 +40,7 @@ const STARTER_PROMPTS = [
 
 export const AIConsultant: React.FC = () => {
   const pathname = usePathname();
+  const whatsappNum = siteSettingsData.whatsappNumber || '917702256073';
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -99,8 +100,7 @@ export const AIConsultant: React.FC = () => {
     const text = encodeURIComponent(
       `Hi Desvanth & Kairos Flow Team,\n\nI was just chatting with your AI Consultant regarding:\n"${lastUserMsg}"\n\nI would like to discuss next steps and pricing with your team.`
     );
-    const num = siteSettingsData.whatsappNumber || '917702256073';
-    return `https://wa.me/${num}?text=${text}`;
+    return `https://wa.me/${whatsappNum}?text=${text}`;
   };
 
   const handleSend = async (overrideText?: string) => {
@@ -147,7 +147,7 @@ export const AIConsultant: React.FC = () => {
             confidence: 'low',
             sources: [],
             actionButtons: [
-              { label: 'Chat on WhatsApp', href: 'https://wa.me/917702256073', isExternal: true },
+              { label: 'Chat on WhatsApp', href: `https://wa.me/${whatsappNum}`, isExternal: true },
               { label: 'Submit Scoping Brief', href: '/contact' }
             ]
           }
@@ -185,7 +185,7 @@ export const AIConsultant: React.FC = () => {
         <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40 flex items-center gap-2.5">
           {/* Floating WhatsApp Quick-Chat with Founder */}
           <a
-            href="https://wa.me/917702256073?text=Hi%20Desvanth%2C%20I'm%20looking%20to%20discuss%20a%20project%20with%20Kairos%20Flow%20Agency."
+            href={`https://wa.me/${whatsappNum}?text=Hi%20Desvanth%2C%20I'm%20looking%20to%20discuss%20a%20project%20with%20Kairos%20Flow%20Agency.`}
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-elevated-card transition-all duration-300 hover:scale-105"
@@ -416,7 +416,7 @@ export const AIConsultant: React.FC = () => {
               🔒 100% IP Rights
             </button>
             <a
-              href="https://wa.me/917702256073?text=Hi%20Desvanth%2C%20I'm%20chatting%20with%20your%20AI%20Consultant%20and%20want%20to%20speak%20directly."
+              href={`https://wa.me/${whatsappNum}?text=Hi%20Desvanth%2C%20I'm%20chatting%20with%20your%20AI%20Consultant%20and%20want%20to%20speak%20directly.`}
               target="_blank"
               rel="noopener noreferrer"
               className="px-2.5 py-1 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition-colors flex-shrink-0 font-bold"

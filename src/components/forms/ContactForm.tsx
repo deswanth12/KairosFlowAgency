@@ -272,7 +272,7 @@ export const ContactForm: React.FC = () => {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-4">
             <a
-              href={`https://wa.me/917702256073?text=${encodeURIComponent(`Hi Desvanth, I just submitted a project brief for ${formData.company || formData.name}. I'd like to schedule a 15-min discovery call tomorrow between 10 AM - 1 PM IST.`)}`}
+              href={`https://wa.me/${siteSettingsData.whatsappNumber || '917702256073'}?text=${encodeURIComponent(`Hi Desvanth, I just submitted a project brief for ${formData.company || formData.name}. I'd like to schedule a 15-min discovery call tomorrow between 10 AM - 1 PM IST.`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="p-3 rounded-lg bg-white hover:bg-emerald-50 border border-[#D9E0E5] hover:border-emerald-500 text-center transition-all group shadow-2xs"
@@ -284,7 +284,7 @@ export const ContactForm: React.FC = () => {
               <div className="text-[10px] text-[#5B6875] mt-1">10:00 AM – 1:00 PM IST</div>
             </a>
             <a
-              href={`https://wa.me/917702256073?text=${encodeURIComponent(`Hi Desvanth, I just submitted a project brief for ${formData.company || formData.name}. I'd like to schedule a 15-min discovery call tomorrow between 3 PM - 7 PM IST.`)}`}
+              href={`https://wa.me/${siteSettingsData.whatsappNumber || '917702256073'}?text=${encodeURIComponent(`Hi Desvanth, I just submitted a project brief for ${formData.company || formData.name}. I'd like to schedule a 15-min discovery call tomorrow between 3 PM - 7 PM IST.`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="p-3 rounded-lg bg-white hover:bg-emerald-50 border border-[#D9E0E5] hover:border-emerald-500 text-center transition-all group shadow-2xs"

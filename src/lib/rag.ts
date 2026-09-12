@@ -1,5 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+import { siteSettingsData } from '@/data/settings';
+
+const WA_PHONE = siteSettingsData.whatsappNumber || '917702256073';
 
 export interface RAGChunk {
   id: string;
@@ -357,7 +360,7 @@ export function queryConsultant(userQuery: string, conversationHistory?: Array<{
       sources: [{ title: 'AI & Data Privacy Policy', section: 'Data Protection & Boundary', file: 'policies/ai-policy.md' }],
       actionButtons: [
         { label: 'View Our Capabilities', href: '/services' },
-        { label: 'Chat with Founder on WhatsApp', href: 'https://wa.me/917702256073', isExternal: true }
+        { label: 'Chat with Founder on WhatsApp', href: `https://wa.me/${WA_PHONE}`, isExternal: true }
       ]
     };
   }
@@ -389,7 +392,7 @@ export function queryConsultant(userQuery: string, conversationHistory?: Array<{
         sources: [{ title: 'Pricing Guide', section: '2. App Development (iOS & Android)', file: 'pricing/pricing.md' }],
         actionButtons: [
           { label: 'Start an App Brief', href: '/contact?service=App%20Development' },
-          { label: 'WhatsApp Founder Directly', href: 'https://wa.me/917702256073?text=Hi%20Desvanth,%20I%20would%20like%20to%20discuss%20a%20mobile%20app%20project%20budget%20and%20timeline.', isExternal: true }
+          { label: 'WhatsApp Founder Directly', href: `https://wa.me/${WA_PHONE}?text=Hi%20Desvanth,%20I%20would%20like%20to%20discuss%20a%20mobile%20app%20project%20budget%20and%20timeline.`, isExternal: true }
         ],
         qualification: {
           detectedService: 'App Development',
@@ -414,7 +417,7 @@ export function queryConsultant(userQuery: string, conversationHistory?: Array<{
         sources: [{ title: 'Pricing Guide', section: '3. AI & Automation Pipelines', file: 'pricing/pricing.md' }],
         actionButtons: [
           { label: 'Start an AI Brief', href: '/contact?service=AI%20%26%20Automation' },
-          { label: 'Discuss on WhatsApp', href: 'https://wa.me/917702256073?text=Hi%20Desvanth,%20I%20want%20to%20explore%20an%20AI%20and%20automation%20pipeline%20for%20my%20business.', isExternal: true }
+          { label: 'Discuss on WhatsApp', href: `https://wa.me/${WA_PHONE}?text=Hi%20Desvanth,%20I%20want%20to%20explore%20an%20AI%20and%20automation%20pipeline%20for%20my%20business.`, isExternal: true }
         ],
         qualification: {
           detectedService: 'AI & Automation',
@@ -439,7 +442,7 @@ export function queryConsultant(userQuery: string, conversationHistory?: Array<{
       sources: [{ title: 'Pricing Guide', section: 'Indicative Service Pricing', file: 'pricing/pricing.md' }],
       actionButtons: [
         { label: 'Submit Scoping Brief', href: '/contact' },
-        { label: 'Chat on WhatsApp', href: 'https://wa.me/917702256073?text=Hi%20Desvanth,%20I%20would%20like%20a%20project%20cost%20estimate%20for%20my%20business.', isExternal: true }
+        { label: 'Chat on WhatsApp', href: `https://wa.me/${WA_PHONE}?text=Hi%20Desvanth,%20I%20would%20like%20a%20project%20cost%20estimate%20for%20my%20business.`, isExternal: true }
       ]
     };
   }
@@ -480,7 +483,7 @@ export function queryConsultant(userQuery: string, conversationHistory?: Array<{
       actionButtons: [
         { label: 'View Leadership Team', href: '/about' },
         { label: 'Founder LinkedIn', href: 'https://www.linkedin.com/in/deswanth', isExternal: true },
-        { label: 'Chat with Desvanth on WhatsApp', href: 'https://wa.me/917702256073?text=Hi%20Desvanth,%20I%20would%20like%20to%20connect%20with%20you%20regarding%20a%20project.', isExternal: true }
+        { label: 'Chat with Desvanth on WhatsApp', href: `https://wa.me/${WA_PHONE}?text=Hi%20Desvanth,%20I%20would%20like%20to%20connect%20with%20you%20regarding%20a%20project.`, isExternal: true }
       ]
     };
   }
@@ -517,7 +520,7 @@ export function queryConsultant(userQuery: string, conversationHistory?: Array<{
       sources: [{ title: 'Selected Work & Case Studies', section: 'Production Deliverables', file: 'portfolio/evalmesh.md' }],
       actionButtons: [
         { label: 'View Case Studies', href: targetLink },
-        { label: 'Discuss Your Concept on WhatsApp', href: 'https://wa.me/917702256073?text=Hi%20Desvanth,%20I%20reviewed%20your%20case%20studies%20and%20want%20to%20discuss%20building%20a%20product.', isExternal: true }
+        { label: 'Discuss Your Concept on WhatsApp', href: `https://wa.me/${WA_PHONE}?text=Hi%20Desvanth,%20I%20reviewed%20your%20case%20studies%20and%20want%20to%20discuss%20building%20a%20product.`, isExternal: true }
       ]
     };
   }
@@ -547,7 +550,7 @@ export function queryConsultant(userQuery: string, conversationHistory?: Array<{
       })),
       actionButtons: [
         { label: 'Start a Project Brief', href: '/contact' },
-        { label: 'Chat on WhatsApp', href: `https://wa.me/917702256073?text=${encodeURIComponent(`Hi Desvanth, I have a question regarding: "${userQuery}"`)}`, isExternal: true }
+        { label: 'Chat on WhatsApp', href: `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(`Hi Desvanth, I have a question regarding: "${userQuery}"`)}`, isExternal: true }
       ]
     };
   }
@@ -567,7 +570,7 @@ export function queryConsultant(userQuery: string, conversationHistory?: Array<{
     actionButtons: [
       { label: 'Explore Services', href: '/services' },
       { label: 'Start Project Brief', href: '/contact' },
-      { label: 'Chat on WhatsApp', href: 'https://wa.me/917702256073?text=Hi%20Desvanth,%20I%20would%20like%20to%20consult%20with%20you%20about%20a%20project.', isExternal: true }
+      { label: 'Chat on WhatsApp', href: `https://wa.me/${WA_PHONE}?text=Hi%20Desvanth,%20I%20would%20like%20to%20consult%20with%20you%20about%20a%20project.`, isExternal: true }
     ]
   };
 }

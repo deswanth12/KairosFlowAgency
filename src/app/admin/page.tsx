@@ -676,7 +676,7 @@ export default function AdminPage() {
         }
       } else if ((e.key === 'w' || e.key === 'W') && activeLead && activeLead.phone) {
         // Open WhatsApp
-        const cleanPhone = activeLead.phone.replace(/[^0-9]/g, '');
+        const cleanPhone = activeLead.phone.replace(/[^0-9]/g, '').replace(/^(\d{10})$/, '91$1');
         if (cleanPhone) {
           window.open(`https://wa.me/${cleanPhone}`, '_blank');
         }
